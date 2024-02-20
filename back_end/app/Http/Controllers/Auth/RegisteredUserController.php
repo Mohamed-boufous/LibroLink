@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UnverifiedUser;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -10,6 +11,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Http\Controllers\Auth\VerifyEmail;
+
 
 class RegisteredUserController extends Controller
 {
@@ -22,36 +25,30 @@ class RegisteredUserController extends Controller
     {
         try {
             $request->validate([
-                'userName' => ['required', 'string', 'max:255','unique:'.User::class],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'userName' => ['required', 'string', 'max:255', 'unique:' . User::class],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'displayName' => ['required', 'string', 'max:45'],
                 'date_birth' => ['required', 'date'],
             ]);
-    
-            $user = User::create([
+
+            $tmp_user = UnverifiedUser::create([
                 'userName' => $request->userName,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'displayName' => $request->displayName,
                 'date_birth' => $request->date_birth,
             ]);
-            $token = $user->createToken('API token of' . $user->userName);
-            event(new Registered($user));
-            Auth::login($user);
-    
-            return response()->json([
+            $tmp_user->sendEmailVerificationNotification();
+             return response()->json([
                 'success' => true,
-                'user' => $user,
-                'token' => $token->plainTextToken,
-            ]);
+                'user' => $tmp_user,
+            ]); 
         } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
                 'error' => $th->getMessage(),
             ]);
         }
-        
-      
     }
 }

@@ -4,14 +4,20 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\DeleteUnverifiedUsers;
 
 class Kernel extends ConsoleKernel
 {
     /**
      * Define the application's command schedule.
      */
+    protected $commands = [
+        DeleteUnverifiedUsers::class,
+    ];
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('delete:unverified-users')
+                 ->everyFiveSeconds() ;
         // $schedule->command('inspire')->hourly();
     }
 
