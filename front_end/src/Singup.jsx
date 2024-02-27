@@ -29,7 +29,7 @@ export default function Singup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const csrf = await axiosClient.get("/sanctum/csrf-cookie");
-    console.log(csrf);
+    //console.log(csrf);
     try {
       console.log(formData);
       const response = await axiosClient.post("/api/register", formData);
@@ -44,12 +44,12 @@ export default function Singup() {
       <form onSubmit={handleSubmit} method="post" className=" text-left w-85">
         <div className="mb-2">
           <label className="font-semibold	" htmlFor="username">
-            Quelle est votre username?
+            Quelle est votre username?sss
           </label>
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="text"
             name="userName"
             id="userName"
@@ -66,7 +66,7 @@ export default function Singup() {
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="email"
             name="email"
             id="email"
@@ -83,7 +83,7 @@ export default function Singup() {
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="password"
             name="password"
             id="pwd"
@@ -100,7 +100,7 @@ export default function Singup() {
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="password"
             name="password_confirmation"
             id="pwdc"
@@ -120,7 +120,7 @@ export default function Singup() {
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="text"
             name="displayName"
             id="display_name"
@@ -140,7 +140,7 @@ export default function Singup() {
           <input
             className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
             outline-none focus:border-black"
-            required
+            
             type="date"
             name="date_birth"
             id="date"

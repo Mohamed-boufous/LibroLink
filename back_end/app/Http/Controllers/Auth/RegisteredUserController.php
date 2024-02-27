@@ -40,15 +40,15 @@ class RegisteredUserController extends Controller
                 'date_birth' => $request->date_birth,
             ]);
             $tmp_user->sendEmailVerificationNotification();
-             return response()->json([
+            return response()->json([
                 'success' => true,
                 'user' => $tmp_user,
-            ]); 
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'success' => false,
                 'error' => $th->getMessage(),
-            ]);
+            ], 500);
         }
     }
 }

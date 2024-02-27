@@ -28,14 +28,14 @@ class CostumeVerifyEmail extends Controller
         $user = User::create([
             'userName' => $tmp_user->userName,
             'email' => $tmp_user->email,
-            'password' => Hash::make($tmp_user->password),
+            'password' => $tmp_user->password,
             'displayName' => $tmp_user->displayName,
             'date_birth' => $tmp_user->date_birth,
         ]);
         $token = $user->createToken('auth_token for '.$user->userName)->plainTextToken;
         if ($user->markEmailAsVerified()) {
             $tmp_user->delete();
-            event(new Verified($tmp_user));
+            event(new Verified($user));
         }
         
 
