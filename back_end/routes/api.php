@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CostumeVerifyEmail;
 use App\Http\Controllers\LoginController;
 use Illuminate\Auth\Events\Login;
+use App\Http\Middleware\LoggedIn;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,12 @@ use Illuminate\Auth\Events\Login;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/get_current_user', [LoginController::class, 'logout']);
 });
+Route::middleware(['guest'])->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'login']);
+});
 
-Route::post('/register', [RegisteredUserController::class, 'store']);
-Route::post('/login', [LoginController::class, 'login']);
+
 Route::get('list', function () {
     return \App\Models\User::all();
 });

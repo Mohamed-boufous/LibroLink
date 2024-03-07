@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import EmailVerificationNotif from "./EmailVerificationNotif";
-import Singup from "./Singup";
+import App from "./components/App";
+import EmailVerificationNotif from "./components/EmailVerificationNotif";
+import Singup from "./components/Singup";
+import Login from "./components/Login";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     path: "/verify-email?",
     element: <EmailVerificationNotif />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  }
 ]);
 
 export default router;

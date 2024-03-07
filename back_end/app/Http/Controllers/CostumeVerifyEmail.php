@@ -42,7 +42,7 @@ class CostumeVerifyEmail extends Controller
         return response()->json([
             "message" => "Email verified successfully!",
             "success" => true,
-            "data" => $user,
+            "user" => $user,
             "token" => $token
         ]);
     }

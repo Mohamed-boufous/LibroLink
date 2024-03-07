@@ -5,16 +5,20 @@ export const axiosClient = axios.create({
     withCredentials: true,
 })
 
-/* axiosClient.interceptors.request.use((config) => {
-    
-    // config.headers.Authorization = `Bearer ${localStorage.getItem('access_token')}`;
-}) */
+const token = localStorage.getItem('token');
+export const requestInterceptor=(config) => {
+    if (token){
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}
+
 
 axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if (error.response && error.response.status === 401){
-        router.navigate('\login')
+        router.navigate('/login')
         return error;
     }
     throw error;
