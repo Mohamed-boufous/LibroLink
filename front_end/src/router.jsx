@@ -3,6 +3,7 @@ import App from "./components/App";
 import EmailVerificationNotif from "./components/EmailVerificationNotif";
 import Singup from "./components/Singup";
 import Login from "./components/Login";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +20,9 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  }
+  },
+  
+  
 ]);
 
 export default router;
