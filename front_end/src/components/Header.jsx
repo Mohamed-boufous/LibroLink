@@ -20,74 +20,89 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import CategoriesMenu from "./CategoriesMenu";
 import BooksMenu from "./BooksMenu";
 import LangMenu from "./LangMenu";
+import { MenuIcon } from "lucide-react";
 
 export default function Header() {
   const { currentUser, currentToken, setLang, Lang } = useStateContext();
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center mx-5 h-28">
-        <div className="flex items-center justify- w-full ">
-          <div className="flex items-center">
-            <div className="max-w-full h-auto size-32">
-              <Link to="/">
-                <img className="size-full" src={librolinkLogo} alt="logo" />
-              </Link>
+      <div className="border-b  shadow-sm">
+        <div className="flex flex-row justify-between items-center mx-5 h-28">
+          <div className="flex items-center justify- w-full ">
+            <div className="size-6 lg:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <MenuIcon />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[rem]">
+                  <DropdownMenuLabel>Books</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Categories</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <div className="flex mr-20 min-[320px]:max-lg:hidden">
-              <div className="mr-24 ml-10">
-                <BooksMenu />
+            <div className="flex items-center">
+              <div className="max-w-full h-auto size-32">
+                <Link to="/">
+                  <img className="size-full" src={librolinkLogo} alt="logo" />
+                </Link>
               </div>
-              <CategoriesMenu />
+              <div className="flex mr-20 min-[320px]:max-lg:hidden">
+                <div className="mr-24 ml-10">
+                  <BooksMenu />
+                </div>
+                <CategoriesMenu />
+              </div>
+            </div>
+            <div className="flex justify-between p-1 rounded-2xl items-center border h-fit min-w-[10rem] w-2/3 mr-36">
+              <input
+                className="w-full focus:outline-none "
+                type="text"
+                placeholder="Search Book ..."
+              />
+              <div className="size-8">
+                <img src={searchBarIcon} alt="Search Logo" />
+              </div>
             </div>
           </div>
-          <div className="flex justify-between p-1 rounded-2xl items-center border h-fit min-w-[10rem] w-2/3 mr-36">
-            <input
-              className="w-full focus:outline-none "
-              type="text"
-              placeholder="Search Book ..."
-            />
-            <div className="size-8">
-              <img src={searchBarIcon} alt="Search Logo" />
+          <div className="flex">
+            <div className="lan mr-16">
+              <LangMenu />
             </div>
+            {0 ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Team</DropdownMenuItem>
+                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="linksls flex">
+                <Button
+                  className="mr-4  font-semibold "
+                  variant="outline"
+                  asChild
+                >
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button className="font-semibold " asChild>
+                  <Link to="/singup">Sign up</Link>
+                </Button>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex">
-          <div className="lan mr-16">
-            <LangMenu />
-          </div>
-          {0 ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="linksls flex">
-              <Button
-                className="mr-4  font-semibold "
-                variant="outline"
-                asChild
-              >
-                <Link to="/login">Login</Link>
-              </Button>
-              <Button className="font-semibold " asChild>
-                <Link to="/singup">Sign up</Link>
-              </Button>
-            </div>
-          )}
         </div>
       </div>
     </>
