@@ -5,6 +5,8 @@ const StateContext = createContext({
   setCurrentUser: () => {},
   currentToken: null,
   setCurrentToken: () => {},
+  Lang: "ENG",
+  setLang: () => {},
 });
 console.log("MyProvider rendered (current value:)");
 
@@ -23,6 +25,7 @@ export const ContextProvider = ({ children }) => {
     email_verified_at: null,
   });
   const [currentToken, setCurrentToken] = useState(null);
+  const [Lang, setLang] = useState("ENG");
   return (
     <StateContext.Provider
       value={{
@@ -30,6 +33,8 @@ export const ContextProvider = ({ children }) => {
         setCurrentUser,
         currentToken,
         setCurrentToken,
+        Lang,
+        setLang,
       }}
     >
       {children}
