@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useStateContext } from "../context/ContextProvider";
 export default function LangMenu() {
-    const {Lang, setLang} = useStateContext();
+    const {Lang, setLang, saveLangHandler} = useStateContext();
   const items = [
     {
       value: "ENG",
@@ -47,7 +47,7 @@ export default function LangMenu() {
             {
               items.map((item) => (
                 <div  key={item.value} className="flex items-center space-x-2">
-                <RadioGroupItem checked={Lang === item.value} onClick={() => setLang(item.value)} value={item.value} id={item.value} />
+                <RadioGroupItem checked={Lang === item.value} onClick={() => saveLangHandler(item.value)} value={item.value} id={item.value} />
                 <Label className="flex items-center" htmlFor={item.value}>
                   {item.icon}
                   {item.label}

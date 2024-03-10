@@ -5,8 +5,9 @@ const StateContext = createContext({
   setCurrentUser: () => {},
   currentToken: null,
   setCurrentToken: () => {},
-  Lang: "ENG",
+  Lang: "",
   setLang: () => {},
+  saveLangHandler: () => {},
 });
 console.log("MyProvider rendered (current value:)");
 
@@ -25,7 +26,13 @@ export const ContextProvider = ({ children }) => {
     email_verified_at: null,
   });
   const [currentToken, setCurrentToken] = useState(null);
-  const [Lang, setLang] = useState("ENG");
+  const [Lang, setLang] = useState(
+    localStorage.getItem("lang") ? localStorage.getItem("lang") : "ENG"
+  );
+  const saveLangHandler = (lang) =>{
+    setLang(lang);
+    localStorage.setItem("lang", lang);
+  }
   return (
     <StateContext.Provider
       value={{
@@ -35,6 +42,7 @@ export const ContextProvider = ({ children }) => {
         setCurrentToken,
         Lang,
         setLang,
+        saveLangHandler,
       }}
     >
       {children}

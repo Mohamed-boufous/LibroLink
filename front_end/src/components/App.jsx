@@ -14,7 +14,12 @@ import Header from "./Header";
 function App() {
   console.log("wahyaaaaaa");
   return (
+    <>
     <Header />
+    
+    </>
+    
+    
   );
 }
 

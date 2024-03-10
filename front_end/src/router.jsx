@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./components/App";
 import EmailVerificationNotif from "./components/EmailVerificationNotif";
-import Singup from "./components/Singup";
+import Signup from "./components/Signup";
 import Login from "./components/Login";
 
 const router = createBrowserRouter([
@@ -10,8 +10,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/singup",
-    element: <Singup />,
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "/verify-email?",

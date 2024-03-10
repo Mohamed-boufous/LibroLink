@@ -97,8 +97,8 @@ function Login() {
           <div className="border border-gray-200 w-full mt-8"></div>
           <div className=" mt-4 font-light flex justify-center ">
             New To LibroLink?
-            <Link className="text-orange-600 font-bold mx-9" to="/singup">
-              Singup
+            <Link className="text-orange-600 font-bold mx-9" to="/signup">
+              Signup
             </Link>
           </div>
         </form>

@@ -2,7 +2,12 @@ import React from "react";
 //import "../styles/App.css";
 import librolinkLogo from "../assets/LibroLink.png";
 import searchBarIcon from "../assets/SearchBar.svg";
-
+import resMenuIcon from "../assets/resMenu.svg";
+import logoutIcon from "../assets/logoutIcon.svg";
+import profileIcon from "../assets/profileIcon.svg";
+import libraryIcon from "../assets/libraryIcon.svg";
+import settingsIcon from "../assets/settingsIcon.svg";
+import { useState } from "react";
 import { useStateContext } from "../context/ContextProvider";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,27 +25,30 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import CategoriesMenu from "./CategoriesMenu";
 import BooksMenu from "./BooksMenu";
 import LangMenu from "./LangMenu";
+
 import { MenuIcon } from "lucide-react";
+import ResponsiveMenu from "./ResponsiveMenu";
 
 export default function Header() {
   const { currentUser, currentToken, setLang, Lang } = useStateContext();
-
+  const [menuClicked, setMenuClicked] = useState(false);
   return (
     <>
-      <div className="border-b  shadow-sm">
+      <div className="border-b  shadow-sm bg-white ">
         <div className="flex flex-row justify-between items-center mx-5 h-28">
           <div className="flex items-center justify- w-full ">
-            <div className="size-6 lg:hidden">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MenuIcon />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[rem]">
-                  <DropdownMenuLabel>Books</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Categories</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="min-[1190px]:hidden">
+              <Button
+                className="w-16 p-1 "
+                variant="link"
+                onClick={() => setMenuClicked(!menuClicked)}
+              >
+                <img className="size-full" src={resMenuIcon} alt="logo" />
+              </Button>
+              <ResponsiveMenu
+                menuClicked={menuClicked}
+                setMenuClicked={setMenuClicked}
+              />
             </div>
             <div className="flex items-center">
               <div className="max-w-full h-auto size-32">
@@ -48,7 +56,7 @@ export default function Header() {
                   <img className="size-full" src={librolinkLogo} alt="logo" />
                 </Link>
               </div>
-              <div className="flex mr-20 min-[320px]:max-lg:hidden">
+              <div className="hidden mr-20  min-[1190px]:flex">
                 <div className="mr-24 ml-10">
                   <BooksMenu />
                 </div>
@@ -57,7 +65,7 @@ export default function Header() {
             </div>
             <div className="flex justify-between p-1 rounded-2xl items-center border h-fit min-w-[10rem] w-2/3 mr-36">
               <input
-                className="w-full focus:outline-none "
+                className="w-full focus:outline-none  "
                 type="text"
                 placeholder="Search Book ..."
               />
@@ -66,30 +74,75 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <div className="flex">
-            <div className="lan mr-16">
+          <div className="flex ">
+            <div className="lan hidden mr-16 min-[1190px]:flex">
               <LangMenu />
             </div>
-            {0 ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
-                  <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            {1 ? (
+              <div className=" hidden min-[1190px]:flex">
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link to="#">
+                        <div className="flex flex-row items-center">
+                          <img
+                            className="size-5 mr-2"
+                            src={profileIcon}
+                            alt="profile"
+                          />
+                          Profile
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="#">
+                        <div className="flex flex-row items-center">
+                          <img
+                            className="size-5 mr-2"
+                            src={libraryIcon}
+                            alt="library"
+                          />
+                          Library
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="#">
+                        <div className="flex flex-row items-center">
+                          <img
+                            className="size-5 mr-2"
+                            src={settingsIcon}
+                            alt="library"
+                          />
+                          Settings
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="#">
+                        <div className="flex flex-row items-center  text-rose-500">
+                          <img
+                            className="size-5 mr-2"
+                            src={logoutIcon}
+                            alt="logout"
+                          />
+                          Logout
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
-              <div className="linksls flex">
+              <div className="linksls hidden min-[1190px]:flex">
                 <Button
                   className="mr-4  font-semibold "
                   variant="outline"
