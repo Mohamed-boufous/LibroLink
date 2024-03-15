@@ -10,16 +10,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Header from "./Header";
+import { axiosClient } from "../api/axios";
 
 function App() {
+  /* const test = () => {
+    axiosClient.post("/api/get_current_user").then((response) => {
+      console.log(response.data);
+    }).catch((error) => {
+      console.error(error);
+    })
+  };
+  test(); */
   console.log("wahyaaaaaa");
   return (
     <>
-    <Header />
-    
+      hi
     </>
-    
-    
   );
 }
 

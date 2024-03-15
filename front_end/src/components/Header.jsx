@@ -7,9 +7,10 @@ import logoutIcon from "../assets/logoutIcon.svg";
 import profileIcon from "../assets/profileIcon.svg";
 import libraryIcon from "../assets/libraryIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
+import upgradeIcon from "../assets/upgradeIcon.svg";
 import { useState } from "react";
 import { useStateContext } from "../context/ContextProvider";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -63,7 +64,7 @@ export default function Header() {
                 <CategoriesMenu />
               </div>
             </div>
-            <div className="flex justify-between p-1 rounded-2xl items-center border h-fit min-w-[10rem] w-2/3 mr-36">
+            <div className="flex justify-between p-1 px-2 rounded-md items-center border h-fit min-w-[10rem] w-2/3 mr-36">
               <input
                 className="w-full focus:outline-none  "
                 type="text"
@@ -78,8 +79,17 @@ export default function Header() {
             <div className="lan hidden mr-16 min-[1190px]:flex">
               <LangMenu />
             </div>
-            {1 ? (
-              <div className=" hidden min-[1190px]:flex">
+            {currentToken ? (
+              <div className=" hidden min-[1190px]:flex ">
+                <Button
+                  className= {`mr-4 px-6 font-semibold flex ${currentUser.etat_abonnement === "not subscribed" ? "" : "hidden"}`}
+                  variant=""
+                  asChild
+                >
+                  <Link to="#">
+                    <img className="size-6 mr-2 pb-[0.1rem]" src={upgradeIcon} alt="upgradeIcon" />
+                    Upgrade</Link>
+                </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Avatar>
@@ -88,7 +98,7 @@ export default function Header() {
                     </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>{currentUser.displayName}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                       <Link to="#">
@@ -158,6 +168,7 @@ export default function Header() {
           </div>
         </div>
       </div>
+      <Outlet />
     </>
   );
 }

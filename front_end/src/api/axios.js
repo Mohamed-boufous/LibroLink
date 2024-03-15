@@ -1,24 +1,26 @@
 import axios from "axios";
-import router from "../router";
+
 export const axiosClient = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
     withCredentials: true,
 })
 
-const token = localStorage.getItem('token');
 export const requestInterceptor=(config) => {
+    const token = localStorage.getItem('token');
     if (token){
+        console.log("token kayna");
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 }
 
+axiosClient.interceptors.request.use(requestInterceptor);
 
 axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
     if (error.response && error.response.status === 401){
-        router.navigate('/login')
+        //window.location.href = '/login';
         return error;
     }
     throw error;

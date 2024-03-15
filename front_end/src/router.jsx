@@ -3,11 +3,23 @@ import App from "./components/App";
 import EmailVerificationNotif from "./components/EmailVerificationNotif";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import Header from "./components/Header";
+import Profile from "./components/Profile";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Header />,
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      }
+    ],
   },
   {
     path: "/signup",

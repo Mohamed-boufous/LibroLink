@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import closeIcon from "../assets/x_icon.svg";
@@ -8,6 +8,7 @@ import logoutIcon from "../assets/logoutIcon.svg";
 import profileIcon from "../assets/profileIcon.svg";
 import libraryIcon from "../assets/libraryIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
+import upgradeIcon from "../assets/upgradeIcon.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Accordion,
@@ -25,6 +26,7 @@ import {
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "../context/ContextProvider";
+import { axiosClient } from "@/api/axios";
 export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
   const booklist = ["New", "Popular", "Top Rated", "Book List"];
   const categories1 = [
@@ -65,7 +67,6 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
     "Women's Fiction",
     "Young Adult",
   ];
-  const { Lang, setLang, saveLangHandler } = useStateContext();
 
   const items = [
     {
@@ -81,6 +82,27 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
       label: "Arabic",
     },
   ];
+  const {
+    Lang,
+    setLang,
+    saveLangHandler,
+    currentToken,
+    currentUser,
+    setCurrentUser,
+  } = useStateContext();
+  useEffect(() => {
+    if (currentToken) {
+      axiosClient
+        .post("/api/get_current_user")
+        .then((response) => {
+          console.log(response.data);
+          setCurrentUser(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  },[currentToken])
   return (
     <div
       className={`${
@@ -100,21 +122,30 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
         </div>
         <ScrollArea className="h-full">
           <nav className="flex flex-col items-start ml-5 p-4 space-y-4">
-            {1 ? (
+            {currentToken ? (
               <>
                 <div className="flex items-center space-x-2">
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>AV</AvatarFallback>
                   </Avatar>
                   <div>
                     <div className="text-lg font-semibold">
-                      DiplayedUsername
+                      {currentUser.displayName ? currentUser.displayName : "Display Name"}
                     </div>
-                    <div className="text-sm text-gray-500"> @username </div>
+                    <div className="text-sm text-gray-500"> @{currentUser.userName ? currentUser.userName : "User Name"} </div>
                   </div>
                 </div>
                 <div className="flex flex-col space-y-2 font-semibold text-[0.95rem]">
+                <Button
+                  className= {`mr-4 mb-2 w-28 px-6 font-semibold flex ${currentUser.etat_abonnement === "not subscribed" ? "" : "hidden"}`}
+                  variant=""
+                  asChild
+                >
+                  <Link to="#">
+                    <img className="size-6 mr-2 pb-[0.1rem]" src={upgradeIcon} alt="upgradeIcon" />
+                    Upgrade</Link>
+                </Button>
                   <div>
                     <Link to="#">
                       <div className="flex flex-row items-center">
@@ -128,7 +159,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
                     </Link>
                   </div>
                   <div>
-                  <Link to="#">
+                    <Link to="#">
                       <div className="flex flex-row items-center">
                         <img
                           className="size-5 mr-2"
@@ -140,7 +171,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
                     </Link>
                   </div>
                   <div>
-                  <Link to="#">
+                    <Link to="#">
                       <div className="flex flex-row items-center">
                         <img
                           className="size-5 mr-2"
@@ -177,7 +208,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
             )}
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
-                <AccordionTrigger className="hover:no-underline w-64">
+                <AccordionTrigger className="hover:no-underline w-64  font-semibold">
                   Books
                 </AccordionTrigger>
                 {booklist.map((book) => {
@@ -189,7 +220,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
                 })}
               </AccordionItem>
               <AccordionItem value="item-2">
-                <AccordionTrigger className="hover:no-underline">
+                <AccordionTrigger className="hover:no-underline font-semibold">
                   Categories
                 </AccordionTrigger>
                 {categories1.map((category) => {

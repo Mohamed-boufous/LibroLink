@@ -25,14 +25,14 @@ export const ContextProvider = ({ children }) => {
     updated_at: null,
     email_verified_at: null,
   });
-  const [currentToken, setCurrentToken] = useState(null);
+  const [currentToken, setCurrentToken] = useState(localStorage.getItem("token") ? localStorage.getItem("token") : null);
   const [Lang, setLang] = useState(
     localStorage.getItem("lang") ? localStorage.getItem("lang") : "ENG"
   );
-  const saveLangHandler = (lang) =>{
+  const saveLangHandler = (lang) => {
     setLang(lang);
     localStorage.setItem("lang", lang);
-  }
+  };
   return (
     <StateContext.Provider
       value={{
