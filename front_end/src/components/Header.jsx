@@ -1,6 +1,6 @@
 import React from "react";
 //import "../styles/App.css";
-import librolinkLogo from "../assets/LibroLink.png";
+import librolinkLogo from "../assets/LibroLink (8) (1).png";
 import searchBarIcon from "../assets/SearchBar.svg";
 import resMenuIcon from "../assets/resMenu.svg";
 import logoutIcon from "../assets/logoutIcon.svg";

@@ -1,0 +1,397 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.cont-img img {
+  max-width: 100%;
+  height: auto;
+}
+
+.search-cont {
+  display: flex;
+  gap: 50px;
+}
+.search-cont a {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+  color: black;
+  text-decoration: none; /* Supprime le soulignement */
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid gainsboro;
+  width: 25%;
+  border-radius: 10px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+.search-icon img {
+  max-width: 25px;
+  height: auto;
+}
+
+.sign-login-lang {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 250px;
+}
+
+.lan {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 2px;
+  margin-right: 10px;
+}
+
+.lan img {
+  max-width: 25px;
+  height: auto;
+}
+
+.lan a {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: large;
+  color: black;
+  text-decoration: none;
+}
+
+.a-log-in {
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: large;
+  color: black;
+  margin-right: 15px;
+  margin-top: 5px;
+}
+
+.a-sign-in {
+  background-color: rgba(251, 113, 14, 1);
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: large;
+  color: white;
+  border-radius: 10px;
+  border: 5px solid rgba(251, 113, 14, 1);
+  width: 70px;
+}
+
+.sign-login-lang > div:last-child {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sign-login-lang > div:last-child a {
+  margin-left: 10px;
+}
+.container-all {
+  display: flex;
+  margin-left: 40px;
+}
+
+.cont1 {
+  flex: 1;
+  max-width: 50%;
+  
+
+  background-color: #fc8734;
+}
+
+.cont2 {
+  flex: 1;
+  max-width: 40%;
+  background-color: #f87a20;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+ 
+  overflow-y: auto; /* Add a vertical scrollbar when content overflows */
+
+  /* Hide the scrollbar but allow scrolling */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+/* For WebKit browsers (e.g., Chrome, Safari) */
+.cont2::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+.cont2::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the color of the scrollbar thumb */
+}
+
+.cont2 h2 {
+  margin-bottom: 20px;
+}
+.cont2 span {
+  font-weight: bold;
+  /* Add other styles as needed */
+}
+
+.cont1 img {
+  width: 80%; /* Ajustez la largeur de l'image selon vos besoins */
+  margin: 30px;
+}
+
+.adding-cont {
+  display: flex;
+  align-items: center;
+  padding: 10px; /* Add padding for better spacing */
+}
+
+
+.adding-cont img {
+  width: 30px;
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Add margin for spacing between images */
+}
+
+.adding-cont .bookbut {
+  flex-shrink: 0; /* Prevent button from shrinking */
+  width: 40%;
+  max-width: 150px; /* Limit maximum width */
+  background-color: white;
+  font-size: larger;
+  border: 1px solid wheat; /* Use shorthand for border */
+
+}
+
+/* Media query for screens between 1000px and 600px */
+
+/* Media query for screens below 600px */
+
+/* StarRating.css */
+
+.star-rating-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star {
+  font-size: 2em; /* Adjust the font size as needed */
+  color: #ccc; /* Default star color */
+  cursor: pointer;
+  margin: 0.1em;
+  transition: color 0.3s ease;
+}
+
+.star.selected {
+  color: yellow; /* Selected star color */
+}
+.subject {
+  margin-bottom: 30px;
+}
+
+.ligne {
+  width: 91%;
+  height: 2px;
+  background-color: rgba(251, 113, 14, 1);
+}
+.star-svg {
+  background-color: rgb(0, 0, 0);
+
+  width: 21px;
+  height: 20px;
+  margin-right: 5px;
+}
+.star-div {
+  margin-top: -9px;
+}
+.langague-div  img
+{
+  display: inline;
+  margin-right: 4px;
+}
+.langague-div{
+  margin-bottom: 1.5em;
+}
+.langague-div1  img
+{
+  display: inline;
+  margin-right: 4px;
+  margin-left: -2.25em;
+}
+.langague-div1{
+  margin-bottom: 1.5em;
+}
+.pages-div  img
+{
+  display: inline;
+  margin-right: 4px;
+}
+.star-div svg {
+  display: inline;
+  margin-right: 4px;
+}
+.star-div
+{
+  margin-bottom: 1.5em;
+}
+.svg {
+  width: 20px;
+}
+.pages-div 
+{
+margin-bottom: 1.5em;
+}
+
+.star-svg path {
+  fill: rgba(255, 255, 255, 0.8);
+}
+.read-button {
+  background-color: orange;
+  margin-bottom: 5px;
+  width: 70px;
+}
+.info-button {
+  background-color: rgba(255, 255, 255, 0.8);
+
+  width: 70px;
+}
+.Author-Other-Works {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  grid-gap: 16px; /* Adjust the gap between books as needed */
+  max-width: 100%; /* Set your maximum width as needed */
+  margin: 0 auto; /* Center the container */
+  max-height: 900px; /* Adjust the maximum height as needed */
+  overflow-y: auto; /* Add a vertical scrollbar when content overflows */
+
+  /* For WebKit browsers (e.g., Chrome, Safari) */
+  scrollbar-width: thin;
+  scrollbar-color: orange transparent; /* Set the color of the scrollbar */
+
+  /* Add the top border */
+
+  margin-left: 10px;
+}
+.titre-outher {
+  border-bottom: 5px solid orange; /* Adjust the color and thickness as needed */
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  margin-left: 20px;
+}
+
+.Author-Other-Works::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+}
+
+.Author-Other-Works::-webkit-scrollbar-thumb {
+  background-color: orange; /* Set the color of the scrollbar thumb */
+}
+
+.book {
+  width: 100%; /* Ensure each book takes up the full width of its container */
+}
+.ligne-orange-aloso {
+  background-color: #fc8734;
+  width: 99%;
+  height: 3px;
+  margin-left: 2px;
+}
+.May_Also_Like {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.cont1 .img1
+{
+  margin-right: 8%;
+}
+/* styles.css */
+
+
+
+/* Style for each Book */
+
+@media (max-width: 1000px) {
+  .container-all {
+    flex-direction: column; /* On smaller screens, stack columns */
+  }
+
+  .cont1,
+  .cont2 {
+    max-width: 100%; /* Full width for smaller screens */
+  }
+
+  .Author-Other-Works .book {
+    flex: 0 0 100%; /* Full width for smaller screens */
+  }
+  .container-all {
+    margin-left: 0px;
+    width: 50%;
+    margin: 0 29%;
+  }
+  .great {
+    background-color: #fc8734;
+  }
+
+}
+@media screen and (max-width: 600px) {
+  .header {
+    flex-direction: column; /* Changer la direction en colonne pour les petits écrans */
+    text-align: center;
+    gap: 10px;
+  }
+
+  .search-cont {
+    margin-top: 10px;
+    width: 30%; /* Utiliser 100% de la largeur pour les petits écrans */
+    margin-right: 56px;
+    gap: 50px;
+  }
+
+  .search-bar {
+    width: 50%; /* Utiliser 100% de la largeur pour les petits écrans */
+    padding: 10px; /* Ajouter un peu d'espace intérieur */
+    order: 3;
+  }
+
+  .search-icon img {
+    max-width: 15px;
+    padding-left: 5px; /* Ajuster l'espacement pour les petits écrans */
+  }
+  .lan {
+    align-items: center;
+
+    margin-right: 10px; /* Add a margin to create space between lan and sign-login-lang */
+  }
+
+  .sign-login-lang {
+    display: flex;
+    flex-grow: 0;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  .sign-login-lang > div:last-child a {
+    margin-right: 20px;
+  }
+  .container-all {
+    width: 100%;
+    margin-top: 20px;
+    margin-left: 0;
+  }
+  .great {
+    background-color: white;
+  }
+
+}
