@@ -5,6 +5,7 @@ import "../styles/Login.css";
 import { axiosClient } from "../api/axios";
 import { useStateContext } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
+import librolinkLogo from "../assets/LibroLink (8) (1).png";
 function Login() {
   const navigate = useNavigate();
 
@@ -45,7 +46,8 @@ function Login() {
   return (
 
     <div className="flex items-center justify-center min-h-screen  bg-gray-100">
-      <div className="bg-white p-10 rounded border-2 min-w-96 max-w-lg">
+      <div className="bg-white flex flex-col items-center  p-10 pt-0 rounded border-2 min-w-96 max-w-lg">
+        <div className="size-64"><img src={librolinkLogo} alt="librolinkLogo" /></div>
         <h1 className="text-3xl font-bold mb-8 ">Login to LibroLink</h1>
         <form onSubmit={handleSubmit} method="post" className=" text-left w-85">
           <div className="mb-2">

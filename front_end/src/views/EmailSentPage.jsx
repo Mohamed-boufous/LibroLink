@@ -53,7 +53,7 @@ function EmailSentPage() {
           height="96"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#ffa500"
+          stroke="#f97316"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -75,7 +75,7 @@ function EmailSentPage() {
           }}
         >
           We have sent an email to{" "}
-          <span style={{ color: "#ffa500", textDecoration: "underline" }}>
+          <span className="text-orange-500" style={{  textDecoration: "underline" }}>
             boufousmohamed@gmail.com
           </span>
           to confirm the validity of our email address. After receiving the
@@ -105,7 +105,7 @@ function EmailSentPage() {
               borderRadius: "0.25rem",
               color: "#ffffff",
             }}
-            className="button button-primary bg-orange-600 disabled:bg-orange-200 disabled:cursor-not-allowed"
+            className="button button-primary bg-orange-500 hover:bg-orange-600 disabled:bg-orange-200 disabled:cursor-not-allowed"
           >
             {waitingText ? `Resending (${timer}s)` : "Resend confirmation mail"}
           </button>

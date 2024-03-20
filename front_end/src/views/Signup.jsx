@@ -4,13 +4,16 @@ import { axiosClient } from "../api/axios";
 import { Link } from "react-router-dom";
 import "../styles/Singup.css";
 import { useNavigate } from "react-router-dom";
+import librolinkLogo from "../assets/LibroLink (8) (1).png";
+import { useStateContext } from "../context/ContextProvider";
 export default function Singup() {
   const navigate = useNavigate();
+  const { setCurrentUser, setCurrentToken } = useStateContext();
   useEffect(() => {
     if (localStorage.getItem("token")) {
       navigate("/");
     }
-  },[]);
+  }, []);
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
@@ -35,6 +38,8 @@ export default function Singup() {
     try {
       console.log(formData);
       const response = await axiosClient.post("/api/register", formData);
+      
+      navigate("/email-sent");
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -45,7 +50,10 @@ export default function Singup() {
 
   return (
     <div className="flex items-center justify-center h-screen   bg-gray-100 ">
-      <div className="bg-white p-10 rounded border-2 min-w-96 w-2/5 max-w-lg min-h-fit">
+      <div className="bg-white p-10 pt-0 rounded border-2 flex flex-col items-center  min-w-96 w-2/5 max-w-lg min-h-fit">
+        <div className="size-40">
+          <img src={librolinkLogo} alt="librolinkLogo" />
+        </div>
         <form onSubmit={handleSubmit} method="post" className="text-left w-85 ">
           <h2 className="text-3xl font-bold mb-8">
             Inscrivez-vous gratuitement pour commencer la lecture.
@@ -168,7 +176,7 @@ export default function Singup() {
           </div>
           <div className="flex justify-center mt-8">
             <button
-              className="bg-orange-600 text-white px-20 py-2 rounded hover:bg-orange-500 "
+              className="bg-orange-500 text-white px-20 py-2 rounded hover:bg-orange-600 "
               type="submit"
             >
               S'inscrire
@@ -177,7 +185,10 @@ export default function Singup() {
           <div className="border border-gray-200 w-full mt-8"></div>
           <div className="mt-4 font-light flex justify-center ">
             Vous avez déja un compte ?
-            <Link className="text-orange-600 font-bold mx-9" to="/login">
+            <Link
+              className="text-orange-600 font-bold mx-9 underline"
+              to="/login"
+            >
               Login
             </Link>
           </div>

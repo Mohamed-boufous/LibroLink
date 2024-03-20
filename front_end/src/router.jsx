@@ -10,6 +10,12 @@ import LandingPage from "./views/LandingPage";
 import HomePage from "./views/HomePage";
 import EmailSentPage from "./views/EmailSentPage";
 import InspectBook from "./views/InspectBook";
+import AdminDashboard from "./views/AdminDashboard";
+import AdminSideBar from "./components/AdminSideBar";
+import AdminUsers from "./views/AdminUsers";
+import AdminBooks from "./views/AdminBooks";
+import AdminReports from "./views/AdminReports";
+import AdminSubscriptions from "./views/AdminSubscriptions";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,6 +46,32 @@ const router = createBrowserRouter([
         element: <InspectBook />,
       },
     ],
+  },
+  {
+    path: "/admin",
+    element: <AdminSideBar />,
+    children: [
+      {
+        path: "/admin/Dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "/admin/Users",
+        element: <AdminUsers />,
+      },
+      {
+        path: "/admin/Books",
+        element: <AdminBooks />,
+      },
+      {
+        path: "/admin/Reports",
+        element: <AdminReports />,
+      },
+      {
+        path: "/admin/Subscriptions",
+        element: <AdminSubscriptions />,
+      }
+    ]
   },
   {
     path: "/signup",

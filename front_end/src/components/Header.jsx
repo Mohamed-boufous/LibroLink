@@ -76,19 +76,28 @@ export default function Header() {
             </div>
           </div>
           <div className="flex ">
-            <div className="lan hidden mr-16 min-[1190px]:flex">
+            <div className=" hidden mr-16 min-[1190px]:flex justify-center items-center">
               <LangMenu />
             </div>
             {currentToken ? (
               <div className=" hidden min-[1190px]:flex ">
                 <Button
-                  className= {`mr-4 px-6 font-semibold flex ${currentUser.etat_abonnement === "not subscribed" ? "" : "hidden"}`}
+                  className={`mr-4 px-6 font-semibold flex ${
+                    currentUser.etat_abonnement === "not subscribed"
+                      ? ""
+                      : "hidden"
+                  }`}
                   variant=""
                   asChild
                 >
                   <Link to="#">
-                    <img className="size-6 mr-2 pb-[0.1rem]" src={upgradeIcon} alt="upgradeIcon" />
-                    Upgrade</Link>
+                    <img
+                      className="size-6 mr-2 pb-[0.1rem]"
+                      src={upgradeIcon}
+                      alt="upgradeIcon"
+                    />
+                    Upgrade
+                  </Link>
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -98,7 +107,9 @@ export default function Header() {
                     </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>{currentUser.displayName}</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      {currentUser.displayName}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                       <Link to="#">
@@ -161,7 +172,7 @@ export default function Header() {
                   <Link to="/login">Login</Link>
                 </Button>
                 <Button className="font-semibold " asChild>
-                  <Link to="/singup">Sign up</Link>
+                  <Link to="/signup">Sign up</Link>
                 </Button>
               </div>
             )}
