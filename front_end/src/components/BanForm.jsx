@@ -96,12 +96,13 @@ export default function BanForm() {
                   <select
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-gray-200 border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md"
                     id="delete_history"
-                    name="delete_history"
+                    name="ban_duration"
+                    defaultValue={"n/a"}
                   >
                     <option name="ban_duration" value={"d"}>Day</option>
                     <option name="ban_duration" value={"w"}>Week</option>
                     <option name="ban_duration" value={"m"}>Month</option>
-                    <option name="ban_duration" defaultValue={"n/a"} value="n/a">Until Unban</option>
+                    <option name="ban_duration"  value="n/a">Until Unban</option>
                   </select>
                 </div>
               </fieldset>

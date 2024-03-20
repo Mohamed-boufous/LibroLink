@@ -99,8 +99,8 @@ export default function Header() {
                     Upgrade
                   </Link>
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
+                <DropdownMenu >
+                  <DropdownMenuTrigger className="outline-none">
                     <Avatar>
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>CN</AvatarFallback>

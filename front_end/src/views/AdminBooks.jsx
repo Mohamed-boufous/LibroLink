@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PenaltyForm from "@/components/PenaltyForm";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import AddNewBookForm from "@/components/AddNewBookForm";
 
@@ -36,7 +37,7 @@ export default function AdminBooks() {
       sortable: false,
       filterable: false,
     },
-    { field: "title", headerName: "Title", width: 150 , resizer: true},
+    { field: "title", headerName: "Title", width: 150, resizer: true },
     { field: "author", headerName: "Author", width: 150 },
     {
       field: "serie",
@@ -75,12 +76,18 @@ export default function AdminBooks() {
   ];
   return (
     <>
+
       <div className="flex flex-col items-center w-full mx-10">
         <h1 className="text-2xl w-full font-semibold mx-10 mt-5">Books</h1>
-        <div className=" lg:w-[60rem] 2xl:w-[80rem]  bg-white p-3 my-24 rounded-sm ">
+        <div className=" lg:w-[60rem] 2xl:w-[80rem]  bg-white p-3 my-24 rounded-sm border">
           <p className=" flex items-center justify-between text-sm mb-3">
             This is where book management content will be displayed.
-            <AddNewBookForm />
+            <Link to={"/admin/addbook"}>
+              <Button>
+                <AddIcon />
+                Add New Book
+              </Button>
+            </Link>
           </p>
           <div className="font-[520] text-[0.9rem] mb-1">Book statictics</div>
           <div className="flex flex-row justify-between gap-2 w-full mb-6">
@@ -109,7 +116,6 @@ export default function AdminBooks() {
               }}
               pageSizeOptions={[10, 50, 100]}
               rowSelection={false}
-              
             />
           </div>
         </div>

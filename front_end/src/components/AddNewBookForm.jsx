@@ -1,185 +1,323 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddIcon from "@mui/icons-material/Add";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+
 export default function AddNewBookForm() {
+  const [bookCover, setBookCover] = useState("");
+  const [bookFile, setBookFile] = useState("");
+  const [displayBookCover, setDisplayBookCover] = useState("");
+  const [FreeChecked, setFreeChecked] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    serie: "",
+    genre: "",
+    isFree: false,
+    description: "",
+    subject: "",
+    date_publication: "",
+    origin: "",
+    lang: "",
+    bookFile: {},
+    bookCover: {},
+  });
+  const FreeSwitchHandler = (e) => {
+    setFreeChecked(!FreeChecked);
+    setFormData({
+      ...formData,
+      isFree: !FreeChecked,
+    });
+  };
+
+  const ImportBookCoverHandler = (e) => {
+    setBookCover(e.target.files[0]);
+    setDisplayBookCover(URL.createObjectURL(e.target.files[0]));
+    setFormData({
+      ...formData,
+      bookCover: e.target.files[0],
+    });
+  };
+  const ImportBookFileHandler = (e) => {
+    setBookFile(e.target.files[0]);
+    setFormData({
+      ...formData,
+      bookFile: e.target.files[0],
+    });
+  };
   return (
     <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>
-            <AddIcon />
-            Add New Book
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Book Form</DialogTitle>
-          </DialogHeader>
-          <form className="space-y-6">
-            <div className="space-y-2">
-              <div className="flex justify-center space-x-2 ">
+      <div className="flex flex-col items-center w-full mx-10">
+        <div className=" lg:w-[60rem] 2xl:w-[80rem] bg-white p-3 my-24 rounded-sm border ">
+          <form className="space-y-6 h-full">
+            <div className="flex space-x-2 h-full">
+              <div className="space-y-2 w-full">
+                <div className="flex  space-x-2 ">
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Title
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                        onChange={(e) =>
+                          setFormData({ ...formData, title: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="w-1/2">
+                    <label
+                      htmlFor="authorName"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Author's Name
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="authorName"
+                        id="authorName"
+                        className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                        onChange={(e) =>
+                          setFormData({ ...formData, author: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <label
-                    htmlFor="title"
+                    htmlFor="description"
                     className="block text-sm font-semibold text-gray-700"
                   >
-                    Title
+                    Desciprtion{" "}
                   </label>
+                  <div className="mt-1">
+                    <textarea
+                      name="description"
+                      cols="35"
+                      rows="10"
+                      className="w-full h-32 p-2 resize-none rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none  sm:text-sm"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                    ></textarea>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold" htmlFor="subject">
+                    Subject
+                  </label>
+                  <div className="mt-1">
+                    <textarea
+                      name="subject"
+                      cols="35"
+                      rows="10"
+                      className="w-full h-20 p-2 resize-none rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none  sm:text-sm"
+                      onChange={(e) =>
+                        setFormData({ ...formData, subject: e.target.value })
+                      }
+                    ></textarea>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center space-x-1">
+                    <label className="text-sm font-semibold" htmlFor="genre">
+                      Genre
+                    </label>
+                    <p className="italic text-sm">(separete with ",")</p>
+                  </div>
                   <div className="mt-1">
                     <input
                       type="text"
-                      name="title"
-                      id="title"
+                      name="genre"
+                      placeholder="Genre1,Genre2,Genre3..."
                       className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                      onChange={(e) =>
+                        setFormData({ ...formData, genre: e.target.value })
+                      }
                     />
                   </div>
                 </div>
+                <div className="flex items-center space-x-2 ">
+                  <div className="w-full">
+                    <label
+                      htmlFor="date_publication"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Publication Date
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="date"
+                        name="date_publication"
+                        id="title"
+                        className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            date_publication: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <label
+                      htmlFor="origine"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Origine
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        name="origine"
+                        id="origine"
+                        className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                        onChange={(e) =>
+                          setFormData({ ...formData, origine: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <label
+                      htmlFor="lang"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Language
+                    </label>
+                    <div className="mt-1">
+                      <select
+                        name="lang"
+                        defaultValue={"en"}
+                        className="w-full h-8 p-2 rounded-sm border bg-white border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                        onChange={(e) =>
+                          setFormData({ ...formData, lang: e.target.value })
+                        }
+                      >
+                        <option name="lang" value="ar">
+                          Arabic
+                        </option>
+                        <option name="lang" value="en">
+                          English
+                        </option>
+                        <option name="lang" value="fr">
+                          French
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
                 <div>
-                  <label
-                    htmlFor="authorName"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Author's Name
-                  </label>
+                  <div className="flex items-center space-x-1">
+                    <label className="text-sm font-semibold" htmlFor="serie">
+                      Serie's Name
+                    </label>
+                    <p className="italic text-sm">(optional)</p>
+                  </div>
                   <div className="mt-1">
                     <input
                       type="text"
-                      name="authorName"
-                      id="authorName"
-                      className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                      name="serie"
+                      className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none  sm:text-sm"
+                      onChange={(e) =>
+                        setFormData({ ...formData, serie: e.target.value })
+                      }
                     />
+                  </div>
+                  <div className="flex items-center space-x-2 h-full mt-3">
+                    <Switch
+                      checked={FreeChecked}
+                      name="isFree"
+                      onClick={(e) => FreeSwitchHandler(e)}
+                    />
+                    <label htmlFor="isFree" className="text-sm font-semibold">
+                      Free
+                    </label>
                   </div>
                 </div>
               </div>
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Desciprtion{" "}
-                </label>
-                <div className="mt-1">
-                  <textarea
-                    name="description"
-                    cols="35"
-                    rows="10"
-                    className="w-full h-32 p-2 resize-none rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none  sm:text-sm"
-                  ></textarea>
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-semibold" htmlFor="subject">
-                  Subject
-                </label>
-                <div className="mt-1">
-                  <textarea
-                    name="subject"
-                    cols="35"
-                    rows="10"
-                    className="w-full h-20 p-2 resize-none rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none  sm:text-sm"
-                  ></textarea>
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center space-x-1">
-                  <label className="text-sm font-semibold" htmlFor="genre">
-                    Genre
-                  </label>
-                  <p className="italic text-sm">(separete with ",")</p>
-                </div>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    name="genre"
-                    placeholder="Genre1,Genre2,Genre3..."
-                    className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-between items-center space-x-2 ">
-                <div>
-                  <label
-                    htmlFor="date_publication"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Publication Date
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="date"
-                      name="date_publication"
-                      id="title"
-                      className="w-40 h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+              <div className="h-full border-l-2 pl-3">
+                <div className="flex flex-col items-center">
+                  <div className="bg-gray-100 w-64 h-96 mb-4 rounded-sm">
+                    <img
+                      className="w-full h-full"
+                      src={`${displayBookCover ? displayBookCover : ""}`}
+                      alt=""
                     />
                   </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="origine"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Origine
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      name="origine"
-                      id="origine"
-                      className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
+                  <div className="mb-2">
+                    <label
+                      htmlFor="image"
+                      className=" w-64 h-10 cursor-pointer flex justify-center items-center 
+                    text-sm font-semibold text-black bg-white border hover:bg-gray-50  py-1 px-2 rounded-md  "
+                    >
+                      Import Book Cover
+                    </label>
+                    <Input
+                      accept=".jpg, .jpeg, .png"
+                      type="file"
+                      name="image"
+                      id="image"
+                      className="hidden"
+                      onChange={(e) => ImportBookCoverHandler(e)}
                     />
                   </div>
+                  <div className="flex flex-col justify-center items-center">
+                    <label
+                      htmlFor="file_path"
+                      className=" w-64 h-10 cursor-pointer flex justify-center items-center 
+                    text-sm font-semibold text-black bg-white border hover:bg-gray-50  py-1 px-2 rounded-md  "
+                    >
+                      Import File
+                    </label>
+                    <Input
+                      accept=".pdf"
+                      type="file"
+                      name="file_path"
+                      id="file_path"
+                      className="hidden"
+                      onChange={(e) => ImportBookFileHandler(e)}
+                    />
+                    {bookFile && (
+                      <div className="text-[0.7rem] text-green-500">
+                        {bookFile.name} has imported successfully
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-10">
+                    <Button className="w-64 h-10">
+                      {" "}
+                      <AddIcon /> Add Book
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div className="flex items-center space-x-1">
-                  <label className="text-sm font-semibold" htmlFor="serie">
-                    Serie's Name
-                  </label>
-                  <p className="italic text-sm">(optional)</p>
-                </div>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    name="serie"
-                    className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="image"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Book Cover
-                </label>
-                <Input type="file" name="image" />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch name="isFree" />
-                <label htmlFor="isFree" className="text-sm font-semibold">
-                  Free
-                </label>
               </div>
             </div>
           </form>
-          <DialogFooter>
-            <Button className="bg-red-600" type="submit">
-              Ban
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     </>
   );
 }
