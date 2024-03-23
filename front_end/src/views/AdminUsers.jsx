@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PenaltyForm from "@/components/PenaltyForm";
-
+import { axiosClient } from "@/api/axios";
+import { useActionData } from "react-router-dom";
 
 export default function AdminUsers() {
-  const rows = [
-    {
-      id: 1,
-      username: "@sen_charaf",
-      displayname: "Charaf Eddine",
-      subscribed: true,
-      email: "kaouri.charafeddine@gmail.com",
-      created_at: "2024-03-02 20:08:58",
-      updated_at: "2024-03-02 20:08:58",
-    },
-    { id: 2, username: "@mohamed", displayname: "Mohammed" },
-    { id: 3, username: "@ussef", displayname: "Youssef" },
-  ];
+  const [userArray, setUserArray] = useState([]);
+  useEffect(() => {
+    axiosClient.get("/api/list").then((response) => {
+      console.log(response.data);
+      setUserArray(response.data);
+    }).catch((error) => {
+      console.error(error);
+    })
+  }, []);
+
+  const rows = userArray.map((user) => ({
+    id: user.id,
+    username: user.userName,
+    displayname: user.displayName,
+    subscribed: user.is_subscribed,
+    email: user.email,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+  }));
 
   const columns = [
     { field: "id", headerName: "Id", width: 60 },
@@ -49,7 +56,6 @@ export default function AdminUsers() {
       headerName: "Created_at",
       width: 180,
       editable: false,
-      
     },
     {
       field: "updated_at",
@@ -61,9 +67,7 @@ export default function AdminUsers() {
       field: "actions",
       headerName: "Actions",
       type: "actions",
-      renderCell: () => (
-        <PenaltyForm />
-      ),
+      renderCell: () => <PenaltyForm />,
     },
   ];
   return (
@@ -78,20 +82,24 @@ export default function AdminUsers() {
           <div className="flex flex-row justify-between gap-2 w-full mb-6">
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Total Users
-              <div className="font-bold text-[1.5rem]">1000</div>
+              <div className="font-bold text-[1.5rem]">{userArray.length}</div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Subscribed Users
-              <div className="font-bold text-[1.5rem]">300</div>
+              <div className="font-bold text-[1.5rem]">
+                {userArray.filter((user) => user.is_subscribed).length}
+              </div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Non-subscribed Users
-              <div className="font-bold text-[1.5rem]">700</div>
+              <div className="font-bold text-[1.5rem]">
+                {userArray.filter((user) => !user.is_subscribed).length}
+              </div>
             </div>
           </div>
           <div className="">
             <DataGrid
-              sx={{ m: 1 , }}
+              sx={{ m: 1 }}
               autoHeight
               rows={rows}
               columns={columns}
@@ -101,6 +109,7 @@ export default function AdminUsers() {
               }}
               pageSizeOptions={[10, 50, 100]}
               rowSelection={false}
+              loading={userArray.length === 0}
             />
           </div>
         </div>

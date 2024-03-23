@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Auth\Events\Login;
 use App\Http\Middleware\LoggedIn;
+use App\Http\Controllers\BookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,7 @@ Route::get('list', function () {
     return \App\Models\User::all();
 });
 Route::get('/email-verification', [CostumeVerifyEmail::class, 'verifyEmail'])->name('verification.verify');
+Route::get('/get_all_books', [BookController::class, 'index']);
+Route::post('/upload_book', [BookController::class, 'store']);
+Route::delete('/delete_books', [BookController::class, 'delete']);
+Route::post('/update_books/{id}', [BookController::class, 'update']);

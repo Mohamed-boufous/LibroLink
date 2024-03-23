@@ -107,7 +107,7 @@ export default function TimeoutForm() {
           </fieldset>
         </form>
         <DialogFooter>
-          <Button className="bg-yellow-500" type="submit">
+          <Button className="bg-yellow-400 hover:bg-yellow-500" type="submit">
             TimOut
           </Button>
         </DialogFooter>

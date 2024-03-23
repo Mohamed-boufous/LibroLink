@@ -11,8 +11,11 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { axiosClient } from "@/api/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AddNewBookForm() {
+  const navigate = useNavigate();
   const [bookCover, setBookCover] = useState("");
   const [bookFile, setBookFile] = useState("");
   const [displayBookCover, setDisplayBookCover] = useState("");
@@ -27,10 +30,40 @@ export default function AddNewBookForm() {
     subject: "",
     date_publication: "",
     origin: "",
-    lang: "",
+    lang: "en",
     bookFile: {},
     bookCover: {},
   });
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("author", formData.author);
+    form.append("serie", formData.serie);
+    form.append("genre", formData.genre);
+    form.append("isFree", formData.isFree ? 1 : 0);
+    form.append("description", formData.description);
+    form.append("subject", formData.subject);
+    form.append("date_publication", formData.date_publication);
+    //form.append("origin", formData.origin);
+    form.append("lang", formData.lang);
+    //form.append("bookFile", formData.bookFile);
+    form.append("bookCover", formData.bookCover);
+    form.append("bookFile", formData.bookFile);
+    console.log(form);
+    console.log(formData.isFree);
+    console.log(FreeChecked);
+    axiosClient
+      .post("api/upload_book", form)
+      .then((response) => {
+        console.log(response);
+        navigate("/admin/Books");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   const FreeSwitchHandler = (e) => {
     setFreeChecked(!FreeChecked);
     setFormData({
@@ -56,9 +89,13 @@ export default function AddNewBookForm() {
   };
   return (
     <>
-      <div className="flex flex-col items-center w-full mx-10">
-        <div className=" lg:w-[60rem] 2xl:w-[80rem] bg-white p-3 my-24 rounded-sm border ">
-          <form className="space-y-6 h-full">
+      <div className="flex flex-col justify-center items-center w-full mx-10 ">
+        <div className=" lg:w-[60rem] 2xl:w-[90rem] 2xl:h-[40rem] flex flex-col justify-center bg-white p-3 my-24 rounded-sm border ">
+          <form
+            onSubmit={submitHandler}
+            className="space-y-6 "
+            encType="multipart/form-data"
+          >
             <div className="flex space-x-2 h-full">
               <div className="space-y-2 w-full">
                 <div className="flex  space-x-2 ">
@@ -195,7 +232,7 @@ export default function AddNewBookForm() {
                         id="origine"
                         className="w-full h-8 p-2 rounded-sm border border-gray-300 focus:border-black shadow-sm focus:outline-none   sm:text-sm"
                         onChange={(e) =>
-                          setFormData({ ...formData, origine: e.target.value })
+                          setFormData({ ...formData, origin: e.target.value })
                         }
                       />
                     </div>

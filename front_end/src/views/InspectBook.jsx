@@ -7,16 +7,6 @@ import image5 from "../assets/Rectangle5(1).png";
 import image6 from "../assets/Rectangle5(4).png";
 import Com from'../components/component/com'
 
-
-
-
-
-
-
-
-
-
-
 function App() {
   const booksData = [
     { id: 1, image: image3  },

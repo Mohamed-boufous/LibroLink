@@ -36,6 +36,7 @@
     "clsx": "^2.1.0",
     "lucide-react": "^0.350.0",
     "react": "^18.2.0",
+    "react-charts": "^3.0.0-beta.57",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-pro-sidebar": "^1.1.0",

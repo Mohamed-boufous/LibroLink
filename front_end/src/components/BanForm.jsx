@@ -108,7 +108,7 @@ export default function BanForm() {
               </fieldset>
             </form>
             <DialogFooter>
-              <Button className="bg-red-600" type="submit">
+              <Button className="bg-red-500 hover:bg-red-600" type="submit">
                 Ban
               </Button>
             </DialogFooter>
