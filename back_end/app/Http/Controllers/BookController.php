@@ -7,6 +7,10 @@ use App\Models\Book;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Storage;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfParser\PdfParser;
+use setasign\Fpdi\PdfReader\PdfReader;
 
 class BookController extends Controller
 {
@@ -22,7 +26,7 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        
         $validator = Validator::make($request->all(), [
             'bookCover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string',
@@ -64,6 +68,11 @@ class BookController extends Controller
             $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move('pdf', $fileName);
             $book->filePath = 'pdf/' . $fileName;
+            $stream = StreamReader::createByFile($book->filePath);
+            $parser = new PdfParser($stream);
+            $pdfReader = new PdfReader($parser);
+            
+            $book->pages = $pdfReader->getPageCount();
         }
         $genre = explode(',', $request->genre);
         $genreIds = [];
