@@ -15,8 +15,8 @@ export default function AdminSideBar() {
   const [menuClicked, setMenuClicked] = useState(location.pathname.slice(7));
   return (
     <>
-      <div className="flex bg-gray-50">
-        <div className=" w-96 h-screen flex flex-col justify-between border-r-2 bg-white">
+      <div className="flex h-screen bg-gray-50">
+        <div className=" w-96 flex flex-col justify-between border-r-2 bg-white">
           <div className="flex flex-col  items-center ">
             <div className="mx-5 pt-2 mb-5 flex items-baseline space-x-2">
               <div className="text-2xl font-semibold text-orange-500">
@@ -51,7 +51,7 @@ export default function AdminSideBar() {
                   <div className="font-semibold text-[0.9rem]">Dashboard</div>
                 </div>
               </Link>
-              <div className="text-[0.8rem] font-medium text-gray-500 px-2 mt-3 mb-1">
+              <div className="text-[0.8rem] font-medium text-gray-500 px-2 mt-3 mb-">
                 Manage
               </div>
               <Link to={"/admin/Users"} onClick={() => setMenuClicked("Users")}>
@@ -127,7 +127,9 @@ export default function AdminSideBar() {
             </div>
           </Link>
         </div>
+        <div className="w-full overflow-y-auto overflow-x-hidden">
         <Outlet />
+        </div>
       </div>
     </>
   );

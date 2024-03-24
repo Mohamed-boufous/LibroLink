@@ -26,7 +26,7 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'bookCover' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'title' => 'required|string',
@@ -71,7 +71,7 @@ class BookController extends Controller
             $stream = StreamReader::createByFile($book->filePath);
             $parser = new PdfParser($stream);
             $pdfReader = new PdfReader($parser);
-            
+            //dd($pdfReader->getPageCount());
             $book->pages = $pdfReader->getPageCount();
         }
         $genre = explode(',', $request->genre);

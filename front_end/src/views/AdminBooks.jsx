@@ -8,6 +8,8 @@ import AddIcon from "@mui/icons-material/Add";
 import AddNewBookForm from "@/components/AddNewBookForm";
 import EditBookFom from "@/components/EditBookFom";
 import { axiosClient } from "@/api/axios";
+import BarChar from "@/components/charts/BarChar";
+import BooksPieChart from "@/components/charts/BooksPieChart";
 
 export default function AdminBooks() {
   const [books, setBooks] = useState([]);
@@ -28,6 +30,7 @@ export default function AdminBooks() {
   }, [load]);
 
   const rows = books.map((book) => ({
+    
     id: book.id,
     title: book.title,
     author: book.author,
@@ -42,7 +45,6 @@ export default function AdminBooks() {
     file_path: book.filePath,
     bookCover: book.ImageURL,
   }));
-
 
   rows.forEach((row) => {
     console.log(row.file_path);
@@ -173,7 +175,9 @@ export default function AdminBooks() {
       field: "actions",
       headerName: "Actions",
       width: 100,
-      renderCell: (params) => <EditBookFom params={params} setLoad={setLoad} load={load} />,
+      renderCell: (params) => (
+        <EditBookFom params={params} setLoad={setLoad} load={load} />
+      ),
     },
   ];
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
@@ -200,8 +204,8 @@ export default function AdminBooks() {
 
   return (
     <>
-      <div className="flex flex-col items-center w-full mx-5">
-        <h1 className="text-2xl w-full font-semibold mx-10 mt-5">Books</h1>
+      <div className=" flex-grow flex flex-col items-center w-full mx-10 ">
+        <h1 className="text-3xl w-full font-semibold mx-10 mt-5">Books</h1>
         <div className=" lg:w-[60rem] 2xl:w-[90rem]  bg-white p-3 my-24 rounded-sm border">
           <p className=" flex items-center justify-between text-sm mb-3">
             This is where book management content will be displayed.
@@ -214,17 +218,17 @@ export default function AdminBooks() {
           </p>
           <div className="font-[520] text-[0.9rem] mb-1">Book statictics</div>
           <div className="flex flex-row justify-between gap-2 w-full mb-6">
-            <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
+            <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Total Books
               <div className="font-bold text-[1.5rem]">{books.length}</div>
             </div>
-            <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
+            <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Free Books
               <div className="font-bold text-[1.5rem]">
                 {books.filter((book) => book.isFree).length}
               </div>
             </div>
-            <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
+            <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Premium Books
               <div className="font-bold text-[1.5rem]">
                 {books.filter((book) => !book.isFree).length}
@@ -263,6 +267,26 @@ export default function AdminBooks() {
               }}
               rowSelectionModel={selectedRows}
             />
+          </div>
+          <div className="flex flex-row space-x-3  mt-8">
+            <div className=" p-2">
+              <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
+                Top 5 Viewed Books
+              </div>
+              <BarChar w={ window.innerWidth <= 1534  ? 280 : 450} h={300} />
+            </div>
+            <div className="   p-2">
+              <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
+                Top 5 Rating Books
+              </div>
+              <BarChar w={ window.innerWidth <= 1534 ? 280 : 450} h={300}/>
+            </div>
+            <div className="  p-2">
+              <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
+                Book types
+              </div>
+              <BarChar w={ window.innerWidth <= 1534 ? 280 : 450} h={300} />
+            </div>
           </div>
         </div>
       </div>
