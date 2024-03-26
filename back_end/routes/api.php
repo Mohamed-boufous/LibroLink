@@ -32,9 +32,10 @@ Route::middleware(['guest'])->group(function () {
 });
 
 
-Route::get('list', function () {
-    return \App\Models\User::all();
-});
+Route::get('list_users', [UserController::class, 'list']);
+Route::get('/get_users_number', [UserController::class, 'list_users_number']);
+Route::get('/get_books_number', [BookController::class, 'list_books_number']);
+
 Route::get('/email-verification', [CostumeVerifyEmail::class, 'verifyEmail'])->name('verification.verify');
 Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);

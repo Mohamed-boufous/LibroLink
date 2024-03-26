@@ -13,54 +13,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function BarChar( {w,h}) {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-
-  ];
-
+export default function BarChar({ w, h, data }) {
   return (
     <div>
-        
-        <BarChart  width={w} height={h} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="pv" fill="rgb(249 115 22)" />
-        </BarChart>
-        
-      
+      <BarChart width={w} height={h} data={data}>
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="value" fill="rgb(249 115 22)" />
+      </BarChart>
     </div>
   );
 }

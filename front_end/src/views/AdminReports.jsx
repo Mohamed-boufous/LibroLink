@@ -9,7 +9,8 @@ import AddNewBookForm from "@/components/AddNewBookForm";
 import EditBookFom from "@/components/EditBookFom";
 import { axiosClient } from "@/api/axios";
 import BarChar from "@/components/charts/BarChar";
-import BooksPieChart from "@/components/charts/BooksPieChart";
+import BooksPieChart from "@/components/charts/MyPieChart";
+import SolveForm from "@/components/SolveForm";
 
 export default function AdminReports() {
   const [books, setBooks] = useState([]);
@@ -106,7 +107,7 @@ export default function AdminReports() {
             </div>
           );
         } else {
-          return <Button variant="outline">Solve</Button>;
+          return <SolveForm params={params} />;
         }
       },
     },

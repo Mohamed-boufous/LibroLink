@@ -5,13 +5,88 @@ import PenaltyForm from "@/components/PenaltyForm";
 import { axiosClient } from "@/api/axios";
 import { useActionData } from "react-router-dom";
 import BarChar from "@/components/charts/BarChar";
-import BooksPieChart from "@/components/charts/BooksPieChart";
-
+import MyPieChart from "@/components/charts/MyPieChart";
+const columns = [
+  { field: "id", headerName: "Id", width: 60 },
+  {
+    field: "avatar",
+    headerName: "Avatar",
+    width: 60,
+    renderCell: () => (
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>AV</AvatarFallback>
+      </Avatar>
+    ),
+    sortable: false,
+    filterable: false,
+  },
+  { field: "username", headerName: "Username", flex: 1 },
+  { field: "displayname", headerName: "Displayname", flex: 0.8 },
+  {
+    field: "subscribed",
+    headerName: "Subscribed",
+    flex: 0.5,
+    type: "boolean",
+    editable: true,
+  },
+  { field: "email", headerName: "Email", width: 180, editable: false },
+  {
+    field: "gender",
+    headerName: "Gender",
+    flex: 0.3,
+    editable: false,
+  },
+  {
+    field: "birth_date",
+    headerName: "Birth Date",
+    flex: 0.5,
+    editable: false,
+  },
+  {
+    field: "age",
+    headerName: "Age",
+    flex: 0.2,
+    editable: false,
+  },
+  {
+    field: "created_at",
+    headerName: "Created_at",
+    flex: 0.5,
+    editable: false,
+  },
+  {
+    field: "updated_at",
+    headerName: "updated_at",
+    flex: 0.5,
+    editable: false,
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    type: "actions",
+    renderCell: () => <PenaltyForm />,
+  },
+];
 export default function AdminUsers() {
   const [userArray, setUserArray] = useState([]);
+  const [usersNumber, setUsersNumber] = useState({
+    total: 0,
+    subscribed: 0,
+    nonSubscribed: 0,
+    male: 0,
+    female: 0,
+    age: {
+      "<18": 0,
+      "18-25": 0,
+      "26-35": 0,
+      "36-45": 0,
+      "46>": 0,
+    },
+  });
   useEffect(() => {
     axiosClient
-      .get("/api/list")
+      .get("/api/list_users")
       .then((response) => {
         console.log(response.data);
         setUserArray(response.data);
@@ -20,7 +95,31 @@ export default function AdminUsers() {
         console.error(error);
       });
   }, []);
-  console.log(Date.now());
+  useEffect(() => {
+    axiosClient
+      .get("api/get_users_number")
+      .then((response) => {
+        console.log(response.data);
+        setUsersNumber({
+          total: response.data.total_users,
+          subscribed: response.data.subscribed_users,
+          nonSubscribed: response.data.non_subscribed_users,
+          male: response.data.male_users,
+          female: response.data.female_users,
+          age: {
+            "<18": response.data["0-18"],
+            "18-25": response.data["18-25"],
+            "26-35": response.data["26-35"],
+            "36-45": response.data["36-45"],
+            "46>": response.data["45-99"],
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const rows = userArray.map((user) => ({
     id: user.id,
     username: user.userName,
@@ -28,67 +127,27 @@ export default function AdminUsers() {
     subscribed: user.is_subscribed,
     email: user.email,
     gender: user.gender === "M" ? "Male" : "Female",
-    age: 18,
+    age: user.age,
+    birth_date: user.date_birth,
     created_at: user.created_at,
     updated_at: user.updated_at,
   }));
-
-  const columns = [
-    { field: "id", headerName: "Id", width: 60 },
-    {
-      field: "avatar",
-      headerName: "Avatar",
-      width: 60,
-      renderCell: () => (
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>AV</AvatarFallback>
-        </Avatar>
-      ),
-      sortable: false,
-      filterable: false,
-    },
-    { field: "username", headerName: "Username", flex: 1 },
-    { field: "displayname", headerName: "Displayname", flex: 0.8 },
-    {
-      field: "subscribed",
-      headerName: "Subscribed",
-      flex: 0.5,
-      type: "boolean",
-      editable: true,
-    },
-    { field: "email", headerName: "Email", width: 180, editable: false },
-    {
-      field: "gender",
-      headerName: "Gender",
-      flex: 0.5,
-      editable: false,
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      flex: 0.5,
-      editable: false,
-    },
-    {
-      field: "created_at",
-      headerName: "Created_at",
-      flex: 0.5,
-      editable: false,
-    },
-    {
-      field: "updated_at",
-      headerName: "updated_at",
-      flex: 0.5,
-      editable: false,
-    },
-    {
-      field: "actions",
-      headerName: "Actions",
-      type: "actions",
-      renderCell: () => <PenaltyForm />,
-    },
+  const usersStateData = [
+    { name: "Subscribed", value: usersNumber.subscribed },
+    { name: "Non-Subscribed ", value: usersNumber.nonSubscribed },
   ];
+  const usersGenderData = [
+    { name: "Male", value: usersNumber.male },
+    { name: "Female", value: usersNumber.female },
+  ];
+  const usersAgeData = [
+    { name: "<18", value: usersNumber.age["<18"] },
+    { name: "18-25", value: usersNumber.age["18-25"] },
+    { name: "26-35", value: usersNumber.age["26-35"] },
+    { name: "36-45", value: usersNumber.age["36-45"] },
+    { name: "46>", value: usersNumber.age["46>"] },
+  ];
+  console.log(usersAgeData);
   return (
     <>
       <div className=" flex-grow  flex flex-col items-center w-full mx-10">
@@ -101,18 +160,18 @@ export default function AdminUsers() {
           <div className="flex flex-row justify-between gap-2 w-full mb-6">
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Total Users
-              <div className="font-bold text-[1.5rem]">{userArray.length}</div>
+              <div className="font-bold text-[1.5rem]">{usersNumber.total}</div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Subscribed Users
               <div className="font-bold text-[1.5rem]">
-                {userArray.filter((user) => user.is_subscribed).length}
+                {usersNumber.subscribed}
               </div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-16 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Non-subscribed Users
               <div className="font-bold text-[1.5rem]">
-                {userArray.filter((user) => !user.is_subscribed).length}
+                {usersNumber.nonSubscribed}
               </div>
             </div>
           </div>
@@ -136,34 +195,85 @@ export default function AdminUsers() {
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Usere's state
               </div>
-              <BooksPieChart
+              <MyPieChart
                 w={200}
                 cx={"50%"}
-                cy="50%"
+                cy="55%"
                 h={250}
+                sizein={50}
+                data={usersStateData}
+                colors={["#ff8800", "rgb(209 213 219)"]}
               />
+              <div className="flex items-center justify-center space-x-4">
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#ff8800]" />
+                  <span className="text-gray-500 text-xs">Subscribed</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-gray-300" />
+                  <span className="text-gray-500 text-xs">Non Subscribed</span>
+                </div>
+              </div>
             </div>
             <div className=" flex flex-col items-center   p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Usere's age
               </div>
-              <BooksPieChart
+              <MyPieChart
                 w={200}
                 cx={"50%"}
-                cy="50%"
+                cy="55%"
                 h={250}
-              />
+                data={usersAgeData}
+                colors={["#64d638", "#a438d6", "#FFBB28", "#387cd6","#e93a3a"]}
+                sizein={50}
+              />{" "}
+              <div className="flex items-center justify-center space-x-4">
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#64d638]" />
+                  <span className="text-gray-500 text-xs"> {"<18"} </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#a438d6]" />
+                  <span className="text-gray-500 text-xs">{"18-25"}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#FFBB28]" />
+                  <span className="text-gray-500 text-xs"> {"26-35"} </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#4e8ee2]" />
+                  <span className="text-gray-500 text-xs">{"36-45"}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#e93a3a]" />
+                  <span className="text-gray-500 text-xs">{"<45"}</span>
+                </div>
+              </div>
             </div>
             <div className=" flex flex-col items-center  p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Usere's gender
               </div>
-              <BooksPieChart
+              <MyPieChart
                 w={200}
                 cx={"50%"}
-                cy="50%"
+                cy="55%"
                 h={250}
+                sizein={50}
+                data={usersGenderData}
+                colors={["#47b7f3", "#fb5d92"]}
               />
+              <div className="flex items-center justify-center space-x-4">
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#47b7f3]" />
+                  <span className="text-gray-500 text-xs">Male</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#fb5d92]" />
+                  <span className="text-gray-500 text-xs">Female</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

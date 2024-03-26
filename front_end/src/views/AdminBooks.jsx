@@ -9,11 +9,41 @@ import AddNewBookForm from "@/components/AddNewBookForm";
 import EditBookFom from "@/components/EditBookFom";
 import { axiosClient } from "@/api/axios";
 import BarChar from "@/components/charts/BarChar";
-import BooksPieChart from "@/components/charts/BooksPieChart";
+import BooksPieChart from "@/components/charts/MyPieChart";
+import MyPieChart from "@/components/charts/MyPieChart";
 
 export default function AdminBooks() {
-  const [books, setBooks] = useState([]);
   const [load, setLoad] = useState(false);
+  const [books, setBooks] = useState([]);
+  const [booksNumber, setBooksNumber] = useState({
+    total: 0,
+    free: 0,
+    premium: 0,
+  });
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    serie: false,
+    bookFile: false,
+    origin: false,
+    lang: false,
+    created_at: false,
+    updated_at: false,
+  });
+  const [selectedRows, setSelectedRows] = useState([]);
+  useEffect(() => {
+    axiosClient
+      .get("api/get_books_number")
+      .then((response) => {
+        console.log(response.data);
+        setBooksNumber({
+          total: response.data.total_books,
+          free: response.data.free_books,
+          premium: response.data.premium_books,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [load]);
   useEffect(() => {
     const getBooksHandler = () => {
       axiosClient
@@ -28,28 +58,6 @@ export default function AdminBooks() {
     };
     getBooksHandler();
   }, [load]);
-
-  const rows = books.map((book) => ({
-    
-    id: book.id,
-    title: book.title,
-    author: book.author,
-    date_publication: book.date_publication,
-    origin: book.origin,
-    genre: book.genres.map((g) => g.genreName).join(", "),
-    subject: book.subject,
-    serie: book.serie,
-    isFree: book.isFree,
-    description: book.description,
-    lang: book.lang,
-    file_path: book.filePath,
-    bookCover: book.ImageURL,
-  }));
-
-  rows.forEach((row) => {
-    console.log(row.file_path);
-  });
-
   const columns = [
     { field: "id", headerName: "Id", width: 60 },
     {
@@ -124,8 +132,6 @@ export default function AdminBooks() {
       field: "isFree",
       headerName: "Is_Free",
       minWidth: 120,
-
-      minWidth: 120,
       flex: 0.8,
       type: "boolean",
       editable: false,
@@ -180,15 +186,26 @@ export default function AdminBooks() {
       ),
     },
   ];
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
-    serie: false,
-    bookFile: false,
-    origin: false,
-    lang: false,
-    created_at: false,
-    updated_at: false,
-  });
-  const [selectedRows, setSelectedRows] = useState([]);
+
+  const rows = books.map((book) => ({
+    id: book.id,
+    title: book.title,
+    author: book.author,
+    date_publication: book.date_publication,
+    origin: book.origin,
+    genre: book.genres.map((g) => g.genreName).join(", "),
+    subject: book.subject,
+    serie: book.serie,
+    isFree: book.isFree,
+    description: book.description,
+    lang: book.lang,
+    file_path: book.filePath,
+    bookCover: book.ImageURL,
+  }));
+  const booksData = [
+    { name: "Premium", value: booksNumber.premium },
+    { name: "Free", value: booksNumber.free },
+  ];
   const handleDeleteSelectedRows = () => {
     axiosClient
       .delete("api/delete_books", { data: { ids: selectedRows } })
@@ -220,18 +237,16 @@ export default function AdminBooks() {
           <div className="flex flex-row justify-between gap-2 w-full mb-6">
             <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Total Books
-              <div className="font-bold text-[1.5rem]">{books.length}</div>
+              <div className="font-bold text-[1.5rem]">{booksNumber.total}</div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Free Books
-              <div className="font-bold text-[1.5rem]">
-                {books.filter((book) => book.isFree).length}
-              </div>
+              <div className="font-bold text-[1.5rem]">{booksNumber.free}</div>
             </div>
             <div className="flex flex-col justify-center bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
               Premium Books
               <div className="font-bold text-[1.5rem]">
-                {books.filter((book) => !book.isFree).length}
+                {booksNumber.premium}
               </div>
             </div>
           </div>
@@ -273,19 +288,36 @@ export default function AdminBooks() {
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Top 5 Viewed Books
               </div>
-              <BarChar w={ window.innerWidth <= 1534  ? 280 : 450} h={300} />
+              <BarChar w={window.innerWidth <= 1534 ? 280 : 450} h={300} />
             </div>
             <div className="   p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Top 5 Rating Books
               </div>
-              <BarChar w={ window.innerWidth <= 1534 ? 280 : 450} h={300}/>
+              <BarChar w={window.innerWidth <= 1534 ? 280 : 450} h={300} />
             </div>
             <div className="  p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Book types
               </div>
-              <BarChar w={ window.innerWidth <= 1534 ? 280 : 450} h={300} />
+              <MyPieChart
+                w={window.innerWidth <= 1534 ? 280 : 450}
+                h={250}
+                sizein={60}
+                data={booksData}
+                label={false}
+                colors={["#ff8800", "rgb(209 213 219)"]}
+              />
+              <div className="flex items-center justify-center space-x-4 mt-4">
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-[#ff8800]" />
+                  <span className="text-gray-500 text-xs">Premium</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <div className="h-3 w-3 rounded-full bg-gray-300" />
+                  <span className="text-gray-500 text-xs">Free</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

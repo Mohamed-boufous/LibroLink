@@ -24,6 +24,41 @@ class BookController extends Controller
         return response()->json($books);
     }
 
+    function list_books_number(Request $request)
+    {
+        $state = $request->query('state'); 
+
+        $totalBooks = Book::count();
+
+        if ($state === "total") {
+            
+            return response()->json([
+                'total_books' => $totalBooks,
+            ]);
+        }
+        $freeBooks = Book::where('isFree', 1)->count();
+
+        if ($state === "free") {
+            return response()->json([
+                'free_books' => $freeBooks,
+            ]);
+        }
+       
+        $premiumBooks = $totalBooks - $freeBooks;
+
+        if ($state === "premium") {
+            return response()->json([
+                'premium_books' => $premiumBooks,
+            ]);
+        }
+
+        return response()->json([
+            'total_books' => $totalBooks,
+            'free_books' => $freeBooks,
+            'premium_books' => $premiumBooks,
+        ]);
+    }
+
     public function store(Request $request)
     {
 

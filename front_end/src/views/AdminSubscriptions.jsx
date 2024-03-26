@@ -9,7 +9,7 @@ import AddNewBookForm from "@/components/AddNewBookForm";
 import EditBookFom from "@/components/EditBookFom";
 import { axiosClient } from "@/api/axios";
 import BarChar from "@/components/charts/BarChar";
-import BooksPieChart from "@/components/charts/BooksPieChart";
+import BooksPieChart from "@/components/charts/MyPieChart";
 export default function AdminSubscriptions() {
   const [books, setBooks] = useState([]);
   const [load, setLoad] = useState(false);
@@ -55,8 +55,7 @@ export default function AdminSubscriptions() {
       offer: "3 Months",
       subscription_date: "2022-01-01",
       expiration_date: "2022-04-01",
-    }
-    
+    },
   ];
 
   const columns = [
@@ -102,12 +101,16 @@ export default function AdminSubscriptions() {
   const [selectedRows, setSelectedRows] = useState([]);
   return (
     <div className=" flex-grow flex flex-col items-center w-full mx-10 ">
-      <h1 className="text-3xl w-full font-semibold mx-10 mt-5">Subscriptions</h1>
+      <h1 className="text-3xl w-full font-semibold mx-10 mt-5">
+        Subscriptions
+      </h1>
       <div className=" lg:w-[60rem] 2xl:w-[90rem]  bg-white p-3 my-24 rounded-sm border">
         <p className=" flex items-center justify-between text-sm mb-3">
           This is where Subscriptions will be displayed.
         </p>
-        <div className="font-[520] text-[0.9rem] mb-1">Subscriptions statictics</div>
+        <div className="font-[520] text-[0.9rem] mb-1">
+          Subscriptions statictics
+        </div>
         <div className="flex flex-row justify-between gap-2 w-full mb-6">
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Total Subscriptions
