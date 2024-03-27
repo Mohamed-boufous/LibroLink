@@ -47,5 +47,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-   
+    public function views_book(){
+        return $this->belongsToMany(Book::class,'user_viewed_book','id_user','id_book');
+    }
+    public function rating_book(){
+        return $this->belongsToMany(Book::class,'ratings','utilisateur_id','book_id');
+    }
 }

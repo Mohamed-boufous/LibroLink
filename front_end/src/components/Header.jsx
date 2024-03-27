@@ -8,9 +8,9 @@ import profileIcon from "../assets/profileIcon.svg";
 import libraryIcon from "../assets/libraryIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
 import upgradeIcon from "../assets/upgradeIcon.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStateContext } from "../context/ContextProvider";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -29,10 +29,25 @@ import LangMenu from "./LangMenu";
 
 import { MenuIcon } from "lucide-react";
 import ResponsiveMenu from "./ResponsiveMenu";
+import { axiosClient } from "@/api/axios";
 
 export default function Header() {
-  const { currentUser, currentToken, setLang, Lang } = useStateContext();
+  const navigate = useNavigate();
+  const { currentUser, currentToken, setCurrentUser, setLang, Lang } =
+    useStateContext();
+  console.log(currentToken);
   const [menuClicked, setMenuClicked] = useState(false);
+  const logoutHandler = () => {
+    axiosClient
+      .post("api/logout")
+      .then((response) => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className="border-b  shadow-sm bg-white ">
@@ -49,6 +64,7 @@ export default function Header() {
               <ResponsiveMenu
                 menuClicked={menuClicked}
                 setMenuClicked={setMenuClicked}
+                logoutHandler={logoutHandler}
               />
             </div>
             <div className="flex items-center">
@@ -99,7 +115,7 @@ export default function Header() {
                     Upgrade
                   </Link>
                 </Button>
-                <DropdownMenu >
+                <DropdownMenu>
                   <DropdownMenuTrigger className="outline-none">
                     <Avatar>
                       <AvatarImage src="https://github.com/shadcn.png" />
@@ -148,7 +164,7 @@ export default function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link to="#">
+                      <Link onClick={logoutHandler}>
                         <div className="flex flex-row items-center  text-rose-500">
                           <img
                             className="size-5 mr-2"

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import VisitCounter from './HoverItem';
 
-const Book = ({ title, image, highlight, visitCount }) => {
+const Book = ({ book, highlight, visitCount }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

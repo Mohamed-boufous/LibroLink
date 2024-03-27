@@ -125,4 +125,16 @@ class UserController extends Controller
             ], 404);
         }
     }
+
+    public  function delete(Request $request)
+    {
+        $ids = $request->ids;
+        foreach ($ids as $id) {
+            $user = User::find($id);
+            $user->views_book()->detach();
+            $user->rating_book()->detach();
+            $user->delete();
+        }
+        return response()->json(['message' => 'user$user deleted successfully']);
+    }
 }

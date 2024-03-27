@@ -5,6 +5,7 @@ import PenaltyForm from "@/components/PenaltyForm";
 import { axiosClient } from "@/api/axios";
 import { useActionData } from "react-router-dom";
 import BarChar from "@/components/charts/BarChar";
+import { Button } from "@/components/ui/button";
 import MyPieChart from "@/components/charts/MyPieChart";
 const columns = [
   { field: "id", headerName: "Id", width: 60 },
@@ -69,6 +70,7 @@ const columns = [
   },
 ];
 export default function AdminUsers() {
+  const [load, setLoad] = useState(false);
   const [userArray, setUserArray] = useState([]);
   const [usersNumber, setUsersNumber] = useState({
     total: 0,
@@ -84,6 +86,7 @@ export default function AdminUsers() {
       "46>": 0,
     },
   });
+  const [selectedRows, setSelectedRows] = useState([]);
   useEffect(() => {
     axiosClient
       .get("/api/list_users")
@@ -94,7 +97,7 @@ export default function AdminUsers() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [load]);
   useEffect(() => {
     axiosClient
       .get("api/get_users_number")
@@ -118,7 +121,20 @@ export default function AdminUsers() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [load]);
+
+  const handleDeleteSelectedRows = () => {
+    axiosClient
+      .delete("api/delete_users", { data: { ids: selectedRows } })
+      .then((response) => {
+        console.log(response.data);
+        setSelectedRows([]);
+        setLoad(!load);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const rows = userArray.map((user) => ({
     id: user.id,
@@ -176,6 +192,14 @@ export default function AdminUsers() {
             </div>
           </div>
           <div className="">
+          <Button
+              className={`ml-2 w-28 h-8 hover:bg-red-600 bg-red-500 ${
+                selectedRows.length === 0 ? "hidden" : ""
+              }`}
+              onClick={handleDeleteSelectedRows}
+            >
+              Delete
+            </Button>
             <DataGrid
               sx={{ m: 1 }}
               autoHeight
@@ -186,8 +210,14 @@ export default function AdminUsers() {
                 pagination: { paginationModel: { pageSize: 10 } },
               }}
               pageSizeOptions={[10, 50, 100]}
-              rowSelection={false}
+              rowSelection={true}
               loading={userArray.length === 0}
+              checkboxSelection
+              disableRowSelectionOnClick
+              onRowSelectionModelChange={(rowSelectionModel) => {
+                setSelectedRows(rowSelectionModel);
+              }}
+              rowSelectionModel={selectedRows}
             />
           </div>
           <div className="flex flex-row justify-between  mt-14">
@@ -225,7 +255,7 @@ export default function AdminUsers() {
                 cy="55%"
                 h={250}
                 data={usersAgeData}
-                colors={["#64d638", "#a438d6", "#FFBB28", "#387cd6","#e93a3a"]}
+                colors={["#64d638", "#a438d6", "#FFBB28", "#387cd6", "#e93a3a"]}
                 sizein={50}
               />{" "}
               <div className="flex items-center justify-center space-x-4">

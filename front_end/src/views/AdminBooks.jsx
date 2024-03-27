@@ -15,6 +15,8 @@ import MyPieChart from "@/components/charts/MyPieChart";
 export default function AdminBooks() {
   const [load, setLoad] = useState(false);
   const [books, setBooks] = useState([]);
+  const [popularBooks, setPopularBooks] = useState([]);
+  const [mostRatedBooks, setMostRatedBooks] = useState([]);
   const [booksNumber, setBooksNumber] = useState({
     total: 0,
     free: 0,
@@ -56,7 +58,31 @@ export default function AdminBooks() {
           console.error(error);
         });
     };
+    const getPopularBooksHandler = () => {
+      axiosClient
+        .get("api/get_all_books?option=popular&limit=5")
+        .then((response) => {
+          setPopularBooks(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    const getMostRatedBooksHandler = () => {
+      axiosClient
+        .get("api/get_all_books?option=rating&limit=5")
+        .then((response) => {
+          setMostRatedBooks(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getBooksHandler();
+    getPopularBooksHandler();
+    getMostRatedBooksHandler();
   }, [load]);
   const columns = [
     { field: "id", headerName: "Id", width: 60 },
@@ -206,6 +232,14 @@ export default function AdminBooks() {
     { name: "Premium", value: booksNumber.premium },
     { name: "Free", value: booksNumber.free },
   ];
+  const popularBooksData = popularBooks.map((book) => ({
+    name: book.title,
+    value: book.views,
+  }));
+  const mostRatedBooksData = mostRatedBooks.map((book) => ({
+    name: book.title,
+    value: book.sum_rating,
+  }));
   const handleDeleteSelectedRows = () => {
     axiosClient
       .delete("api/delete_books", { data: { ids: selectedRows } })
@@ -288,13 +322,21 @@ export default function AdminBooks() {
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Top 5 Viewed Books
               </div>
-              <BarChar w={window.innerWidth <= 1534 ? 280 : 450} h={300} />
+              <BarChar
+                w={window.innerWidth <= 1534 ? 280 : 450}
+                h={300}
+                data={popularBooksData}
+              />
             </div>
             <div className="   p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Top 5 Rating Books
               </div>
-              <BarChar w={window.innerWidth <= 1534 ? 280 : 450} h={300} />
+              <BarChar
+                w={window.innerWidth <= 1534 ? 280 : 450}
+                h={300}
+                data={mostRatedBooksData}
+              />
             </div>
             <div className="  p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">

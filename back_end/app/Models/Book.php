@@ -32,4 +32,12 @@ class Book extends Model
     {
         return $this->belongsToMany(Genre::class, 'book_has_genres', 'book_id', 'genres_id');
     }
+
+    public function users_views(){
+        return $this->belongsToMany(User::class,'user_viewed_book','id_book','id_user');
+    }
+
+    public function rating_book(){
+        return $this->belongsToMany(User::class,'ratings','book_id','utilisateur_id');
+    }
 }

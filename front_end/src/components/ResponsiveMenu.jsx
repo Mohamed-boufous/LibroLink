@@ -27,7 +27,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "../context/ContextProvider";
 import { axiosClient } from "@/api/axios";
-export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
+export default function ResponsiveMenu({ menuClicked, setMenuClicked,logoutHandler }) {
   const booklist = ["New", "Popular", "Top Rated", "Book List"];
   const categories1 = [
     "Reading Experience",
@@ -90,19 +90,6 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
     currentUser,
     setCurrentUser,
   } = useStateContext();
-  useEffect(() => {
-    if (currentToken) {
-      axiosClient
-        .post("/api/get_current_user")
-        .then((response) => {
-          console.log(response.data);
-          setCurrentUser(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  },[currentToken])
   return (
     <div
       className={`${
@@ -183,7 +170,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked }) {
                     </Link>
                   </div>
                   <div>
-                    <Link to="#">
+                    <Link onClick={logoutHandler}>
                       <div className="flex flex-row items-center  text-rose-500">
                         <img
                           className="size-5 mr-2"

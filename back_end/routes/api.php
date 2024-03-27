@@ -33,6 +33,8 @@ Route::middleware(['guest'])->group(function () {
 
 
 Route::get('list_users', [UserController::class, 'list']);
+Route::delete('/delete_users', [UserController::class, 'delete']);
+
 Route::get('/get_users_number', [UserController::class, 'list_users_number']);
 Route::get('/get_books_number', [BookController::class, 'list_books_number']);
 

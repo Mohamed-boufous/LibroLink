@@ -14,9 +14,28 @@ use setasign\Fpdi\PdfReader\PdfReader;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::with('genres')->get();
+        $option = $request->query('option');
+        $order = $request->query('order');
+        $limit = $request->query('limit');
+        $books = Book::with('genres');
+        switch ($option) {
+            case 'recent':
+                $books = $books->orderBy('created_at', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
+                break;
+            case 'popular':
+                $books = $books->orderBy('views', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
+                break;
+            case 'rating':
+                $books = $books->orderBy('sum_rating', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
+                break;
+            default:
+                $books = $books->get();
+                break;
+        }
+
+
         foreach ($books as $book) {
             /** @var Book $book */
             $book->ImageURL = asset($book->bookCover);
@@ -26,12 +45,12 @@ class BookController extends Controller
 
     function list_books_number(Request $request)
     {
-        $state = $request->query('state'); 
+        $state = $request->query('state');
 
         $totalBooks = Book::count();
 
         if ($state === "total") {
-            
+
             return response()->json([
                 'total_books' => $totalBooks,
             ]);
@@ -43,7 +62,7 @@ class BookController extends Controller
                 'free_books' => $freeBooks,
             ]);
         }
-       
+
         $premiumBooks = $totalBooks - $freeBooks;
 
         if ($state === "premium") {
@@ -187,6 +206,8 @@ class BookController extends Controller
         foreach ($ids as $id) {
             $book = Book::find($id);
             $book->genres()->detach();
+            $book->users_views()->detach();
+            $book->rating_book()->detach();
             $book->delete();
         }
         return response()->json(['message' => 'book deleted successfully']);
