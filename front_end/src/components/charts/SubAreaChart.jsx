@@ -1,7 +1,7 @@
 import React from "react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
-export default function SubAreaChart({ w,h,data }) {
+export default function SubAreaChart({ w,h,data,datakey }) {
   return (
     <ResponsiveContainer height={h} >
     <AreaChart
@@ -21,11 +21,13 @@ export default function SubAreaChart({ w,h,data }) {
         </linearGradient>
       </defs>
       <XAxis dataKey="name" />
-      <YAxis />
+      <YAxis type="number">
+        <Label value="Revenu in DH" angle={-90} position="insideLeft" fill="#ff8800" />
+      </YAxis>
       <Tooltip />
       <Area
         type="monotone"
-        dataKey="pv"
+        dataKey={datakey}
         stroke="#ff8800"
         fillOpacity={1}
         fill="url(#colorPv)"

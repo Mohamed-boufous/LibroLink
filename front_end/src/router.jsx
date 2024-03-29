@@ -44,13 +44,13 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/book_inspect",
+        path: "/book/:bookId",
         element: <InspectBook />,
       },
       {
         path: "/plans",
         element: <PlansPage />,
-      }
+      },
     ],
   },
   {
@@ -76,11 +76,12 @@ const router = createBrowserRouter([
       {
         path: "/admin/Subscriptions",
         element: <AdminSubscriptions />,
-      },{
+      },
+      {
         path: "/admin/addbook",
         element: <AddNewBookForm />,
-      }
-    ]
+      },
+    ],
   },
   {
     path: "/signup",
@@ -96,8 +97,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/email-sent",
-    element: <EmailSentPage/>,
-  }
+    element: <EmailSentPage />,
+  },
 ]);
 
 export default router;

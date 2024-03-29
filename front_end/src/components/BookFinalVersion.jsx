@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function BookFinalVersion({
   book,
@@ -57,7 +58,7 @@ export default function BookFinalVersion({
               >
                 <span className="block">
                   <img
-                    src="./etoile.svg"
+                    src="../etoile.svg"
                     alt=""
                     className="inline-block w-4 h-4 mr-2"
                   />
@@ -65,7 +66,7 @@ export default function BookFinalVersion({
                 </span>
                 <span className="block">
                   <img
-                    src="./world.svg"
+                    src="../world.svg"
                     alt=""
                     className="inline-block w-4 h-4 mr-2"
                   />
@@ -73,7 +74,7 @@ export default function BookFinalVersion({
                 </span>
                 <span className="block">
                   <img
-                    src="./page.svg"
+                    src="../page.svg"
                     alt=""
                     className="inline-block w-4 h-4 mr-2"
                   />
@@ -81,7 +82,7 @@ export default function BookFinalVersion({
                 </span>
                 <span className="block">
                   <img
-                    src="./oeil.svg"
+                    src="../oeil.svg"
                     alt=""
                     className="inline-block w-4 h-4 mr-2"
                   />
@@ -89,9 +90,9 @@ export default function BookFinalVersion({
                 </span>
               </div>
               <div className="flex justify-center">
-                <button className="font-bold text-white bg-orange-600 text-[14px] w-24  px-[16px] py-1 rounded-[2px]">
+                <button className="font-bold  bg-orange-600 text-[14px] w-24  px-[16px] py-1 rounded-[2px]">
                   <img
-                    src="./public/book.svg"
+                    src="../public/book.svg"
                     alt=""
                     className="inline-block w-4 h-4 mr-2"
                   />
@@ -99,14 +100,16 @@ export default function BookFinalVersion({
                 </button>
               </div>
               <div className="flex justify-center mt-2">
-                <button className="font-bold text-black text-[14px] w-24 bg-white px-[16px] py-1 rounded-[2px]">
-                  <img
-                    src="./public/info.svg"
-                    alt=""
-                    className="inline-block w-4 h-4 mr-2"
-                  />
-                  Info
-                </button>
+                <Link to={`/book/${book.id}`}>
+                  <button className="font-bold text-black text-[14px] w-24 bg-white px-[16px] py-1 rounded-[2px]">
+                    <img
+                      src="../public/info.svg"
+                      alt=""
+                      className="inline-block w-4 h-4 mr-2"
+                    />
+                    Info
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

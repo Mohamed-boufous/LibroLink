@@ -43,6 +43,12 @@ class BookController extends Controller
         return response()->json($books);
     }
 
+    public function get_book($id) {
+        $book = Book::with('genres')->find($id);
+        $book->ImageURL = asset($book->bookCover);
+        return response()->json($book);
+    }
+
     function list_books_number(Request $request)
     {
         $state = $request->query('state');

@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Login;
 use App\Http\Middleware\LoggedIn;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,14 +32,15 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
 });
 
+Route::get('/email-verification', [CostumeVerifyEmail::class, 'verifyEmail'])->name('verification.verify');
 
 Route::get('list_users', [UserController::class, 'list']);
+Route::get('/get_users_number', [UserController::class, 'list_users_number']);
 Route::delete('/delete_users', [UserController::class, 'delete']);
 
-Route::get('/get_users_number', [UserController::class, 'list_users_number']);
-Route::get('/get_books_number', [BookController::class, 'list_books_number']);
 
-Route::get('/email-verification', [CostumeVerifyEmail::class, 'verifyEmail'])->name('verification.verify');
+Route::get('/get_books_number', [BookController::class, 'list_books_number']);
+Route::get('/get_book/{id}', [BookController::class, 'get_book']);
 Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);
 Route::delete('/delete_books', [BookController::class, 'delete']);
@@ -47,3 +49,7 @@ Route::post('/update_books/{id}', [BookController::class, 'update']);
 Route::post('/subscribe/{user_id}',[SubscriptionController::class, 'createSubscription']);
 Route::get('/list_subscriptions', [SubscriptionController::class, 'index']);
 Route::get('/get_subscriptions_number', [SubscriptionController::class, 'get_subs_number']);
+Route::get('/get_revenue', [SubscriptionController::class, 'get_revenue']);
+
+Route::post('/add_comment', [CommentController::class, 'store']);
+Route::get('/list_comments', [CommentController::class, 'index']);

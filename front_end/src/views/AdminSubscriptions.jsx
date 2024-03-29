@@ -13,25 +13,31 @@ import BooksPieChart from "@/components/charts/MyPieChart";
 export default function AdminSubscriptions() {
   const [subs, setSubs] = useState([]);
   const [load, setLoad] = useState(false);
-  const [subsNumber,setSubsNumber] = useState({
-    total:0,
-    active:0,
-    expired:0
+  const [subsNumber, setSubsNumber] = useState({
+    total: 0,
+    active: 0,
+    expired: 0,
   });
   useEffect(() => {
-    axiosClient.get("api/list_subscriptions").then((response) => {
-      setSubs(response.data);
-      console.log(response.data);
-    }).catch((error) => {
-      console.error(error);
-    });
+    axiosClient
+      .get("api/list_subscriptions")
+      .then((response) => {
+        setSubs(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    axiosClient.get("api/get_subscriptions_number").then((response) => {
-      setSubsNumber(response.data);
-      console.log(response.data);
-    }).catch((error) => {
-      console.error(error);
-    })
+    axiosClient
+      .get("api/get_subscriptions_number")
+      .then((response) => {
+        setSubsNumber(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [load]);
 
   const rows = subs.map((sub) => {
@@ -40,8 +46,10 @@ export default function AdminSubscriptions() {
       username: sub.user.userName,
       card_number: sub.card.cardNumber,
       offer: `${sub.offer.mois} Months`,
+      price: `${sub.offer.price} DH`,
       subscription_date: sub.subscription_date,
       expiration_date: sub.expiration_date,
+      is_active: sub.is_active,
     };
   });
 
@@ -69,6 +77,13 @@ export default function AdminSubscriptions() {
       editable: false,
     },
     {
+      field: "price",
+      headerName: "Price",
+      minWidth: 120,
+      flex: 1,
+      editable: false,
+    },
+    {
       field: "subscription_date",
       headerName: "Subscription Date",
 
@@ -80,6 +95,14 @@ export default function AdminSubscriptions() {
       field: "expiration_date",
       headerName: "Expiration Date",
 
+      minWidth: 120,
+      flex: 1,
+      editable: false,
+    },
+    {
+      field: "is_active",
+      headerName: "Active",
+      type: "boolean",
       minWidth: 120,
       flex: 1,
       editable: false,

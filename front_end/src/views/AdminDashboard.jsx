@@ -17,50 +17,7 @@ import SubAreaChart from "@/components/charts/SubAreaChart";
 import { DataGrid } from "@mui/x-data-grid";
 import SolveForm from "@/components/SolveForm";
 import { axiosClient } from "@/api/axios";
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+
 const rows = [
   {
     id: 1,
@@ -145,7 +102,7 @@ function AdminDashboard() {
     free: 0,
     premium: 0,
   });
-
+  const [revenue, setRevenue] = useState([]);
   const [subsTotalNumber, setSubsTotalNumber] = useState(0);
 
   useEffect(() => {
@@ -192,7 +149,42 @@ function AdminDashboard() {
       });
   }, []);
 
+  useEffect(() => {
+    axiosClient
+      .get("api/get_revenue").then((response) => {
+        setRevenue(response.data);
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+        console.log(error.response.data.error);
+      })
+  }, []);
+
   console.log("AdminDashboard");
+  const RevenueData = revenue.map((revenue) => {
+    return {
+      name: revenue.date,
+      revenue: revenue.total_revenue,
+    };
+  })
+  
+  /* [
+    {
+      name: "Page A",
+      pv: 989,
+      amt: 2400,
+    },
+    {
+      name: "Page B",
+      pv: 1288,
+      amt: 2210,
+    },
+    {
+      name: "Page B",
+      pv: 1407,
+      amt: 2210,
+    },
+  ]; */
   const usersPieData = [
     { name: "Subscribed", value: usersNumber.subscribed },
     { name: "Non-Subscribed ", value: usersNumber.nonSubscribed },
@@ -318,15 +310,16 @@ function AdminDashboard() {
           </Card>
         </div>
         <div className="sbg-green-500 w-full  space-x-3 flex ">
-          <Card className="w-4/6 h-full">
+          <Card className="w-4/6 h-full ">
             <div className="text-xl font-bold py-2 pl-2">
-              Subscription Revenue Growth
+              Subscription Daily Revenue
             </div>
             <CardContent>
               <SubAreaChart
                 w={window.innerWidth <= 1534 ? 700 : 600}
                 h={580}
-                data={data}
+                data={RevenueData}
+                datakey={"revenue"}
               />
             </CardContent>
           </Card>

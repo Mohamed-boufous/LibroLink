@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Offer;
 use App\Models\Subscription;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
@@ -23,8 +24,29 @@ class SubscriptionController extends Controller
             $subscription->user = $user;
             $subscription->offer = $offer;
             $subscription->card = $card;
+            $subscription->is_active = $subscription->expiration_date > Carbon::now();
         }
         return $subscriptions;
+    }
+
+    public function get_revenue()
+    {
+        try {
+        $subscriptions = Subscription::select(
+            DB::raw('DATE(subscription_date) as date'),
+            DB::raw('SUM(offers.price) as total_revenue')
+        )
+            ->join('offers', 'abonnement list.offer_id', '=', 'offers.id')
+            ->groupBy('date')
+            ->get();
+        
+        return response()->json($subscriptions);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 422);
+        }
+    
     }
 
     public function get_subs_number(Request $request)
