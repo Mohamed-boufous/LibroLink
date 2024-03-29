@@ -17,6 +17,7 @@ import AdminBooks from "./views/AdminBooks";
 import AdminReports from "./views/AdminReports";
 import AdminSubscriptions from "./views/AdminSubscriptions";
 import AddNewBookForm from "./components/AddNewBookForm";
+import PlansPage from "./views/PlansPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         path: "/book_inspect",
         element: <InspectBook />,
       },
+      {
+        path: "/plans",
+        element: <PlansPage />,
+      }
     ],
   },
   {

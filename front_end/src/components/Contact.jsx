@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "./ui/button";
 
 const Contact = () => {
   const [email, setEmail] = useState("");
@@ -37,9 +38,9 @@ const Contact = () => {
           onChange={handleMessageChange}
           required
         ></textarea>
-        <button type="submit" className="secondary-button">
+        <Button type="submit" className="font-semibold">
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   );

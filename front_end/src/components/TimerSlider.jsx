@@ -111,7 +111,7 @@ const AutoImageSlider = () => {
 
   return (
     <div>
-      <h1 className='best-product-text'>Our Best Products </h1>
+      <h1 className='text-4xl text-center'>Our Best Products </h1>
 <CenteredContainer>
       <SliderContainer>
         <NavButton onClick={handlePrev} style={{ left: 0 }}>

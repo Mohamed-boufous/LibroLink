@@ -13,7 +13,7 @@ function LandingPage() {
     <div className="App">
       <Home />
       <About />
-      <AutoImageSlider />
+    {/*   <AutoImageSlider /> */}
 
       <Testimonial />
       <Contact />

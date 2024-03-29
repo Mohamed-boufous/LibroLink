@@ -146,6 +146,8 @@ function AdminDashboard() {
     premium: 0,
   });
 
+  const [subsTotalNumber, setSubsTotalNumber] = useState(0);
+
   useEffect(() => {
     axiosClient
       .get("api/get_users_number")
@@ -172,6 +174,18 @@ function AdminDashboard() {
           free: response.data.free_books,
           premium: response.data.premium_books,
         });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axiosClient
+      .get("api/get_subscriptions_number?option=total")
+      .then((response) => {
+        console.log(response.data);
+        setSubsTotalNumber(response.data.total);
       })
       .catch((error) => {
         console.log(error);
@@ -243,7 +257,7 @@ function AdminDashboard() {
                     className="text-orange-500 w-12 h-12"
                   />
                   <div>
-                    <div className="text-4xl font-bold">400</div>
+                    <div className="text-4xl font-bold">{subsTotalNumber}</div>
                     <div className="text-gray-500">Total Subscriptions</div>
                   </div>
                 </CardContent>

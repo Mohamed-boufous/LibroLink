@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Auth\Events\Login;
 use App\Http\Middleware\LoggedIn;
 use App\Http\Controllers\BookController;
-
+use App\Http\Controllers\SubscriptionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,3 +43,7 @@ Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);
 Route::delete('/delete_books', [BookController::class, 'delete']);
 Route::post('/update_books/{id}', [BookController::class, 'update']);
+
+Route::post('/subscribe/{user_id}',[SubscriptionController::class, 'createSubscription']);
+Route::get('/list_subscriptions', [SubscriptionController::class, 'index']);
+Route::get('/get_subscriptions_number', [SubscriptionController::class, 'get_subs_number']);

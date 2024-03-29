@@ -11,52 +11,39 @@ import { axiosClient } from "@/api/axios";
 import BarChar from "@/components/charts/BarChar";
 import BooksPieChart from "@/components/charts/MyPieChart";
 export default function AdminSubscriptions() {
-  const [books, setBooks] = useState([]);
+  const [subs, setSubs] = useState([]);
   const [load, setLoad] = useState(false);
-  useEffect(() => {}, [load]);
+  const [subsNumber,setSubsNumber] = useState({
+    total:0,
+    active:0,
+    expired:0
+  });
+  useEffect(() => {
+    axiosClient.get("api/list_subscriptions").then((response) => {
+      setSubs(response.data);
+      console.log(response.data);
+    }).catch((error) => {
+      console.error(error);
+    });
 
-  const rows = [
-    {
-      id: 1,
-      username: "John Doe",
-      card_number: "1234 5678 9012 3456",
-      offer: "3 Months",
-      subscription_date: "2022-01-01",
-      expiration_date: "2022-04-01",
-    },
-    {
-      id: 2,
-      username: "John Doe",
-      card_number: "1234 5678 9012 3456",
-      offer: "3 Months",
-      subscription_date: "2022-01-01",
-      expiration_date: "2022-04-01",
-    },
-    {
-      id: 3,
-      username: "John Doe",
-      card_number: "1234 5678 9012 3456",
-      offer: "3 Months",
-      subscription_date: "2022-01-01",
-      expiration_date: "2022-04-01",
-    },
-    {
-      id: 4,
-      username: "John Doe",
-      card_number: "1234 5678 9012 3456",
-      offer: "3 Months",
-      subscription_date: "2022-01-01",
-      expiration_date: "2022-04-01",
-    },
-    {
-      id: 5,
-      username: "John Doe",
-      card_number: "1234 5678 9012 3456",
-      offer: "3 Months",
-      subscription_date: "2022-01-01",
-      expiration_date: "2022-04-01",
-    },
-  ];
+    axiosClient.get("api/get_subscriptions_number").then((response) => {
+      setSubsNumber(response.data);
+      console.log(response.data);
+    }).catch((error) => {
+      console.error(error);
+    })
+  }, [load]);
+
+  const rows = subs.map((sub) => {
+    return {
+      id: sub.id,
+      username: sub.user.userName,
+      card_number: sub.card.cardNumber,
+      offer: `${sub.offer.mois} Months`,
+      subscription_date: sub.subscription_date,
+      expiration_date: sub.expiration_date,
+    };
+  });
 
   const columns = [
     { field: "id", headerName: "Id", width: 60 },
@@ -114,15 +101,15 @@ export default function AdminSubscriptions() {
         <div className="flex flex-row justify-between gap-2 w-full mb-6">
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Total Subscriptions
-            <div className="font-bold text-[1.5rem]">1200</div>
+            <div className="font-bold text-[1.5rem]">{subsNumber.total}</div>
           </div>
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Active Subscriptions
-            <div className="font-bold text-[1.5rem]">200</div>
+            <div className="font-bold text-[1.5rem]">{subsNumber.active}</div>
           </div>
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Expired Subscriptions
-            <div className="font-bold text-[1.5rem]">1000</div>
+            <div className="font-bold text-[1.5rem]">{subsNumber.expired}</div>
           </div>
         </div>
         <div className="">

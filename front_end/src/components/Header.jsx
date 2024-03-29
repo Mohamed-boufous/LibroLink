@@ -48,6 +48,17 @@ export default function Header() {
         console.log(error);
       });
   };
+  useEffect(() => {
+    axiosClient
+      .post("api/get_current_user")
+      .then((response) => {
+        setCurrentUser(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <>
       <div className="border-b  shadow-sm bg-white ">
@@ -99,14 +110,12 @@ export default function Header() {
               <div className=" hidden min-[1190px]:flex ">
                 <Button
                   className={`mr-4 px-6 font-semibold flex ${
-                    currentUser.etat_abonnement === "not subscribed"
-                      ? ""
-                      : "hidden"
+                    currentUser.is_subscribed === 0 ? "" : "hidden"
                   }`}
                   variant=""
                   asChild
                 >
-                  <Link to="#">
+                  <Link to="/plans">
                     <img
                       className="size-6 mr-2 pb-[0.1rem]"
                       src={upgradeIcon}
