@@ -18,6 +18,8 @@ import AdminReports from "./views/AdminReports";
 import AdminSubscriptions from "./views/AdminSubscriptions";
 import AddNewBookForm from "./components/AddNewBookForm";
 import PlansPage from "./views/PlansPage";
+import ReadingBook from "./views/ReadingBook";
+import IFrameReading from "./views/IFrameReading";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/plans",
         element: <PlansPage />,
+      },
+      {
+        path: "/reading",
+        element: <ReadingBook />,
       },
     ],
   },
@@ -98,6 +104,10 @@ const router = createBrowserRouter([
   {
     path: "/email-sent",
     element: <EmailSentPage />,
+  },
+  {
+    path: "/iframe",
+    element: <IFrameReading />,
   },
 ]);
 

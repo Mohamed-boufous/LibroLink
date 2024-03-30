@@ -46,6 +46,9 @@ class BookController extends Controller
     public function get_book($id) {
         $book = Book::with('genres')->find($id);
         $book->ImageURL = asset($book->bookCover);
+        if ($book->filePath) {
+        $book->PdfURL = asset($book->filePath);
+        }
         return response()->json($book);
     }
 

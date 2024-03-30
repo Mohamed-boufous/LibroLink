@@ -352,7 +352,7 @@ export default function AdminBooks() {
               />
               <div className="flex items-center justify-center space-x-4 mt-4">
                 <div className="flex items-center space-x-1">
-                  <div className="h-3 w-3 rounded-full bg-[#ff8800]" />
+                  <div className="h-3 w-3 rounded-full bg-[#ffb560]" />
                   <span className="text-gray-500 text-xs">Premium</span>
                 </div>
                 <div className="flex items-center space-x-1">

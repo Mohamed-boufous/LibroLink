@@ -1,0 +1,4 @@
+<IfModule mod_headers.c>
+  # Allow access to all files
+  Header set Access-Control-Allow-Origin *  # Replace with specific origins for production
+</IfModule>
