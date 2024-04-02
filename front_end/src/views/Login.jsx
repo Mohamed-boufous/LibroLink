@@ -35,7 +35,11 @@ function Login() {
         setCurrentUser(response.data.user);
         setCurrentToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        navigate("/");
+        if (response.data.type === "admin") {
+          navigate("/admin");
+        }else if ( response.data.type === "user") {
+        navigate(-1);
+      }
       })
       .catch((error) => {
         console.error(error);

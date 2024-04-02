@@ -110,7 +110,7 @@ export default function Header() {
               <div className=" hidden min-[1190px]:flex ">
                 <Button
                   className={`mr-4 px-6 font-semibold flex ${
-                    currentUser.is_subscribed === 0 ? "" : "hidden"
+                    currentUser.is_subscribed === 1 ? "" : "hidden"
                   }`}
                   variant=""
                   asChild

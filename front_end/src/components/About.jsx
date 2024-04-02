@@ -12,9 +12,9 @@ const About = () => {
       <div className="about-section-image-container">
         <img src={AboutBackgroundImage} alt="" />
       </div>
-      <div className="about-section-text-container">
-        <p className="primary-subheading">About LibroLink</p>
-        <h1 className="primary-heading">
+      <div className="about-section-text-container items-center">
+        <p className="text-2xl font-semibold mb-8">About LibroLink</p>
+        <h1 className="text-5xl font-[510]">
           <span style={{ color: "orange" }}>LibroLink</span>: Your guide to an{" "}
           <span style={{ color: "orange" }}>endless library</span>.
         </h1>

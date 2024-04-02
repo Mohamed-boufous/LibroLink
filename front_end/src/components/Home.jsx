@@ -16,9 +16,9 @@ const Home = () => {
           <img src={BannerBackground} alt="" />
         </div>
         <div className="home-text-section">
-          <h1 className="primary-heading">
+          <h1 className=" text-5xl font-semibold">
             <span>LibroLink</span>: Where Your Machine Becomes Your Book.{" "}
-            <span>Make</span> Your <span>Mark</span>.
+            <span className="text-orange-500">Make</span> Your <span className="text-orange-500">Mark</span>.
           </h1>
 
           <p className="primary-text">

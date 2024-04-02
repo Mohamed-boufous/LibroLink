@@ -42,13 +42,15 @@ export default function BookFinalVersion({
               >
                 {book.title}
               </span>
-              {book.genres.map((genre) => (
-                <button
-                  className={`text-start font-medium text-sm block mt-2 bg-gray-200 px-2 py-1 rounded-md`}
-                >
-                  {genre.genreName}
-                </button>
-              ))}
+              <div className="flex  h-10 gap-2 flex-shrink-3">
+                {book.genres.map((genre) => (
+                  <button
+                    className={`text-start  font-medium text-sm block mt-2 bg-gray-200 px-2 py-1 rounded-md`}
+                  >
+                    {genre.genreName}
+                  </button>
+                ))}
+              </div>
               <div
                 className={`mt-2 ${
                   window.innerWidth >= 992 && window.innerWidth <= 1170

@@ -157,6 +157,26 @@ export default function Singup() {
             ))}
           </div>
           <div className="mb-2">
+            <label className="font-semibold	" htmlFor="gender">
+              Quel est votre genre ?
+            </label>
+            <select
+              className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
+            outline-none focus:border-black bg-white"
+              name="gender"
+              id="gender"
+              onChange={(e) =>
+                setFormData({ ...formData, gender: e.target.value })
+              }
+            >
+              <option value="Homme">Homme</option>
+              <option value="Femme">Femme</option>
+            </select>
+            {/* {errors.gender.map((error) => (
+              <p className="text-red-500 pl-1">{error}</p>
+            ))} */}
+          </div>
+          <div className="mb-2">
             <label className="font-semibold	" htmlFor="date">
               Quelle est votre date de naissance ?
             </label>

@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [ // Add this new guard configuration
+            'driver' => 'session', // Or any preferred driver (e.g., 'token')
+            'provider' => 'admins', // Specify the provider for admin users (assuming 'admins' table)
+        ],
     ],
 
     /*
@@ -64,7 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'admins' => [ // Add this new provider configuration
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class, // Replace with your admin model path
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

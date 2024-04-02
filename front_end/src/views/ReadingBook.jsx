@@ -95,7 +95,7 @@ export default function ReadingBook() {
           >
             {bookPDF ? (
               <Viewer
-                fileUrl={" http://localhost:8000/pdf/660754580c7d2.pdf"}
+                fileUrl={"/public/TheLordOfTheRingsPDF.pdf"}
                 plugins={[
                   zoomPluginInstance,
                   pageNavigationPluginInstance,

@@ -64,7 +64,7 @@ const router = createBrowserRouter([
     element: <AdminSideBar />,
     children: [
       {
-        path: "/admin/Dashboard",
+        path: "/admin/",
         element: <AdminDashboard />,
       },
       {

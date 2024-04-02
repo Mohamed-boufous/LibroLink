@@ -13,11 +13,39 @@ import BooksPieChart from "@/components/charts/MyPieChart";
 import SolveForm from "@/components/SolveForm";
 
 export default function AdminReports() {
-  const [books, setBooks] = useState([]);
+  const [reports, setReports] = useState([]);
   const [load, setLoad] = useState(false);
-  useEffect(() => {}, [load]);
+  const [reportsNumber, setReportsNumber] = useState({
+    solved: 0,
+    unsolved: 0,
+    total: 0,
+  });
+  useEffect(() => {
+    axiosClient.get("api/get_all_reports").then((response) => {
+      setReports(response.data);
+    });
+    axiosClient
+      .get("api/get_reports_number")
+      .then((response) => {
+        setReportsNumber(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [load]);
 
-  const rows = [
+  const rows = reports.map((report) => {
+    return {
+      id: report.id,
+      comment: report.comment_id,
+      reporter: report.reporter_id,
+      reported: report.reported_id,
+      message: report.message,
+      solved: report.solved,
+    };
+  });
+
+  /* const rows = [
     {
       id: 1,
       comment: "this is a comment",
@@ -25,36 +53,7 @@ export default function AdminReports() {
       reported: "Jane Doe",
       message: "this is a message",
     },
-    {
-      id: 2,
-      comment: "this is a comment",
-      reporter: "John Doe",
-      reported: "Jane Doe",
-      message: "this is a message",
-      solved: true,
-    },
-    {
-      id: 3,
-      comment: "this is a comment",
-      reporter: "John Doe",
-      reported: "Jane Doe",
-      message: "this is a message",
-    },
-    {
-      id: 4,
-      comment: "this is a comment",
-      reporter: "John Doe",
-      reported: "Jane Doe",
-      message: "this is a message",
-    },
-    {
-      id: 5,
-      comment: "this is a comment",
-      reporter: "John Doe",
-      reported: "Jane Doe",
-      message: "this is a message",
-    },
-  ];
+  ]; */
 
   const columns = [
     { field: "id", headerName: "Id", width: 60 },
@@ -112,8 +111,19 @@ export default function AdminReports() {
       },
     },
   ];
-
   const [selectedRows, setSelectedRows] = useState([]);
+  const handleDeleteSelectedRows = () => {
+    axiosClient
+      .delete("api/delete_reports", { data: { ids: selectedRows } })
+      .then((response) => {
+        console.log(response.data);
+        setSelectedRows([]);
+        setLoad(!load);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   return (
     <div className=" flex-grow flex flex-col items-center w-full mx-10 ">
       <h1 className="text-3xl w-full font-semibold mx-10 mt-5">Reports</h1>
@@ -125,15 +135,19 @@ export default function AdminReports() {
         <div className="flex flex-row justify-between gap-2 w-full mb-6">
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Total Reports
-            <div className="font-bold text-[1.5rem]">500</div>
+            <div className="font-bold text-[1.5rem]">{reportsNumber.total}</div>
           </div>
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Unsolved Reports
-            <div className="font-bold text-[1.5rem]">100</div>
+            <div className="font-bold text-[1.5rem]">
+              {reportsNumber.unsolved}
+            </div>
           </div>
           <div className="flex flex-col justify-center  bg-orange-400 rounded-sm h-18 text-white text-[0.9rem] font-medium p-2 w-1/3">
             Solved Reports
-            <div className="font-bold text-[1.5rem]">300</div>
+            <div className="font-bold text-[1.5rem]">
+              {reportsNumber.solved}
+            </div>
           </div>
         </div>
         <div className="">
@@ -141,6 +155,7 @@ export default function AdminReports() {
             className={`ml-2 w-28 h-8 hover:bg-red-600 bg-red-500 ${
               selectedRows.length === 0 ? "hidden" : ""
             }`}
+            onClick={handleDeleteSelectedRows}
           >
             Delete
           </Button>

@@ -11,6 +11,7 @@ use App\Http\Middleware\LoggedIn;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReportController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,3 +54,10 @@ Route::get('/get_revenue', [SubscriptionController::class, 'get_revenue']);
 
 Route::post('/add_comment', [CommentController::class, 'store']);
 Route::get('/list_comments', [CommentController::class, 'index']);
+Route::post('/update_comment/{id}/{like}/{dislike}', [CommentController::class, 'update_like_delike']);
+Route::get('/get_comments_number/{book_id}', [CommentController::class, 'get_number']);
+
+Route::get('/get_all_reports', [ReportController::class, 'index']);
+Route::get('/get_reports_number', [ReportController::class, 'get_number']);
+Route::post('/make_report', [ReportController::class, 'store']);
+Route::delete('/delete_reports', [ReportController::class, 'delete']);

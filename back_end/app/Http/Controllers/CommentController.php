@@ -13,13 +13,24 @@ class CommentController extends Controller
 
     public function index(Request $request) {
         $book_id = $request->query('book_id');
-        $comments = Comment::where('book_id', $book_id)->get();
+        $replied_id = $request->query('replied_id');
+        if ($replied_id != null) {
+            $comments = Comment::where('replied_id', $replied_id)->where('book_id', $book_id)->get();
+        } else {
+            $comments = Comment::where('book_id', $book_id)->get();
+        }
         foreach ($comments as $comment) {
             $user = User::find($comment->user_id);
             $comment->user = $user;
         }
         return $comments;
     }
+
+public function get_number(Request $request, $book_id) {
+    $replied_id = $request->query('replied_id');
+    $comments = Comment::where('book_id', $book_id)->where('replied_id', $replied_id)->count();
+    return $comments;
+}
 
     public function store(Request $request)
     {
@@ -65,5 +76,16 @@ class CommentController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function update_like_delike($id,$like,$deslike) {
+        $comment = Comment::find($id);
+        if ($comment == null) {
+            return response()->json(['message' => 'comment not found'], 404);
+        }
+        $comment->likes = $like;
+        $comment->deslikes = $deslike;
+        $comment->save();
+        return response()->json($comment);
     }
 }

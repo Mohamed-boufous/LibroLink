@@ -102,6 +102,11 @@ function AdminDashboard() {
     free: 0,
     premium: 0,
   });
+  const [reportsNumber, setReportsNumber] = useState({
+    solved: 0,
+    unsolved: 0,
+    total: 0,
+  });
   const [revenue, setRevenue] = useState([]);
   const [subsTotalNumber, setSubsTotalNumber] = useState(0);
 
@@ -118,6 +123,14 @@ function AdminDashboard() {
       })
       .catch((error) => {
         console.log(error);
+      });
+      axiosClient
+      .get("api/get_reports_number")
+      .then((response) => {
+        setReportsNumber(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
@@ -237,7 +250,7 @@ function AdminDashboard() {
                     className="text-orange-500 w-12 h-12"
                   />
                   <div>
-                    <div className="text-4xl font-bold">216</div>
+                    <div className="text-4xl font-bold">{reportsNumber.total}</div>
                     <div className="text-gray-500">Total Reports</div>
                   </div>
                 </CardContent>

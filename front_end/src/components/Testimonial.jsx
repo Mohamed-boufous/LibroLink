@@ -7,9 +7,9 @@ import { AiFillStar } from "react-icons/ai";
 const Testimonial = () => {
   return (
     <div className="work-section-wrapper mt-20">
-      <div className="work-section-top">
-        <p className="primary-subheading">Client Testimonials</p>
-        <h1 className="primary-heading">Client Satisfaction at Its Best.</h1>
+      <div className="work-section-top flex flex-col items-center">
+        <p className=" font-semibold text-4xl mb-8">Client Testimonials</p>
+        <h1 className=" text-gray-800 text-8xl">Client Satisfaction at Its Best.</h1>
       </div>
       <div className="testimonial-section-bottom">
         <div className="flex flex-col">
@@ -26,7 +26,7 @@ const Testimonial = () => {
             <AiFillStar />
             <AiFillStar />
           </div>
-          <h2>hassan ait walter</h2>
+          <h2>Hassan Boufous</h2>
         </div>
         <div className="flex flex-col">
           <img src={ProfilePic2} alt="" />
@@ -42,7 +42,7 @@ const Testimonial = () => {
             <AiFillStar />
             <AiFillStar />
           </div>
-          <h2>khadija walter</h2>
+          <h2>Khadija Kaouri</h2>
         </div>
         <div className="flex flex-col">
           <img src={ProfilePic3} alt="" />
@@ -59,7 +59,7 @@ const Testimonial = () => {
             <AiFillStar />
             <AiFillStar />
           </div>
-          <h2>kahlid pinkman</h2>
+          <h2>Khalid Falag</h2>
         </div>
       </div>
     </div>

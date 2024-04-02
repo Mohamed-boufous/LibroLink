@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use App\Models\Admin;
 
 class LoginController extends Controller
 {
@@ -27,30 +28,24 @@ class LoginController extends Controller
             ], 422);
         }
             //$credentials = $request->validated();
-            if (!Auth::attempt($request->only('email', 'password'))) {
-                
-                return response()->json([
-                    'message' => 'Invalid credentials.',
-
-                ], 401);
+            $user = Admin::where('email', $request->email)->first();
+            if (!$user) {
+                $user = User::where('email', $request->email)->first();
             }
-            
-            try {
-                /** @var User $user */
-                $user = Auth::user();
+    
+            if ($user && Auth::guard($user instanceof Admin ? 'admin' : 'web')->attempt(['email' => $request->email, 'password' => $request->password])) {
                 $token = $user->createToken('auth_token')->plainTextToken;
-
+    
                 return response()->json([
-                    'message' => 'Successfully logged in.',
-                    'user' => $user,
                     'token' => $token,
-                    'data' => Auth::user(),
+                    'user' => $user,
+                    'token_type' => 'bearer',
+                    'type' => $user instanceof Admin ? 'admin' : 'user',
                 ]);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'message' => 'error',
-                ], 401);
             }
+    
+            return response()->json(['error' => 'Invalid login credentials.'], 401);
+    
         
     }
 

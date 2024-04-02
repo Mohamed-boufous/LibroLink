@@ -43,11 +43,12 @@ class BookController extends Controller
         return response()->json($books);
     }
 
-    public function get_book($id) {
+    public function get_book($id)
+    {
         $book = Book::with('genres')->find($id);
         $book->ImageURL = asset($book->bookCover);
         if ($book->filePath) {
-        $book->PdfURL = asset($book->filePath);
+            $book->PdfURL = asset($book->filePath);
         }
         return response()->json($book);
     }
@@ -143,8 +144,10 @@ class BookController extends Controller
         foreach ($genre as $genreName) {
             $genretable[] = trim($genreName);
         }
+        /* dd($genre); */
         foreach ($genre as $genreName) {
             $genretable = Genre::where('genreName', $genreName)->firstOrFail();
+            /* dd($genretable->id); */
             $genreIds[] = $genretable->id;
         }
         $book->save();
