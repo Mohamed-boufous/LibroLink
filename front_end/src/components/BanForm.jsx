@@ -12,8 +12,32 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import BlockIcon from "@mui/icons-material/Block";
-export default function BanForm() {
+import { axiosClient } from "@/api/axios";
+
+export default function BanForm({params, currentUser}) {
   const [isOtherClicked, setIsOtherClicked] = useState(false);
+  const [penaltyData, setPenaltyData] = useState({
+    penalty: "ban",
+    reason: "",
+    duration: "unlimited",
+    userId: params.row.id,
+    adminId: currentUser.id,
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(penaltyData);
+    axiosClient
+      .post("/api/make_penalty", penaltyData)
+      .then((response) => {
+        console.log(response.data);
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,7 +64,8 @@ export default function BanForm() {
                   id="suspicious_account"
                   name="ban_reason"
                   type="radio"
-                  onChange={() => setIsOtherClicked(false)}
+                  value={'Spam account'}
+                  onChange={() => {setIsOtherClicked(false); setPenaltyData({...penaltyData, reason: 'Spam account'})}}
                 />
                 <label
                   className="ml-3 block text-sm font-medium text-gray-700"
@@ -55,7 +80,8 @@ export default function BanForm() {
                   id="compromised_account"
                   name="ban_reason"
                   type="radio"
-                  onChange={() => setIsOtherClicked(false)}
+                  value={'Inappropriate language'}
+                  onChange={() => {setIsOtherClicked(false); setPenaltyData({...penaltyData, reason: 'Inappropriate language'})}}
                 />
                 <label
                   className="ml-3 block text-sm font-medium text-gray-700"
@@ -70,6 +96,7 @@ export default function BanForm() {
                   id="other"
                   name="ban_reason"
                   type="radio"
+                  value={"other"}
                   onChange={() => setIsOtherClicked(!isOtherClicked)}
                 />
                 <label
@@ -83,6 +110,8 @@ export default function BanForm() {
                 <textarea
                   className={`w-full h-full border resize-none  
                     border-gray-300 rounded-md p-2 focus:outline-none focus:border-black" name="ban_reason" cols="30" rows="10`}
+                    value={penaltyData.reason}
+                    onChange={(e) => setPenaltyData({...penaltyData, reason: e.target.value})}
                 ></textarea>
               </div>
             </div>
@@ -96,18 +125,21 @@ export default function BanForm() {
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-gray-200 border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md"
                 id="delete_history"
                 name="ban_duration"
-                defaultValue={"n/a"}
+                defaultValue={"unlimited"}
+                onChange={(e) =>
+                  setPenaltyData({ ...penaltyData, duration: e.target.value })
+                }
               >
-                <option name="ban_duration" value={"d"}>
+                <option name="ban_duration" value={1}>
                   Day
                 </option>
-                <option name="ban_duration" value={"w"}>
+                <option name="ban_duration" value={7}>
                   Week
                 </option>
-                <option name="ban_duration" value={"m"}>
+                <option name="ban_duration" value={30}>
                   Month
                 </option>
-                <option name="ban_duration" value="n/a">
+                <option name="ban_duration" value="unlimited">
                   Until Unban
                 </option>
               </select>
@@ -116,7 +148,7 @@ export default function BanForm() {
         </form>
         <DialogFooter>
           <DialogClose>
-            <Button className="bg-red-500 hover:bg-red-600" type="submit">
+            <Button className="bg-red-500 hover:bg-red-600" onClick={handleSubmit}>
               Ban
             </Button>
           </DialogClose>

@@ -24,6 +24,7 @@ export const ContextProvider = ({ children }) => {
     date_birth: null,
     updated_at: null,
     email_verified_at: null,
+    state: null,
   });
   const [currentToken, setCurrentToken] = useState(localStorage.getItem("token") ? localStorage.getItem("token") : null);
   const [Lang, setLang] = useState(

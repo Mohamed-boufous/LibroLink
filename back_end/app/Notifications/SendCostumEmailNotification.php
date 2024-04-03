@@ -44,8 +44,8 @@ class SendCostumEmailNotification extends Notification
         }
 
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', $url)
+            ->line('To verify your email, please click the button below.')
+            ->action('Verify Email', $url)
             ->line('Thank you for using our application!');
     }
 

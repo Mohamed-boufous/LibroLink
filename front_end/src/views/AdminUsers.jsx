@@ -66,7 +66,7 @@ const columns = [
     field: "actions",
     headerName: "Actions",
     type: "actions",
-    renderCell: () => <PenaltyForm />,
+    renderCell: (params) => <PenaltyForm params={params}/>,
   },
 ];
 export default function AdminUsers() {

@@ -16,7 +16,7 @@ function LandingPage() {
     {/*   <AutoImageSlider /> */}
 
       <Testimonial />
-      <Contact />
+      {/* <Contact /> */}
       <Footer />
       
     </div>

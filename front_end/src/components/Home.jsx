@@ -11,7 +11,7 @@ const Home = () => {
     <div className="home-container">
       
 
-      <div className="home-banner-container">
+      <div className="home-banner-container mt-16">
         <div className="home-bannerImage-container">
           <img src={BannerBackground} alt="" />
         </div>
@@ -32,7 +32,7 @@ const Home = () => {
           </button>
         </div>
         <div className="home-image-section">
-          <img src={BannerImage} alt="" />
+          <img src={BannerImage} className="size-[48rem]" alt="" />
         </div>
       </div>
     </div>

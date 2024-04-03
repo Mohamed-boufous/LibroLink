@@ -13,8 +13,8 @@ import BooksPieChart from "@/components/charts/MyPieChart";
 import SolveForm from "@/components/SolveForm";
 
 export default function AdminReports() {
-  const [reports, setReports] = useState([]);
   const [load, setLoad] = useState(false);
+  const [reports, setReports] = useState([]);
   const [reportsNumber, setReportsNumber] = useState({
     solved: 0,
     unsolved: 0,
@@ -37,7 +37,7 @@ export default function AdminReports() {
   const rows = reports.map((report) => {
     return {
       id: report.id,
-      comment: report.comment_id,
+      comment: report.comment,
       reporter: report.reporter_id,
       reported: report.reported_id,
       message: report.message,
@@ -106,7 +106,7 @@ export default function AdminReports() {
             </div>
           );
         } else {
-          return <SolveForm params={params} />;
+          return <SolveForm params={params} load={load} setLoad={setLoad} />;
         }
       },
     },

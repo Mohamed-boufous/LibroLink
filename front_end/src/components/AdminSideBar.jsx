@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useStateContext } from "../context/ContextProvider";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -9,10 +9,36 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FlagIcon from "@mui/icons-material/Flag";
 import PaidIcon from "@mui/icons-material/Paid";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { axiosClient } from "@/api/axios";
+
 export default function AdminSideBar() {
-  const { currentUser } = useStateContext();
+  const { currentUser, setCurrentUser } = useStateContext();
   const location = useLocation();
   const [menuClicked, setMenuClicked] = useState(location.pathname.slice(7));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axiosClient
+      .post("api/get_current_user")
+      .then((response) => {
+        setCurrentUser(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  const logoutHandler = () => {
+    axiosClient
+      .post("api/logout")
+      .then((response) => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className="flex h-screen bg-gray-50">
@@ -29,8 +55,8 @@ export default function AdminSideBar() {
               <AvatarFallback>AV</AvatarFallback>
             </Avatar>
             <div className="text-md font-semibold mb-10">
-              {currentUser.displayName
-                ? currentUser.displayName
+              {currentUser.adminName
+                ? currentUser.adminName
                 : "Display Name"}
             </div>
             <div className="w-full px-5">
@@ -120,7 +146,7 @@ export default function AdminSideBar() {
               </Link>
             </div>
           </div>
-          <Link>
+          <Link onClick={logoutHandler}>
             <div className="flex flex-row items-center hover:bg-gray-100 text-rose-500 mb-4 py-1 rounded-sm px-4">
               <LogoutIcon fontSize="small" className="mr-1" />
               <div>Logout</div>

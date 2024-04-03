@@ -13,7 +13,16 @@ class PenaltyUsers extends Model
     protected $fillable = [
         'userId',
         'adminId',
-        'date_penalty' => 'timestamp', 
-        'penalty'
+        'date_penalty' => 'timestamp',
+        'date_exp'   => 'timestamp',
+        'penalty',
+        'reason',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class, 'userId');
+    }
+    public function admin() {
+        return $this->belongsTo(Admin::class, 'adminId');
+    }
 }

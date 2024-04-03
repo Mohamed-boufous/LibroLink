@@ -20,6 +20,7 @@ import AddNewBookForm from "./components/AddNewBookForm";
 import PlansPage from "./views/PlansPage";
 import ReadingBook from "./views/ReadingBook";
 import IFrameReading from "./views/IFrameReading";
+import BannedPage from "./views/BannedPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
     path: "/iframe",
     element: <IFrameReading />,
   },
+  {
+    path: "/banned",
+    element: <BannedPage />,
+  }
 ]);
 
 export default router;

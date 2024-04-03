@@ -13,7 +13,7 @@ function Login() {
     if (localStorage.getItem("token")) {
       navigate("/");
     }
-  },[]);
+  }, []);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,8 +22,8 @@ function Login() {
     email: [""],
     password: [""],
   });
-  const { setCurrentUser,  setCurrentToken } =
-    useStateContext();
+  const [credentials_error, setCredentialsError] = useState("");
+  const { setCurrentUser, setCurrentToken } = useStateContext();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const csrf = await axiosClient.get("/sanctum/csrf-cookie");
@@ -37,21 +37,36 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         if (response.data.type === "admin") {
           navigate("/admin");
-        }else if ( response.data.type === "user") {
-        navigate(-1);
-      }
+        } else if (response.data.type === "user") {
+          if (
+            response.data.user.state.penalty &&
+            response.data.user.state.penalty === "ban"
+          ) {
+            navigate("/banned");
+          } else {
+            console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh");
+            navigate(-1);
+          }
+        }
       })
       .catch((error) => {
+        /* if (error.response.status === 422) {
+          console.error(error);
+          setErrors({ ...errors, ...error.response.data.errors });
+        } else if (error.status === 401) {
+          console.error(error);
+          setCredentialsError(error.response.data.message);
+          console.error(error.error);
+        } */
         console.error(error);
-        console.error(error.response.data.errors);
-        setErrors({ ...errors, ...error.response.data.errors });
       });
   };
   return (
-
     <div className="flex items-center justify-center min-h-screen  bg-gray-100">
       <div className="bg-white flex flex-col items-center  p-10 pt-0 rounded border-2 min-w-96 max-w-lg">
-        <div className="size-64"><img src={librolinkLogo} alt="librolinkLogo" /></div>
+        <div className="size-64">
+          <img src={librolinkLogo} alt="librolinkLogo" />
+        </div>
         <h1 className="text-3xl font-bold mb-8 ">Login to LibroLink</h1>
         <form onSubmit={handleSubmit} method="post" className=" text-left w-85">
           <div className="mb-2">

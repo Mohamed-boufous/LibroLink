@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use App\Models\Admin;
+use App\Models\PenaltyUsers;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -19,34 +21,47 @@ class LoginController extends Controller
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
-        
-        
+
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'error' => $validator->messages(),
             ], 422);
         }
-            //$credentials = $request->validated();
-            $user = Admin::where('email', $request->email)->first();
-            if (!$user) {
-                $user = User::where('email', $request->email)->first();
+        //$credentials = $request->validated();
+        $user = Admin::where('email', $request->email)->first();
+        if (!$user) {
+            $user = User::where('email', $request->email)->first();
+        }
+
+        if ($user && Auth::guard($user instanceof Admin ? 'admin' : 'web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $penalty = PenaltyUsers::where('userId', $user->id)->first();
+            if ($penalty) {
+                if ($penalty->date_exp && $penalty->date_exp < Carbon::now()) {
+                    $penalty->delete();
+                } else {
+                    $user->state = $penalty;
+                    return response()->json([
+                        'token' => $token,
+                        'user' => $user,
+                        'token_type' => 'bearer',
+                        'type' => $user instanceof Admin ? 'admin' : 'user',
+                    ]);
+                }
             }
-    
-            if ($user && Auth::guard($user instanceof Admin ? 'admin' : 'web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-    
-                return response()->json([
-                    'token' => $token,
-                    'user' => $user,
-                    'token_type' => 'bearer',
-                    'type' => $user instanceof Admin ? 'admin' : 'user',
-                ]);
-            }
-    
-            return response()->json(['error' => 'Invalid login credentials.'], 401);
-    
-        
+
+            $user->state = "normal";
+            return response()->json([
+                'token' => $token,
+                'user' => $user,
+                'token_type' => 'bearer',
+                'type' => $user instanceof Admin ? 'admin' : 'user',
+            ]);
+        }
+
+        return response()->json(['error' => 'Invalid login credentials.'], 401);
     }
 
     public function logout(Request $request)

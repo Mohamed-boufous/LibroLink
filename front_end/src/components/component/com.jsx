@@ -234,9 +234,12 @@ export default function CommentSection({ bookId }) {
       });
   }, [load]);
   return (
+    
     <div className="bg-white p-6">
       <h2 className="text-xl font-semibold mb-4">{commentsNumber} Comments</h2>
-      <form onSubmit={handleCommentSubmit}>
+      {
+      currentUser.id ? (
+        <form onSubmit={handleCommentSubmit}>
         <div className="flex flex-col space-y-2 items-end border-b border-gray-200 mb-5 pb-5">
           <div className="w-full">
             <div className="flex items-center">
@@ -244,7 +247,7 @@ export default function CommentSection({ bookId }) {
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>AV</AvatarFallback>
               </Avatar>
-              <h3 className="font-semibold text-orange-500 ml-3">User</h3>
+              <h3 className="font-semibold text-orange-500 ml-3">{currentUser.displayName}</h3>
             </div>
             <textarea
               name="comment"
@@ -255,10 +258,15 @@ export default function CommentSection({ bookId }) {
               value={textComment}
             ></textarea>
           </div>
-          <Button className=" font-semibold h-10">Post Comment</Button>
+          <Button { ...{disabled: currentUser.state.penalty === "timeout"} } className=" disabled:cursor-not-allowed font-semibold h-10">Post Comment</Button>
+          <div className={` ${currentUser.state.penalty === "timeout" ? "block" : "hidden"} text-red-500`}> You have been timedout</div>
         </div>
       </form>
-
+  
+      ) : (
+        <div></div>
+      )
+    }  
       {/* Liste des commentaires */}
       {comments ? (
         comments.map((comment, index) =>
@@ -271,7 +279,7 @@ export default function CommentSection({ bookId }) {
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-orange-500">
-                    {comment.user.userName}
+                    {comment.user.displayName}
                   </h3>
                   <span className="text-sm text-gray-500">
                     Comment Date {comment.date}

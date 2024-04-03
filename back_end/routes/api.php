@@ -12,6 +12,8 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PenaltyUsersController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -60,4 +62,9 @@ Route::get('/get_comments_number/{book_id}', [CommentController::class, 'get_num
 Route::get('/get_all_reports', [ReportController::class, 'index']);
 Route::get('/get_reports_number', [ReportController::class, 'get_number']);
 Route::post('/make_report', [ReportController::class, 'store']);
+Route::post('/update_report/{id}', [ReportController::class, 'update']);
 Route::delete('/delete_reports', [ReportController::class, 'delete']);
+
+Route::get('/get_all_penalties', [PenaltyUsersController::class, 'index']);
+Route::post('/make_penalty', [PenaltyUsersController::class, 'store']);
+Route::delete('/delete_penalties', [PenaltyUsersController::class, 'delete']);

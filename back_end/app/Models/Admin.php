@@ -27,4 +27,8 @@ class Admin extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function penalty () {
+        return $this->hasMany(PenaltyUsers::class, 'adminId');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use Carbon\Carbon;
@@ -11,7 +12,14 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        return Report::all();
+       $reports = Report::all();
+       foreach ($reports as $report) {
+           $comment = Comment::find($report->comment_id);
+           if ($comment) {
+               $report->comment = $comment->text;
+           }
+       }
+       return $reports;
     }
 
     public function get_number() {
@@ -44,6 +52,16 @@ class ReportController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function update(Request $request, $id) {
+        $report = Report::find($id);
+        if (!$report) {
+            return response()->json(['message' => 'Report not found'], 404);
+        }
+        $report->solved = $request->solved;
+        $report->save();
+        return response()->json(['message' => 'Report updated successfully', 'report' => $report], 200);
     }
 
     public function delete(Request $request) {

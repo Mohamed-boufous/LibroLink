@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\PenaltyUsers;
 
 class UserController extends Controller
 {
@@ -117,8 +118,19 @@ class UserController extends Controller
     {
         try {
             if (Auth::check()) {
-                return Auth::user();
+                $user =  Auth::user();
+                $penalty = PenaltyUsers::where('userId', $user->id)->first();
+                if ($penalty) {
+                    if ($penalty->date_exp && $penalty->date_exp < Carbon::now()) {
+                        $penalty->delete();
+                    } else {
+                        $user->state = $penalty;
+                        return $user;
+                    }
             }
+            $user->state = 'normal';
+            return $user;
+        }
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'error',

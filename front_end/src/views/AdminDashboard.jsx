@@ -18,80 +18,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import SolveForm from "@/components/SolveForm";
 import { axiosClient } from "@/api/axios";
 
-const rows = [
-  {
-    id: 1,
-    comment: "this is a comment",
-    reporter: "John Doe",
-    reported: "Jane Doe",
-    message: "this is a message",
-  },
-  {
-    id: 2,
-    comment: "this is a comment",
-    reporter: "John Doe",
-    reported: "Jane Doe",
-    message: "this is a message",
-    solved: true,
-  },
-  {
-    id: 3,
-    comment: "this is a comment",
-    reporter: "John Doe",
-    reported: "Jane Doe",
-    message: "this is a message",
-  },
-  {
-    id: 4,
-    comment: "this is a comment",
-    reporter: "John Doe",
-    reported: "Jane Doe",
-    message: "this is a message",
-  },
-  {
-    id: 5,
-    comment: "this is a comment",
-    reporter: "John Doe",
-    reported: "Jane Doe",
-    message: "this is a message",
-  },
-];
 
-const columns = [
-  { field: "id", headerName: "Id", width: 60 },
-  {
-    field: "comment",
-    headerName: "Comment",
-    minWidth: 120,
-    flex: 2,
-    editable: false,
-  },
-  {
-    field: "message",
-    headerName: "Message",
 
-    minWidth: 120,
-    flex: 2,
-    editable: false,
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    width: 100,
-    renderCell: (params) => {
-      if (params.row.solved) {
-        return (
-          <div className="text-green-500 text-center w-full">
-            <div className="font-bold pr-3">Solved</div>
-          </div>
-        );
-      } else {
-        return <SolveForm params={params} />;
-      }
-    },
-  },
-];
 function AdminDashboard() {
+  const [reports, setReports] = useState([]);
   const [usersNumber, setUsersNumber] = useState({
     total: 0,
     subscribed: 0,
@@ -108,8 +38,8 @@ function AdminDashboard() {
     total: 0,
   });
   const [revenue, setRevenue] = useState([]);
+  const [load, setLoad] = useState(false);
   const [subsTotalNumber, setSubsTotalNumber] = useState(0);
-
   useEffect(() => {
     axiosClient
       .get("api/get_users_number")
@@ -132,7 +62,14 @@ function AdminDashboard() {
       .catch((error) => {
         console.error(error);
       });
+      
   }, []);
+
+  useEffect(() => {
+    axiosClient.get("api/get_all_reports").then((response) => {
+      setReports(response.data);
+    });
+  },[load]);
 
   useEffect(() => {
     axiosClient
@@ -180,24 +117,16 @@ function AdminDashboard() {
       revenue: revenue.total_revenue,
     };
   })
-  
-  /* [
-    {
-      name: "Page A",
-      pv: 989,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      pv: 1288,
-      amt: 2210,
-    },
-    {
-      name: "Page B",
-      pv: 1407,
-      amt: 2210,
-    },
-  ]; */
+  const rows = reports.map((report) => {
+    return {
+      id: report.id,
+      comment: report.comment,
+      reporter: report.reporter_id,
+      reported: report.reported_id,
+      message: report.message,
+      solved: report.solved,
+    };
+  });
   const usersPieData = [
     { name: "Subscribed", value: usersNumber.subscribed },
     { name: "Non-Subscribed ", value: usersNumber.nonSubscribed },
@@ -205,6 +134,40 @@ function AdminDashboard() {
   const booksPieData = [
     { name: "Premium", value: booksNumber.premium },
     { name: "Free", value: booksNumber.free },
+  ];
+  const columns = [
+    { field: "id", headerName: "Id", width: 60 },
+    {
+      field: "comment",
+      headerName: "Comment",
+      minWidth: 120,
+      flex: 2,
+      editable: false,
+    },
+    {
+      field: "message",
+      headerName: "Message",
+  
+      minWidth: 120,
+      flex: 2,
+      editable: false,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 100,
+      renderCell: (params) => {
+        if (params.row.solved) {
+          return (
+            <div className="text-green-500 text-center w-full">
+              <div className="font-bold pr-3">Solved</div>
+            </div>
+          );
+        } else {
+          return <SolveForm params={params} load={load} setLoad={setLoad} />;
+        }
+      },
+    },
   ];
   console.log(usersPieData);
   return (
