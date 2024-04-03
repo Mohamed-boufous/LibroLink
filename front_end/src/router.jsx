@@ -21,6 +21,7 @@ import PlansPage from "./views/PlansPage";
 import ReadingBook from "./views/ReadingBook";
 import IFrameReading from "./views/IFrameReading";
 import BannedPage from "./views/BannedPage";
+import BiblioPage from "./views/BiblioPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/reading",
         element: <ReadingBook />,
+      },
+      {
+        path: "/biblio",
+        element: <BiblioPage />,
       },
     ],
   },

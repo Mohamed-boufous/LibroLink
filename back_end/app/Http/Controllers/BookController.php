@@ -11,6 +11,8 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfReader\PdfReader;
+use App\Models\Biblio;
+use App\Models\BiblioHasBook;
 
 class BookController extends Controller
 {
@@ -223,5 +225,60 @@ class BookController extends Controller
             $book->delete();
         }
         return response()->json(['message' => 'book deleted successfully']);
+    }
+
+    function deleteBookFromBiblio($nameBiblio, $userId, $bookId)
+    {
+        // Find the biblio ID based on the provided name and user ID
+        $biblio = Biblio::where('biblioName', $nameBiblio)
+            ->where('utilisateur_id', $userId)
+            ->first();
+
+        if (!$biblio) {
+            return response()->json([
+                'error' => 'Biblio not found for the specified user',
+            ], 404);
+        }
+
+        $biblioId = $biblio->id;
+
+        // Delete the book from the biblio_has_book table
+        BiblioHasBook::where('biblio_id', $biblioId)
+            ->where('book_id', $bookId)
+            ->delete();
+
+        return response()->json([
+            'message' => 'Book deleted from biblio successfully',
+        ]);
+    }
+
+
+
+
+    function book($nameBiblio, $userId, $page)
+    {
+        $bookPerPage = 16;
+
+        // Retrieve books based on the provided condition
+        $books = Biblio::where('biblioName', $nameBiblio)
+            ->where('utilisateur_id', $userId)
+            ->with(['book' => function ($query) {
+                $query->select('id', 'title', 'author', 'description', 'subject', 'date_publication', 'origin', 'pages', 'isFree', 'sum_rating', 'filePath', 'serie', 'lang', 'bookCover');
+            }])
+            ->get();
+
+        // Count total number of books
+        $totalBooks = $books->pluck('book')->flatten()->count();
+
+        // Calculate the total number of pages
+        $nbrPage = ceil($totalBooks / $bookPerPage);
+
+        // Paginate the books
+        $pagedBooks = $books->pluck('book')->flatten()->slice(($page - 1) * $bookPerPage, $bookPerPage);
+
+        return response()->json([
+            'books' => $pagedBooks->values(), // Extract just the values without keys
+            'nbrPage' => $nbrPage,
+        ]);
     }
 }

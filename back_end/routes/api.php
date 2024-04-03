@@ -13,6 +13,8 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PenaltyUsersController;
+use App\Http\Controllers\ReadingHistoryController;
+use App\Http\Controllers\BiblioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,3 +70,12 @@ Route::delete('/delete_reports', [ReportController::class, 'delete']);
 Route::get('/get_all_penalties', [PenaltyUsersController::class, 'index']);
 Route::post('/make_penalty', [PenaltyUsersController::class, 'store']);
 Route::delete('/delete_penalties', [PenaltyUsersController::class, 'delete']);
+
+
+
+Route::get('/user/{userId}/biblioName', [BiblioController::class, 'list']);
+Route::post('createBiblio', [BiblioController::class, 'createBiblio']);
+Route::delete('deleteBiblioForUser/{userId}/{biblioId}', [BiblioController::class, 'deleteBiblioForUser']);
+Route::get('/book/{nameBiblio}/{userId}/{page}', [BookController::class, 'book']);
+Route::delete('deleteBookFromBiblio/{nameBiblio}/{userIduserId}/{bookId}', [BookController::class, 'deleteBookFromBiblio']);
+Route::get('users/{userId}/{currentPage}/reading-history', [ReadingHistoryController::class, 'searchBooksByUserId']);

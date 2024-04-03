@@ -40,4 +40,14 @@ class Book extends Model
     public function rating_book(){
         return $this->belongsToMany(User::class,'ratings','book_id','utilisateur_id');
     }
+    public function biblio()
+    {
+        return $this->belongsToMany(Biblio::class, 'biblio_has_book', 'book_id', 'biblio_id');
+    }
+
+    public function readingHistory()
+    {
+        return $this->belongsToMany(ReadingHistory::class, 'reading_history_has_book', 'id_book', 'id_reading_history')
+            ->withPivot('date_creation_book');
+    }
 }
