@@ -3,11 +3,12 @@ import SidebarMenuApi from "./SidebarMenuApi";
 import BookGridApi from "./BookGridApi";
 import ReadingBooks from "./ReadingBooks";
 import LibraryCreationPopupApi from "./LibraryCreationPopupApi";
+import { useStateContext } from "@/context/ContextProvider";
 
 export default function BiblioContainer() {
   const [library, setLibrary] = useState([]);
   const [libraryFetched, setLibraryFetched] = useState(false);
-  const userId = 33; // Replace 1 with the actual user ID
+   // Replace 1 with the actual user ID
   const [currentPage, setCurrentPage] = useState(1);
   const [lastRowIDLibrary, setLastRowIdLibrary] = useState();
   const [libraryUsed, setLibraryUsed] = useState("likedBooks");
@@ -16,13 +17,14 @@ export default function BiblioContainer() {
   const [lastPageReadingHistory, setLastPageReadingHistory] = useState();
   const [readingHistoryIsLoading, setReadingHistoryIsLoading] = useState(true);
   const [firstTimeIntoRH, setFirstTimeIntoRH] = useState(true);
-  const [totalBooksReadingHistory,setTotalBooksReadingHistory] = useState();
+  const [totalBooksReadingHistory, setTotalBooksReadingHistory] = useState();
 
+  const { currentUser } = useStateContext();
   useEffect(() => {
     const fetchLibraryData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/user/${userId}/biblioName`
+          `http://localhost:8000/api/user/${currentUser.id}/biblioName`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -116,7 +118,7 @@ export default function BiblioContainer() {
         },
         body: JSON.stringify({
           biblio_name: value,
-          user_id: userId,
+          user_id: currentUser.id,
         }),
       });
 
@@ -192,7 +194,7 @@ export default function BiblioContainer() {
     const NewLibrary = library.filter((item) => item.id !== id);
     setLibrary(NewLibrary);
     librarySelected("likedBooks");
-    DeleteLibraryFromDb(userId, id);
+    DeleteLibraryFromDb(currentUser.id, id);
   };
 
   const [books, setBooks] = useState([]);
@@ -204,7 +206,7 @@ export default function BiblioContainer() {
   const fetchLikedBooks = async () => {
     try {
       let result = await fetch(
-        `http://localhost:8000/api/book/${libraryUsed}/${userId}/${currentPage}`
+        `http://localhost:8000/api/book/${libraryUsed}/${currentUser.id}/${currentPage}`
       );
       result = await result.json();
       console.log(libraryUsed);
@@ -243,7 +245,7 @@ export default function BiblioContainer() {
   const fetchedReadingBooks = async () => {
     try {
       let result = await fetch(
-        `http://localhost:8000/api/users/${userId}/${currentPageReadingHistory}/reading-history`
+        `http://localhost:8000/api/users/${currentUser.id}/${currentPageReadingHistory}/reading-history`
       );
       result = await result.json();
       setBooks(result.books.data); // Set the books data
@@ -294,7 +296,7 @@ export default function BiblioContainer() {
   const deleteBookInDB = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/deleteBookFromBiblio/${libraryUsed}/${userId}/${id}`,
+        `http://localhost:8000/api/deleteBookFromBiblio/${libraryUsed}/${currentUser.id}/${id}`,
         {
           method: "DELETE",
         }
@@ -374,7 +376,7 @@ export default function BiblioContainer() {
               currentPageReadingHistory={currentPageReadingHistory}
               lastPageReadingHistory={lastPageReadingHistory}
               firstTimeIntoRH={firstTimeIntoRH}
-              totalBooksReadingHistory = {totalBooksReadingHistory}
+              totalBooksReadingHistory={totalBooksReadingHistory}
             />
           )}
         </div>

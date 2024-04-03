@@ -63,10 +63,16 @@ const columns = [
     editable: false,
   },
   {
+    field: "penalties",
+    headerName: "Penalties",
+    flex: 0.5,
+    editable: false,
+  },
+  {
     field: "actions",
     headerName: "Actions",
     type: "actions",
-    renderCell: (params) => <PenaltyForm params={params}/>,
+    renderCell: (params) => { return params.row.penalties === "normal" && <PenaltyForm params={params}/>},
   },
 ];
 export default function AdminUsers() {
@@ -147,6 +153,7 @@ export default function AdminUsers() {
     birth_date: user.date_birth,
     created_at: user.created_at,
     updated_at: user.updated_at,
+    penalties: user.state,
   }));
   const usersStateData = [
     { name: "Subscribed", value: usersNumber.subscribed },

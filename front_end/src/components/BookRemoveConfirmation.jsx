@@ -37,7 +37,7 @@ const BookRemoveConfirmation = ({
                 Cancel
               </button>
               <button
-                className="bg-custom px-5 py-1 text-white font-bold text-[15px] rounded-[1px] shadow-md"
+                className="bg-orange-500 px-5 py-1 text-white font-bold text-[15px] rounded-[1px] shadow-md"
                 onClick={removeBookFromList}
               >
                 Validate

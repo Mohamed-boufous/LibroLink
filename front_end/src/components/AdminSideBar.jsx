@@ -61,7 +61,7 @@ export default function AdminSideBar() {
             </div>
             <div className="w-full px-5">
               <Link
-                to={"/admin/Dashboard"}
+                to={"/admin/"}
                 onClick={() => setMenuClicked("Dashboard")}
               >
                 <div

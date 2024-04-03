@@ -149,7 +149,7 @@ export default function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link to="#">
+                      <Link to="/biblio">
                         <div className="flex flex-row items-center">
                           <img
                             className="size-5 mr-2"

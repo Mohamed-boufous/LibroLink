@@ -17,6 +17,8 @@ class UserController extends Controller
         foreach ($users as $user) {
             $birthDate = Carbon::parse($user->date_birth);
             $user->age =  $birthDate->diffInYears(Carbon::today());
+            $penalty = PenaltyUsers::where('userId', $user->id)->first();
+            $user->state = $penalty ? $penalty->penalty : "normal";
         }
 
         return response()->json($users);

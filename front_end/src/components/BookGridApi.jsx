@@ -76,14 +76,14 @@ const BookGridApi = ({
                         <img
                           src={"http://localhost:8000/" + book.bookCover}
                           alt={book.title}
-                          className={`w-full ${
+                          className={`w-full h-full ${
                             hoveredBook === book.id ? "opacity-20" : ""
                           }`}
                           onLoad={handleImagesLoaded}
                         />
                         {imagesLoaded &&
                           hoveredBook !== book.id &&
-                          book.isFree && (
+                          book.isFree == "1" && (
                             <div className="absolute top-0 start-0 w-full">
                               <div
                                 className="mt-1 ml-1 w-1/4 text-[13px] text-center font-bold rounded"
@@ -109,7 +109,7 @@ const BookGridApi = ({
                             </div>
                             <div className=" mt-24">
                               <div className="flex justify-center">
-                                <button className="font-bold text-white text-[14px] bg-custom px-[16px] py-1 rounded-[2px]">
+                                <button className="font-bold text-white text-[14px] bg-orange-500 px-[16px] py-1 rounded-[2px]">
                                   <img
                                     src="./public/book.svg"
                                     alt=""

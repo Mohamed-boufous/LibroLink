@@ -36,10 +36,10 @@ const SidebarMenuApi = ({
   return (
     <>
       <div className="mt-4 mx-2 col-span-5 sm:col-span-4 md:col-span-3 xl:col-span-2">
-        <div className="flex bg-custom py-2 pl-4 rounded-[4px] cursor-pointer ">
+        <div className="flex bg-orange-500 py-2 pl-4 rounded-[4px] cursor-pointer ">
           <img
-            src="./public/house-solid.svg"
-            alt=""
+            src="./public/house-solid.svg "
+            alt="sss"
             onMouseEnter={handleHomeEnter}
             onMouseLeave={handleHomeLeave}
             style={homeHovered ? { opacity: 0.8 } : {}}
