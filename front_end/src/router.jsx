@@ -4,7 +4,6 @@ import EmailVerificationNotif from "./views/EmailVerificationNotif";
 import Signup from "./views/Signup";
 import Login from "./views/Login";
 import Header from "./components/Header";
-import Profile from "./views/Profile";
 import FilterCatalogue from "./views/FilterCatalogue";
 import LandingPage from "./views/LandingPage";
 import HomePage from "./views/HomePage";
@@ -22,19 +21,12 @@ import ReadingBook from "./views/ReadingBook";
 import IFrameReading from "./views/IFrameReading";
 import BannedPage from "./views/BannedPage";
 import BiblioPage from "./views/BiblioPage";
+import ProfilePage from "./views/ProfilePage";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Header />,
     children: [
-      {
-        path: "/",
-        element: <App />,
-      },
-      {
-        path: "/profile",
-        element: <Profile />,
-      },
       {
         path: "/book_filter",
         element: <FilterCatalogue />,
@@ -44,7 +36,7 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/homepage",
+        path: "/",
         element: <HomePage />,
       },
       {
@@ -63,6 +55,10 @@ const router = createBrowserRouter([
         path: "/biblio",
         element: <BiblioPage />,
       },
+      {
+        path: "/settings",
+        element: <ProfilePage />,
+      }
     ],
   },
   {

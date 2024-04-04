@@ -45,7 +45,7 @@ function Login() {
             navigate("/banned");
           } else {
             console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh");
-            navigate(-1);
+            navigate("/");
           }
         }
       })

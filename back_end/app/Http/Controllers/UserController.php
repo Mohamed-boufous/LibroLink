@@ -8,10 +8,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\PenaltyUsers;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    function list(Request $request){
+    function list(Request $request)
+    {
         $users = User::all();
 
         foreach ($users as $user) {
@@ -19,9 +22,130 @@ class UserController extends Controller
             $user->age =  $birthDate->diffInYears(Carbon::today());
             $penalty = PenaltyUsers::where('userId', $user->id)->first();
             $user->state = $penalty ? $penalty->penalty : "normal";
+            $user->image =   $user->image ? asset($user->image) : null;
         }
 
         return response()->json($users);
+    }
+
+    function updateInfo(Request $request)
+    {
+        /** @var User $user */
+
+        $user = Auth::user();
+
+
+        $validator = Validator::make($request->all(), [
+            'userName' => 'nullable|string|max:255|unique:utilisateur,userName,' . $user->id,
+            'displayName' => 'nullable|string|max:45',
+            'bio' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Update only non-null fields
+        $updateData = [];
+        if ($request->has('userName')) {
+            $updateData['userName'] = $request->userName;
+        }
+        if ($request->has('displayName')) {
+            $updateData['displayName'] = $request->displayName;
+        }
+        if ($request->has('bio')) {
+            $updateData['bio'] = $request->bio;
+        }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move('images/profiles', $imageName);
+            $updateData['image'] = 'images/profiles/' . $imageName;
+        }
+        /** @var User $user */
+        $user->update($updateData);
+
+        return response()->json([
+            'message' => 'User information updated successfully!',
+            'user' => $user->fresh(), // Refresh user data after update
+        ]);
+    }
+    public function updateEmail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'email' => 'required|string|email|unique:users,email,' . Auth::id(),
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Invalid current password'], 401);
+        }
+
+        $user->update(['email' => $request->email]);
+
+        return response()->json([
+            'message' => 'Email updated successfully!',
+            'user' => $user->fresh(), // Refresh user data after update
+        ]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Invalid current password'], 401);
+        }
+
+        $user->update(['password' => Hash::make($request->new_password)]);
+
+        return response()->json([
+            'message' => 'Password updated successfully!',
+        ]);
+    }
+
+    public function deleteAccount(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string', // Ensure current password is correct
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        /** @var User $user */
+        $user = Auth::user();
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid current password'], 401);
+        }
+        $user->views_book()->detach();
+        $user->rating_book()->detach();
+        $user->subscriptions()->delete();
+        $user->credit_card()->delete();
+        $user->penalty()->delete();
+        $user->subscriptions()->delete();
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Account deleted successfully!',
+        ], 200);
     }
 
     function list_users_number(Request $request)
@@ -79,17 +203,13 @@ class UserController extends Controller
 
             if ($userAge->age < 18) {
                 $underAge++;
-            }
-            else if ($userAge->age >= 18 && $userAge->age <= 25) {
+            } else if ($userAge->age >= 18 && $userAge->age <= 25) {
                 $teenToAdult++;
-            }
-            else if ($userAge->age >= 26 && $userAge->age <= 35) {
+            } else if ($userAge->age >= 26 && $userAge->age <= 35) {
                 $adult++;
-            }
-            else if ($userAge->age >= 36 && $userAge->age <= 45) {
+            } else if ($userAge->age >= 36 && $userAge->age <= 45) {
                 $middelAge++;
-            }
-            else if ($userAge->age > 45) {
+            } else if ($userAge->age > 45) {
                 $old++;
             }
         }
@@ -129,10 +249,11 @@ class UserController extends Controller
                         $user->state = $penalty;
                         return $user;
                     }
+                }
+                $user->state = 'normal';
+                $user->image = $user->image ? asset($user->image) : null;
+                return $user;
             }
-            $user->state = 'normal';
-            return $user;
-        }
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'error',
@@ -147,6 +268,10 @@ class UserController extends Controller
             $user = User::find($id);
             $user->views_book()->detach();
             $user->rating_book()->detach();
+            $user->subscriptions()->delete();
+            $user->credit_card()->delete();
+            $user->penalty()->delete();
+            $user->subscriptions()->delete();
             $user->delete();
         }
         return response()->json(['message' => 'user$user deleted successfully']);

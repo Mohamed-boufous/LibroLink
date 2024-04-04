@@ -90,6 +90,30 @@ class BookController extends Controller
         ]);
     }
 
+    public function filter(Request $request)
+    {
+        $genreIds = json_decode($request->query('genre_id'), true); // Get genre IDs as an array from query string
+        /* dd($genreIds); */
+        if (!is_array($genreIds)) {
+            // Handle invalid input (not an array)
+            /* dd($genreIds); */
+            return response()->json(['error' => "Genre IDs must be an array"], 400);
+        }
+
+        $booksQuery = Book::query();
+
+        // Filter by genre if genre IDs are provided
+        if (!empty($genreIds)) {
+            $booksQuery->whereHas('genres', function ($q) use ($genreIds) {
+                $q->whereIn('genres_id', $genreIds);
+            });
+        }
+
+        $books = $booksQuery->get();
+
+        return response()->json($books);
+    }
+
     public function store(Request $request)
     {
 

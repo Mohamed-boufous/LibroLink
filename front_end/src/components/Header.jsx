@@ -110,7 +110,7 @@ export default function Header() {
               <div className=" hidden min-[1190px]:flex ">
                 <Button
                   className={`mr-4 px-6 font-semibold flex ${
-                    currentUser.is_subscribed === 1 ? "" : "hidden"
+                    currentUser.is_subscribed === 0 ? "" : "hidden"
                   }`}
                   variant=""
                   asChild
@@ -136,8 +136,8 @@ export default function Header() {
                       {currentUser.displayName}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Link to="#">
+                    {/*  <DropdownMenuItem>
+                      <Link to="/profile">
                         <div className="flex flex-row items-center">
                           <img
                             className="size-5 mr-2"
@@ -147,7 +147,7 @@ export default function Header() {
                           Profile
                         </div>
                       </Link>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem>
                       <Link to="/biblio">
                         <div className="flex flex-row items-center">
@@ -161,7 +161,7 @@ export default function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link to="#">
+                      <Link to="/settings">
                         <div className="flex flex-row items-center">
                           <img
                             className="size-5 mr-2"

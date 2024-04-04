@@ -29,6 +29,11 @@ use App\Http\Controllers\BiblioController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/get_current_user', [UserController::class, 'get_current_user']);
+    Route::post('/update_users_info', [UserController::class, 'updateInfo']);
+    Route::post('/update_users_password', [UserController::class, 'updatePassword']);
+    Route::post('/update_users_email', [UserController::class, 'updateEmail']);
+    Route::post('/delete_user', [UserController::class, 'deleteAccount']);
+
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 Route::post('/get_current_user', [UserController::class, 'get_current_user'])->middleware(['auth:sanctum']);
@@ -44,14 +49,16 @@ Route::get('/get_users_number', [UserController::class, 'list_users_number']);
 Route::delete('/delete_users', [UserController::class, 'delete']);
 
 
+
 Route::get('/get_books_number', [BookController::class, 'list_books_number']);
 Route::get('/get_book/{id}', [BookController::class, 'get_book']);
 Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);
 Route::delete('/delete_books', [BookController::class, 'delete']);
 Route::post('/update_books/{id}', [BookController::class, 'update']);
+Route::get('/filter_books', [BookController::class, 'filter']);
 
-Route::post('/subscribe/{user_id}',[SubscriptionController::class, 'createSubscription']);
+Route::post('/subscribe/{user_id}', [SubscriptionController::class, 'createSubscription']);
 Route::get('/list_subscriptions', [SubscriptionController::class, 'index']);
 Route::get('/get_subscriptions_number', [SubscriptionController::class, 'get_subs_number']);
 Route::get('/get_revenue', [SubscriptionController::class, 'get_revenue']);

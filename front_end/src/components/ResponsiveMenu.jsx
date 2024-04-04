@@ -27,7 +27,11 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "../context/ContextProvider";
 import { axiosClient } from "@/api/axios";
-export default function ResponsiveMenu({ menuClicked, setMenuClicked,logoutHandler }) {
+export default function ResponsiveMenu({
+  menuClicked,
+  setMenuClicked,
+  logoutHandler,
+}) {
   const booklist = ["New", "Popular", "Top Rated", "Book List"];
   const categories1 = [
     "Reading Experience",
@@ -118,22 +122,39 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked,logoutHandl
                   </Avatar>
                   <div>
                     <div className="text-lg font-semibold">
-                      {currentUser.displayName ? currentUser.displayName : "Display Name"}
+                      {currentUser.displayName
+                        ? currentUser.displayName
+                        : "Display Name"}
                     </div>
-                    <div className="text-sm text-gray-500"> @{currentUser.userName ? currentUser.userName : "User Name"} </div>
+                    <div className="text-sm text-gray-500">
+                      {" "}
+                      @
+                      {currentUser.userName
+                        ? currentUser.userName
+                        : "User Name"}{" "}
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col space-y-2 font-semibold text-[0.95rem]">
-                <Button
-                  className= {`mr-4 mb-2 w-28 px-6 font-semibold flex ${currentUser.etat_abonnement === "not subscribed" ? "" : "hidden"}`}
-                  variant=""
-                  asChild
-                >
-                  <Link to="#">
-                    <img className="size-6 mr-2 pb-[0.1rem]" src={upgradeIcon} alt="upgradeIcon" />
-                    Upgrade</Link>
-                </Button>
-                  <div>
+                  <Button
+                    className={`mr-4 mb-2 w-28 px-6 font-semibold flex ${
+                      currentUser.etat_abonnement === "not subscribed"
+                        ? ""
+                        : "hidden"
+                    }`}
+                    variant=""
+                    asChild
+                  >
+                    <Link to="/plans">
+                      <img
+                        className="size-6 mr-2 pb-[0.1rem]"
+                        src={upgradeIcon}
+                        alt="upgradeIcon"
+                      />
+                      Upgrade
+                    </Link>
+                  </Button>
+                  {/* <div>
                     <Link to="#">
                       <div className="flex flex-row items-center">
                         <img
@@ -144,7 +165,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked,logoutHandl
                         Profile
                       </div>
                     </Link>
-                  </div>
+                  </div> */}
                   <div>
                     <Link to="/biblio">
                       <div className="flex flex-row items-center">
@@ -158,7 +179,7 @@ export default function ResponsiveMenu({ menuClicked, setMenuClicked,logoutHandl
                     </Link>
                   </div>
                   <div>
-                    <Link to="#">
+                    <Link to="/settings">
                       <div className="flex flex-row items-center">
                         <img
                           className="size-5 mr-2"
