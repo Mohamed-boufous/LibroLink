@@ -1,3 +1,4 @@
+import { Flag } from "@mui/icons-material";
 import { ResponsiveBar } from "@nivo/bar";
 import React from "react";
 import { PureComponent } from "react";
@@ -17,9 +18,9 @@ export default function BarChar({ w, h, data }) {
   return (
     <div>
       <BarChart width={w} height={h} data={data}>
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
+        <XAxis dataKey="name" hide  />
+        <YAxis  />
+        <Tooltip dataKey="name"/>
         <Legend />
         <Bar dataKey="value" fill="rgb(249 115 22)" />
       </BarChart>

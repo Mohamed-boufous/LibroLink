@@ -9,7 +9,7 @@ import Book from "./Book1";
 import Drop from "../components/component/drop";
 import BookFinalVersion from "./BookFinalVersion";
 import { axiosClient } from "@/api/axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const MyComponent = ({ books, book }) => {
   const [hoveredBook, setHoveredBook] = useState(null);
@@ -58,6 +58,7 @@ const MyComponent = ({ books, book }) => {
               )}
 
               <div className="adding-cont flex space-x-10 mt-4">
+                <Link to={`/reading`}>
                 <button
                   className="py-2 px-16 text-[1rem] mr-10 bg-white rounded font-[580]
             hover:bg-orange-600 hover:text-white
@@ -65,6 +66,7 @@ const MyComponent = ({ books, book }) => {
                 >
                   Read Now
                 </button>
+                </Link>
                 <div className="border border-white flex p-1 rounded-md hover:cursor-pointer">
                   <img
                     src={currentImage}

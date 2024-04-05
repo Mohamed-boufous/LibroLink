@@ -56,7 +56,9 @@ Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);
 Route::delete('/delete_books', [BookController::class, 'delete']);
 Route::post('/update_books/{id}', [BookController::class, 'update']);
-Route::get('/filter_books', [BookController::class, 'filter']);
+Route::get('/filter_booksBygenre', [BookController::class, 'filter']);
+Route::get('/filter_booksByfree', [BookController::class, 'filterByFree']);
+Route::get('/filter_booksBylang', [BookController::class, 'filterByLang']);
 
 Route::post('/subscribe/{user_id}', [SubscriptionController::class, 'createSubscription']);
 Route::get('/list_subscriptions', [SubscriptionController::class, 'index']);

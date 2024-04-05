@@ -106,7 +106,7 @@ export default function ReadingBook() {
                 onPageChange={handlePageChange}
               />
             ) : (
-              "null"
+              ""
             )}
           </div>
         </div>

@@ -91,6 +91,7 @@ export default function BookFinalVersion({
                   <span className="font-bold"> {book.views} views</span>
                 </span>
               </div>
+              <Link to={`/reading`}>
               <div className="flex justify-center">
                 <button className="font-bold  bg-orange-600 text-[14px] w-24  px-[16px] py-1 rounded-[2px]">
                   <img
@@ -101,6 +102,7 @@ export default function BookFinalVersion({
                   Read
                 </button>
               </div>
+              </Link>
               <div className="flex justify-center mt-2">
                 <Link to={`/book/${book.id}`}>
                   <button className="font-bold text-black text-[14px] w-24 bg-white px-[16px] py-1 rounded-[2px]">

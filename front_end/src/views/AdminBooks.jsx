@@ -328,7 +328,7 @@ export default function AdminBooks() {
                 data={popularBooksData}
               />
             </div>
-            <div className="   p-2">
+            <div className="p-2">
               <div className="font-[600] text-orange-500 text-[1.5rem] mb-1">
                 Top 5 Rating Books
               </div>

@@ -44,7 +44,7 @@ const LibraryCreationPopupApi = ({
             </div>
             <div className="flex justify-center items-center mt-5 mb-8 mx-10">
               <button
-                className="bg-custom px-5 py-1 text-white font-bold text-[16px] rounded-[5px]"
+                className="bg-orange-600 px-5 py-1 text-white font-bold text-[16px] rounded-[5px]"
                 onClick={addToLibrary}
               >
                 Submit

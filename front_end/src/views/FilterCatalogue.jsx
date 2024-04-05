@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
 import "../styles/Filter.css";
+import { axiosClient } from "@/api/axios";
 
 function SearchPage() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    axiosClient.get("api/get_all_books").then((response) => {
+      setBooks(response.data);
+      console.log(response.data);
+    }).catch((error) => {
+      console.log(error);
+    })
+  },[])
   const Options = [
     "Most Viewed",
     "Recently Added",
@@ -49,7 +60,7 @@ function SearchPage() {
 
   const searchMethod = ["All", "Title", "Author", "Origin", "Subject"];
 
-  const books = [
+  /* const books = [
     {
       image: "book Preview.png",
       title: "The history of lord rings",
@@ -380,7 +391,7 @@ function SearchPage() {
       rating: 8.5,
       etat: "premium",
     },
-  ];
+  ]; */
 
   const initialStateWithOpacityHovered = books.map((book) => ({
     ...book,

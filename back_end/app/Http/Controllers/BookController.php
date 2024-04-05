@@ -14,6 +14,7 @@ use setasign\Fpdi\PdfReader\PdfReader;
 use App\Models\Biblio;
 use App\Models\BiblioHasBook;
 
+
 class BookController extends Controller
 {
     public function index(Request $request)
@@ -90,28 +91,104 @@ class BookController extends Controller
         ]);
     }
 
-    public function filter(Request $request)
+    public function filterByGenre(Request $request)
     {
-        $genreIds = json_decode($request->query('genre_id'), true); // Get genre IDs as an array from query string
-        /* dd($genreIds); */
+        $genreIds = json_decode($request->query('genre_id'), true); 
+        $langString = $request->query('lang');
+        $order = $request->query('order');
+        $ordermode = $request->query('ordermode');
+        if ($order === "alpha"){
+            $tablecol = "title";
+        }else if($order === "date"){
+            $tablecol = "date_publication";
+        }else if($order === "views"){
+            $tablecol = "views";
+        }else if($order === "rating"){
+            $tablecol = "sum_rating";
+        }else if($order === "recent"){
+            $tablecol = "created_at";
+        }else {
+            $tablecol = "created_at";
+            $ordermode = "desc";
+        }
+    
         if (!is_array($genreIds)) {
-            // Handle invalid input (not an array)
-            /* dd($genreIds); */
+            
             return response()->json(['error' => "Genre IDs must be an array"], 400);
         }
+         if (!empty($genreIds)) {
+            $genreIdsCount = count($genreIds);
+           
+            $bookIds = Book::select('book_id')
+                ->join('book_has_genres', 'book_has_genres.book_id', '=', 'book.id')
+                ->whereIn('book_has_genres.genres_id', $genreIds)
+                ->groupBy('book_id')
+                ->havingRaw('COUNT(DISTINCT book_has_genres.genres_id) = ?', [$genreIdsCount])
+                ->get()
+                ->pluck('book_id');
 
-        $booksQuery = Book::query();
-
-        // Filter by genre if genre IDs are provided
-        if (!empty($genreIds)) {
-            $booksQuery->whereHas('genres', function ($q) use ($genreIds) {
-                $q->whereIn('genres_id', $genreIds);
-            });
+            $books = Book::with('genres')->whereIn('id', $bookIds)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
         }
-
-        $books = $booksQuery->get();
+    
 
         return response()->json($books);
+    }
+
+    public function filterByfree(Request $request){
+        $isFree = $request->query('isFree');
+        $langString = $request->query('lang');
+        $order = $request->query('order');
+        $ordermode = $request->query('ordermode');
+        if ($order === "alpha"){
+            $tablecol = "title";
+        }else if($order === "date"){
+            $tablecol = "date_publication";
+        }else if($order === "views"){
+            $tablecol = "views";
+        }else if($order === "rating"){
+            $tablecol = "sum_rating";
+        }else if($order === "recent"){
+            $tablecol = "created_at";
+        }else {
+            $tablecol = "created_at";
+            $ordermode = "desc";
+        }
+
+        if(!isset($isFree))
+        {
+            return response()->json(['error' => "isFree must be set to 0 or 1"], 400);
+        }
+
+        $books = Book::where('isFree', $isFree)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
+
+        return response()->json($books);
+    }
+
+    public function filterBylang(Request $request){
+        try{
+        $langString = $request->query('lang');
+        $order = $request->query('order');
+        $ordermode = $request->query('ordermode');
+        $langs = explode(',', $langString);
+        if ($order === "alpha"){
+            $tablecol = "title";
+        }else if($order === "date"){
+            $tablecol = "date_publication";
+        }else if($order === "views"){
+            $tablecol = "views";
+        }else if($order === "rating"){
+            $tablecol = "sum_rating";
+        }else if($order === "recent"){
+            $tablecol = "created_at";
+        }else {
+            $tablecol = "created_at";
+            $ordermode = "desc";
+        }
+        $books = Book::whereIn('lang', $langs)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
+        return response()->json($books);
+        }catch(\Throwable  $e){
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function store(Request $request)
