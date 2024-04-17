@@ -15,6 +15,8 @@ function App() {
   const { bookId } = useParams();
   const [book, setBook] = useState(null);
 
+  const  [load, setLoad] = useState(false);
+
   useEffect(() => {
     axiosClient.get("api/get_all_books").then((response) => {
       setBooks(response.data);
@@ -34,10 +36,10 @@ function App() {
       .catch((error) => {
         console.error(error);
       });
-  }, [bookId]);
+  }, [bookId,load]);
   return (
     <div className="cont-all">
-      <SimpleDropdownExample books={books} book={book}></SimpleDropdownExample>
+      <SimpleDropdownExample books={books} book={book}  load={load} setLoad={setLoad}></SimpleDropdownExample>
       <div>
         <h1 className="text-[2.5rem] font-[530] mt-12 ml-5">You May Also Like</h1>
         <div className="h-[2px] bg-orange-600 mx-5 mb-10 "></div>

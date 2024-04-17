@@ -114,7 +114,7 @@ const SidebarMenuApi = ({
               className="font-bold font-sans text-[12px] text-black ml-3"
               style={lectureEnCoursHovered ? { opacity: 0.5 } : {}}
             >
-              Lecture en cours
+              Reading
             </span>
           </div>
           <div
@@ -130,7 +130,7 @@ const SidebarMenuApi = ({
               className="font-bold font-sans text-[12px] text-black ml-3"
               style={luHovered ? { opacity: 0.5 } : {}}
             >
-              Lu
+              Read
             </span>
           </div>
           <div
@@ -146,7 +146,7 @@ const SidebarMenuApi = ({
               className="font-bold font-sans text-[12px] text-black ml-3"
               style={aLireHovered ? { opacity: 0.5 } : {}}
             >
-              A lire
+              To read
             </span>
           </div>
           <div

@@ -15,6 +15,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PenaltyUsersController;
 use App\Http\Controllers\ReadingHistoryController;
 use App\Http\Controllers\BiblioController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,9 +57,11 @@ Route::get('/get_all_books', [BookController::class, 'index']);
 Route::post('/upload_book', [BookController::class, 'store']);
 Route::delete('/delete_books', [BookController::class, 'delete']);
 Route::post('/update_books/{id}', [BookController::class, 'update']);
-Route::get('/filter_booksBygenre', [BookController::class, 'filter']);
+Route::get('/filter_booksBygenre', [BookController::class, 'filterByGenre']);
 Route::get('/filter_booksByfree', [BookController::class, 'filterByFree']);
 Route::get('/filter_booksBylang', [BookController::class, 'filterByLang']);
+Route::get('/get_books_by_title', [BookController::class, 'getBooksByTitle']);
+
 
 Route::post('/subscribe/{user_id}', [SubscriptionController::class, 'createSubscription']);
 Route::get('/list_subscriptions', [SubscriptionController::class, 'index']);
@@ -88,3 +91,8 @@ Route::delete('deleteBiblioForUser/{userId}/{biblioId}', [BiblioController::clas
 Route::get('/book/{nameBiblio}/{userId}/{page}', [BookController::class, 'book']);
 Route::delete('deleteBookFromBiblio/{nameBiblio}/{userIduserId}/{bookId}', [BookController::class, 'deleteBookFromBiblio']);
 Route::get('users/{userId}/{currentPage}/reading-history', [ReadingHistoryController::class, 'searchBooksByUserId']);
+Route::post('/add_book_to_biblio', [BiblioController::class, 'addBookToBiblio']);
+Route::post('/add_book_to_default_biblio', [BiblioController::class, 'addBookToDefaultBiblio']);
+Route::post('/add_historybook', [ReadingHistoryController::class, 'addBookToHistory']);
+Route::post('/add_rating',[BookController::class, 'addRating']);
+Route::get('/get_rating_Number/{book_id}',[RatingController::class, 'list_number']);

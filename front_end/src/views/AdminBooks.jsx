@@ -71,7 +71,7 @@ export default function AdminBooks() {
     };
     const getMostRatedBooksHandler = () => {
       axiosClient
-        .get("api/get_all_books?option=rating&limit=5")
+        .get("api/get_all_books?option=Rating&limit=5")
         .then((response) => {
           setMostRatedBooks(response.data);
           console.log(response.data);

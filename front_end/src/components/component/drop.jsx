@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Importez le hook useState
+import React, { useEffect, useState } from "react"; // Importez le hook useState
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenuTrigger,
@@ -18,11 +18,15 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { X } from "lucide-react"
-const Drop = () => {
+import { axiosClient } from "@/api/axios";
+import { useStateContext } from "@/context/ContextProvider";
+const Drop = ({book}) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [libraryName, setLibraryName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const {currentUser} = useStateContext();
+  const [bibiols, setbiblios] = useState([]);
+  const [load, setLoad] = useState(false);
   const handleSheetToggle = () => {
     setIsSheetOpen(!isSheetOpen);
     // Réinitialiser le message d'erreur lors de l'ouverture de la feuille
@@ -38,14 +42,50 @@ const Drop = () => {
       // Afficher un message d'erreur si le champ est vide
       setErrorMessage('Le champ ne peut pas être vide');
     } else {
-      // Ajoutez ici la logique pour traiter le formulaire
-      // ...
-
-      // Fermez la feuille après le traitement du formulaire
+     axiosClient.post("api/createBiblio",{
+      biblio_name: libraryName,
+      user_id: currentUser.id
+     }).then((response) => {
+      console.log(response.data);
+      setLoad(!load);
       setIsSheetOpen(false);
+     }).catch((error) => {
+      console.log(error);
+     })
     }
   };
+  useEffect(() => {
+    axiosClient.post("api/get_current_user").then((response) => {
+      const user = response.data;
+      axiosClient.get(`api/user/${user.id}/biblioName`).then((response) => {
+        const biblios = response.data.biblioNames
+        console.log(Object.entries(biblios));
+        setbiblios(Object.entries(biblios));
+      })
+  })}, [load]);
 
+  const addTolibrary = (biblio_id) => {
+    axiosClient.post(`/api/add_book_to_biblio`, {
+      biblio_id: biblio_id,
+      book_id: book.id,
+    }).then((response) => {
+      console.log(response.data);
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
+  const addToDefaultLibrary=() => {
+    axiosClient.post("api/add_book_to_default_biblio", {
+      biblio_name: "a lire",
+      book_id: book.id,
+      user_id: currentUser.id,
+    }).then((response) => {
+      console.log("Liked");
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
   return (
     <>
       <style jsx>{`
@@ -103,9 +143,12 @@ const Drop = () => {
         <DropdownMenuContent>
           <DropdownMenuLabel>add to your libraries</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem value="email">Main</DropdownMenuItem>
-          <DropdownMenuItem value="phone">for fun</DropdownMenuItem>
-          <DropdownMenuItem value="letter">mangas</DropdownMenuItem>
+          { 
+           bibiols.map((biblio) => (
+              <DropdownMenuItem onClick={() => addTolibrary(biblio[0])} key={biblio[0]}>{biblio[1]}</DropdownMenuItem>
+            ))
+          }
+          <DropdownMenuItem onClick={() => addToDefaultLibrary()} key={99}>plan to read</DropdownMenuItem>
           <Sheet className="custom-sheet" open={isSheetOpen}>
             <SheetTrigger className="trigger-button" onClick={handleSheetToggle}>
               add new library
@@ -117,7 +160,7 @@ const Drop = () => {
       <X className="h-4 w-4 " />
    
     </SheetClose>
-          <SheetDescription className="custom-sheet-description">
+          <SheetDescription className="custom-sheet-description flex flex-col ">
             <input
               type="text"
               className="library-input"
@@ -126,7 +169,7 @@ const Drop = () => {
               onChange={handleInputChange}
             />
             {errorMessage && <p style={{ color: 'black' }}>{errorMessage}</p>}
-            <button type="button" className="submit-button" onClick={handleFormSubmit}>
+            <button type="button" className="submit-button bg-orange-500 p-2 text-white rounded mx-5" onClick={handleFormSubmit}>
               Submit
             </button>
           </SheetDescription>

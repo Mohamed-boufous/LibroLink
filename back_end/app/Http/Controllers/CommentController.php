@@ -17,10 +17,11 @@ class CommentController extends Controller
         if ($replied_id != null) {
             $comments = Comment::where('replied_id', $replied_id)->where('book_id', $book_id)->get();
         } else {
-            $comments = Comment::where('book_id', $book_id)->get();
+            $comments = Comment::where('book_id', $book_id)->orderBy('date', 'desc')->get();
         }
         foreach ($comments as $comment) {
             $user = User::find($comment->user_id);
+            $user->image = $user->image ? asset($user->image) : null;
             $comment->user = $user;
         }
         return $comments;

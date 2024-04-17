@@ -56,11 +56,11 @@ export default function Singup() {
         </div>
         <form onSubmit={handleSubmit} method="post" className="text-left w-85 ">
           <h2 className="text-3xl font-bold mb-8">
-            Inscrivez-vous gratuitement pour commencer la lecture.
+          Sign up for free to start reading.
           </h2>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="username">
-              Quelle est votre username?
+              What is your user name?
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -68,7 +68,7 @@ export default function Singup() {
               type="text"
               name="userName"
               id="userName"
-              placeholder="Saisissez votre username"
+              placeholder=" Enter your user name"
               onChange={(e) =>
                 setFormData({ ...formData, userName: e.target.value })
               }
@@ -79,7 +79,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="email">
-              Quelle est votre adresse email ?
+              What is your e-mail address?
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -87,7 +87,7 @@ export default function Singup() {
               type="text"
               name="email"
               id="email"
-              placeholder="Saisissez votre adresse e-mail"
+              placeholder="Enter your e-mail address"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
@@ -98,7 +98,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="pwd">
-              Créez un mot de passe
+              Create your password
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -106,7 +106,7 @@ export default function Singup() {
               type="password"
               name="password"
               id="pwd"
-              placeholder="Saisissez votre mot de passe"
+              placeholder="Enter your password"
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
@@ -117,7 +117,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="pwdc">
-              Confirmer votre mot de passe
+              Confirm your password
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -125,7 +125,7 @@ export default function Singup() {
               type="password"
               name="password_confirmation"
               id="pwdc"
-              placeholder="Saisissez de nouveau votre mot de passe"
+              placeholder="Enter your password again"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -136,7 +136,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="display_name">
-              Comment doit-on vous appeler ?
+              What should we call you?
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -144,13 +144,13 @@ export default function Singup() {
               type="text"
               name="displayName"
               id="display_name"
-              placeholder="Saisissez un nom de profil"
+              placeholder="Enter your display name"
               onChange={(e) =>
                 setFormData({ ...formData, displayName: e.target.value })
               }
             />
             <h6 className="font-light text-sm">
-              Celui-ci va apparaitre sur votre profil.
+              This name will be displayed on your profile.
             </h6>
             {errors.displayName.map((error) => (
               <p className="text-red-500 pl-1">{error}</p>
@@ -158,7 +158,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="gender">
-              Quel est votre genre ?
+              What is your gender?
             </label>
             <select
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -169,8 +169,8 @@ export default function Singup() {
                 setFormData({ ...formData, gender: e.target.value })
               }
             >
-              <option value="Homme">Homme</option>
-              <option value="Femme">Femme</option>
+              <option value="Homme">Male</option>
+              <option value="Femme">Female</option>
             </select>
             {/* {errors.gender.map((error) => (
               <p className="text-red-500 pl-1">{error}</p>
@@ -178,7 +178,7 @@ export default function Singup() {
           </div>
           <div className="mb-2">
             <label className="font-semibold	" htmlFor="date">
-              Quelle est votre date de naissance ?
+              What is your date of birth?
             </label>
             <input
               className="border-gray-300 border-solid border-2 rounded w-full h-10 p-2
@@ -199,12 +199,12 @@ export default function Singup() {
               className="bg-orange-500 text-white px-20 py-2 rounded hover:bg-orange-600 "
               type="submit"
             >
-              S'inscrire
+              Sign Up
             </button>
           </div>
           <div className="border border-gray-200 w-full mt-8"></div>
           <div className="mt-4 font-light flex justify-center ">
-            Vous avez déja un compte ?
+            Already have an account?
             <Link
               className="text-orange-600 font-bold mx-9 underline"
               to="/login"

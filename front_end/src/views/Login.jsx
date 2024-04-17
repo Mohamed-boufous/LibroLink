@@ -79,7 +79,7 @@ function Login() {
               type="email"
               name="email"
               id="email"
-              placeholder="Saisissez votre adresse e-mail"
+              placeholder="Entrez your email"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
@@ -98,7 +98,7 @@ function Login() {
               type="password"
               name="password"
               id="pwd"
-              placeholder="Saisissez votre mot de passe"
+              placeholder="Enter your password"
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }

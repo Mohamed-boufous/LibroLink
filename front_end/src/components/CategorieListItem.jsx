@@ -16,7 +16,7 @@ export default function CategorieListItem({ text, isBigLabel }) {
   return (
     <>
       <li className={`px-4 py-2 h-[2.4rem] w-[15rem]  hover:text-orange-600`}>
-        <Link to="/book_filter">{text}</Link>
+        <Link to={`/book_filter?category=${text}`}>{text}</Link>
       </li>
     </>
   );

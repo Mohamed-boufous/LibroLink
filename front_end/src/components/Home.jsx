@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Header from "./Header";
 
 import { FiArrowRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -27,9 +28,11 @@ const Home = () => {
             of knowledge—not just consuming, but truly savoring, the essence of
             books "
           </p>
+          <Link to={"/"}>
           <button className="secondary-button">
             Book now <FiArrowRight />{" "}
           </button>
+          </Link>
         </div>
         <div className="home-image-section">
           <img src={BannerImage} className="size-[48rem]" alt="" />

@@ -10,8 +10,9 @@ import Drop from "../components/component/drop";
 import BookFinalVersion from "./BookFinalVersion";
 import { axiosClient } from "@/api/axios";
 import { Link, useParams } from "react-router-dom";
+import { useStateContext } from "@/context/ContextProvider";
 
-const MyComponent = ({ books, book }) => {
+const MyComponent = ({ books, book, load, setLoad }) => {
   const [hoveredBook, setHoveredBook] = useState(null);
   const [currentImage, setCurrentImage] = useState(image2);
   const [currentImage1, setCurrentImage1] = useState(image3);
@@ -19,9 +20,35 @@ const MyComponent = ({ books, book }) => {
   const [title, setTitle] = useState("Sample Title");
   const [author, setAuthor] = useState("John Doe");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
+  const [ratingNumber, setRatingNumber] = useState(0);
+  const { currentUser } = useStateContext();
   const toggleImage = () => {
     setCurrentImage((prevImage) => (prevImage === image2 ? image5 : image2));
+    if (currentImage === image2) {
+      axiosClient
+        .post("api/add_book_to_default_biblio", {
+          biblio_name: "likedBooks",
+          book_id: book.id,
+          user_id: currentUser.id,
+        })
+        .then((response) => {
+          console.log("Liked");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (currentImage === image5) {
+      axiosClient
+        .delete(
+          `api/deleteBookFromBiblio/likedBooks/${currentUser.id}/${book.id}`
+        )
+        .then((response) => {
+          console.log("Unliked");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const toggleImage1 = () => {
@@ -33,9 +60,30 @@ const MyComponent = ({ books, book }) => {
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
+    axiosClient
+      .post("api/add_rating", {
+        rating: rating,
+        book_id: book.id,
+        utilisateur_id: currentUser.id,
+      })
+      .then((response) => {
+        console.log("rated");
+        setLoad(!load);
+      });
   };
 
-  
+  useEffect(() => {
+    if (book) {
+      axiosClient
+        .get(`api/get_rating_Number/${book.id}`)
+        .then((response) => {
+          setRatingNumber(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [book]);
 
   return (
     <div className="great">
@@ -56,16 +104,16 @@ const MyComponent = ({ books, book }) => {
               ) : (
                 <p>Loading...</p>
               )}
-
-              <div className="adding-cont flex space-x-10 mt-4">
+              {book ? (
+                <div className="adding-cont flex space-x-10 mt-4">
                 <Link to={`/reading`}>
-                <button
-                  className="py-2 px-16 text-[1rem] mr-10 bg-white rounded font-[580]
-            hover:bg-orange-600 hover:text-white
-            "
-                >
-                  Read Now
-                </button>
+                  <button
+                    className="py-2 px-16 text-[1rem] mr-10 bg-white rounded font-[580]
+            hover:bg-orange-600 hover:text-white disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black
+            "  disabled = {currentUser.is_subscribed === 0 && book.isFree === 0 ? true : false}
+                  >
+                    Read Now
+                  </button>
                 </Link>
                 <div className="border border-white flex p-1 rounded-md hover:cursor-pointer">
                   <img
@@ -80,9 +128,12 @@ const MyComponent = ({ books, book }) => {
                   className="dropcont border rounded-md  text-white"
                   style={{ margin: "0rem", marginLeft: "0.5rem" }}
                 >
-                  <Drop className="droplist"></Drop>
+                  <Drop book={book} className="droplist"></Drop>
                 </div>
               </div>
+              ): (
+                <p>Loading...</p>
+              )}
               <div className="flex flex-col items-center">
                 <div className="flex space-x-4">
                   <div className="text-white text-[1.5rem] font-semibold mt-2">
@@ -90,7 +141,7 @@ const MyComponent = ({ books, book }) => {
                   </div>
                   <StarRating onRatingChange={handleRatingChange} />
                 </div>
-                <div className="text-white text-[1rem] ">105 Rates</div>
+                <div className="text-white text-[1rem] ">{ratingNumber} Rates</div>
               </div>
             </div>
           </div>

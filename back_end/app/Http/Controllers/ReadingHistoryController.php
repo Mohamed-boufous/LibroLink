@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReadingHistory;
+use App\Models\ReadingHistoryHasBook;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ReadingHistoryController extends Controller
 {
@@ -32,5 +35,21 @@ class ReadingHistoryController extends Controller
         ];
 
         return response()->json(['books' => $books, 'pagination' => $paginationData], 200);
+    }
+
+    public function addBookToHistory(Request $request) {
+        $request->validate([
+            'book_id' => 'required|integer',
+            'id_utilisateur' => 'required|integer',
+        ]);
+
+        $readingHistory = ReadingHistory::where('id_utilisateur', $request->input('id_utilisateur'))->first();
+        ReadingHistoryHasBook::create([
+            'id_reading_history' => $readingHistory->id,
+            'id_book' => $request->input('book_id'),
+            'date_creation_book' => Carbon::now(),
+        ]);
+
+        return response()->json(['message' => 'Book added to reading history successfully'], 201);
     }
 }

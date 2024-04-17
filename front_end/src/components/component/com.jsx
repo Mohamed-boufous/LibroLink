@@ -6,6 +6,7 @@ import { axiosClient } from "@/api/axios";
 import { useStateContext } from "@/context/ContextProvider";
 import { Dialog } from "../ui/dialog";
 import ReportForm from "../ReportForm";
+import { CurrencyFranc } from "@mui/icons-material";
 
 export default function CommentSection({ bookId }) {
   const [comments, setComments] = useState([]);
@@ -232,7 +233,7 @@ export default function CommentSection({ bookId }) {
       .catch((error) => {
         console.log(error);
       });
-  }, [load]);
+  }, [load,bookId]);
   return (
     
     <div className="bg-white p-6">
@@ -244,7 +245,7 @@ export default function CommentSection({ bookId }) {
           <div className="w-full">
             <div className="flex items-center">
               <Avatar className="">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={currentUser.image} />
                 <AvatarFallback>AV</AvatarFallback>
               </Avatar>
               <h3 className="font-semibold text-orange-500 ml-3">{currentUser.displayName}</h3>
@@ -273,7 +274,7 @@ export default function CommentSection({ bookId }) {
           comment.replied_id === null ? (
             <div key={comment.id} className="flex items-start space-x-3 mb-4">
               <Avatar className="">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={comment.user.image} />
                 <AvatarFallback>AV</AvatarFallback>
               </Avatar>
               <div className="flex-1">
@@ -376,7 +377,7 @@ export default function CommentSection({ bookId }) {
                       className="flex items-start space-x-3 mt-4"
                     >
                       <Avatar className="">
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={reply.user.image}/>
                         <AvatarFallback>AV</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">

@@ -1,18 +1,10 @@
 import { useState, useEffect } from "react";
 import "../styles/Filter.css";
 import { axiosClient } from "@/api/axios";
+import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function SearchPage() {
-  const [books, setBooks] = useState([]);
-
-  useEffect(() => {
-    axiosClient.get("api/get_all_books").then((response) => {
-      setBooks(response.data);
-      console.log(response.data);
-    }).catch((error) => {
-      console.log(error);
-    })
-  },[])
   const Options = [
     "Most Viewed",
     "Recently Added",
@@ -34,7 +26,7 @@ function SearchPage() {
     "Parenting",
     "Philosophy",
     "Scince & technology",
-    "Sekf-help",
+    "Self-help",
     "Travel",
     "True crime",
   ];
@@ -59,362 +51,226 @@ function SearchPage() {
   ];
 
   const searchMethod = ["All", "Title", "Author", "Origin", "Subject"];
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  /* const books = [
-    {
-      image: "book Preview.png",
-      title: "The history of lord rings",
-      authorName: "A",
-      description: "",
-      subject: "Horror",
-      origin: "England",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (2).png",
-      title: "Book 2",
-      authorName: "A",
-      description: "",
-      subject: "Education",
-      origin: "USA",
-      pages: 112,
-      rating: 6.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (3).png",
-      title: "Book 3",
-      authorName: "B",
-      description: "",
-      subject: "Sport",
-      origin: "UK",
-      pages: 80,
-      rating: 3,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (4).png",
-      title: "Book 4",
-      authorName: "B",
-      description: "",
-      subject: "Science",
-      origin: "Australie",
-      pages: 300,
-      rating: 10,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (5).png",
-      title: "Book 5",
-      authorName: "C",
-      description: "",
-      subject: "Sex",
-      origin: "Korea",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (6).png",
-      title: "Book 6",
-      authorName: "C",
-      description: "",
-      subject: "IT",
-      origin: "Morocoo",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (7).png",
-      title: "Book 7",
-      authorName: "D",
-      description: "",
-      subject: "AI",
-      origin: "Britain",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (8).png",
-      title: "Book 8",
-      authorName: "D",
-      description: "",
-      subject: "Anime",
-      origin: "Portugaise",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 9",
-      authorName: "S",
-      description: "",
-      subject: "Box",
-      origin: "Spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 10",
-      authorName: "s",
-      description: "",
-      subject: "Box",
-      origin: "spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview.png",
-      title: "Book 11",
-      authorName: "A",
-      description: "",
-      subject: "Horror",
-      origin: "England",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (2).png",
-      title: "Book 12",
-      authorName: "A",
-      description: "",
-      subject: "Education",
-      origin: "USA",
-      pages: 112,
-      rating: 6.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (3).png",
-      title: "Book 13",
-      authorName: "B",
-      description: "",
-      subject: "Sport",
-      origin: "UK",
-      pages: 80,
-      rating: 3,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (4).png",
-      title: "Book 14",
-      authorName: "B",
-      description: "",
-      subject: "Science",
-      origin: "Australie",
-      pages: 300,
-      rating: 10,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (5).png",
-      title: "Book 15",
-      authorName: "C",
-      description: "",
-      subject: "Sex",
-      origin: "Korea",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (6).png",
-      title: "Book 16",
-      authorName: "C",
-      description: "",
-      subject: "IT",
-      origin: "Morocoo",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (7).png",
-      title: "Book 17",
-      authorName: "D",
-      description: "",
-      subject: "AI",
-      origin: "Britain",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (8).png",
-      title: "Book 18",
-      authorName: "D",
-      description: "",
-      subject: "Anime",
-      origin: "Portugaise",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 19",
-      authorName: "S",
-      description: "",
-      subject: "Box",
-      origin: "Spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 20",
-      authorName: "s",
-      description: "",
-      subject: "Box",
-      origin: "spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview.png",
-      title: "Book 21",
-      authorName: "A",
-      description: "",
-      subject: "Horror",
-      origin: "England",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (2).png",
-      title: "Book 22",
-      authorName: "A",
-      description: "",
-      subject: "Education",
-      origin: "USA",
-      pages: 112,
-      rating: 6.5,
-      etat: "premium",
-    },
-    {
-      image: "book Preview (3).png",
-      title: "Book 23",
-      authorName: "B",
-      description: "",
-      subject: "Sport",
-      origin: "UK",
-      pages: 80,
-      rating: 3,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (4).png",
-      title: "Book 24",
-      authorName: "B",
-      description: "",
-      subject: "Science",
-      origin: "Australie",
-      pages: 300,
-      rating: 10,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (5).png",
-      title: "Book 25",
-      authorName: "C",
-      description: "",
-      subject: "Sex",
-      origin: "Korea",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (6).png",
-      title: "Book 26",
-      authorName: "C",
-      description: "",
-      subject: "IT",
-      origin: "Morocoo",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (7).png",
-      title: "Book 27",
-      authorName: "D",
-      description: "",
-      subject: "AI",
-      origin: "Britain",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (8).png",
-      title: "Book 28",
-      authorName: "D",
-      description: "",
-      subject: "Anime",
-      origin: "Portugaise",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 29",
-      authorName: "S",
-      description: "",
-      subject: "Box",
-      origin: "Spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "Free",
-    },
-    {
-      image: "book Preview (9).png",
-      title: "Book 30",
-      authorName: "s",
-      description: "",
-      subject: "Box",
-      origin: "spain",
-      pages: 155,
-      rating: 8.5,
-      etat: "premium",
-    },
-  ]; */
+  const [books, setBooks] = useState([]);
 
-  const initialStateWithOpacityHovered = books.map((book) => ({
-    ...book,
-    opacity: 1,
-    hovered: false,
-  }));
-  const [livres, setLivres] = useState(initialStateWithOpacityHovered);
+  const [livres, setLivres] = useState([]);
 
   const [booksSelected, setBooksSelected] = useState(livres);
-  const [selectedOption, setSelectedOption] = useState(Options[1]);
+  const [selectedOption, setSelectedOption] = useState(
+    searchParams.get("bookSort") || Options[1]
+  );
+  const [selectedLanguages, setSelectedLanguage] = useState([]);
+  const [selectedReadingExperiences, setSelectedReadingExperiences] =
+    useState(null);
+  const [selectedGenres, setSelectedGenres] = useState([
+    searchParams.get("category"),
+  ]);
   const [selectedAlphabet, setSelectedAlphabet] = useState(null);
   const [selectedSearchMethod, setSelectedSearchMethod] = useState(
     searchMethod[0]
   );
-
+  const [selectedOrder, setSelectedOrder] = useState(
+    searchParams.get("bookSort") ? "desc" : "asc"
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 18; // Nbr des livres par page
 
   // hnaya kanhssbo firstIndex w lastIndex
-  const indexOfLastBook = currentPage * booksPerPage;
-  const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = booksSelected.slice(indexOfFirstBook, indexOfLastBook);
+  const [indexOfLastBook, setIndexOfLastBook] = useState(
+    currentPage * booksPerPage
+  );
+  const [indexOfFirstBook, setIndexOfFirstBook] = useState(
+    indexOfLastBook - booksPerPage
+  );
+  const [currentBooks, setCurrentBooks] = useState(
+    booksSelected.slice(indexOfFirstBook, indexOfLastBook)
+  );
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [textSearch, setTextSearch] = useState(
+    searchParams.get("search") ? searchParams.get("search") : ""
+  );
+  useEffect(() => {
+    if (searchParams.get("category")&& ReadingExperiences.length === 0) {
+      filterHandler();
+    } else if (searchParams.get("search")) {
+      setSelectedSearchMethod("Title");
+      axiosClient
+        .get(`api/get_books_by_title?title=${searchParams.get("search")}`)
+        .then((response) => {
+          setBooks(response.data);
+          const initialStateWithOpacityHovered = response.data.map((book) => ({
+            ...book,
+            opacity: 1,
+            hovered: false,
+          }));
+          setLivres(initialStateWithOpacityHovered);
+          setBooksSelected(initialStateWithOpacityHovered);
+          setCurrentBooks(
+            initialStateWithOpacityHovered.slice(
+              indexOfFirstBook,
+              indexOfLastBook
+            )
+          );
+          console.log(response.data);
+        });
+    } else {
+      axiosClient
+        .get(
+          `api/get_all_books${
+            searchParams.get("bookSort")
+              ? `?option=${searchParams.get("bookSort")}&limit=20`
+              : ""
+          }`
+        )
+        .then((response) => {
+          setBooks(response.data);
+          const initialStateWithOpacityHovered = response.data.map((book) => ({
+            ...book,
+            opacity: 1,
+            hovered: false,
+          }));
+          setLivres(initialStateWithOpacityHovered);
+          setBooksSelected(initialStateWithOpacityHovered);
+          setCurrentBooks(
+            initialStateWithOpacityHovered.slice(
+              indexOfFirstBook,
+              indexOfLastBook
+            )
+          );
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    if (searchParams.get("bookSort")) {
+      setSelectedOption(searchParams.get("bookSort"));
+      console.log(searchParams.get("bookSort"));
+    }
+  }, []);
+  const handleOrder = () => {
+    if (selectedOrder === "asc") {
+      setSelectedOrder("desc");
+    } else if (selectedOrder === "desc") {
+      setSelectedOrder("asc");
+    }
+  };
+  const filterHandler = (event) => {
+    if (
+      (selectedGenres.length === 0 ||
+        (selectedGenres[0] === null && selectedLanguages.length === 1)) &&
+      selectedLanguages.length === 0 &&
+      selectedReadingExperiences === null
+    ) {
+      axiosClient
+        .get(`api/get_all_books`)
+        .then((response) => {
+          setBooks(response.data);
+          const initialStateWithOpacityHovered = response.data.map((book) => ({
+            ...book,
+            opacity: 1,
+            hovered: false,
+          }));
+          setLivres(initialStateWithOpacityHovered);
+          setBooksSelected(initialStateWithOpacityHovered);
+          setCurrentBooks(
+            initialStateWithOpacityHovered.slice(
+              indexOfFirstBook,
+              indexOfLastBook
+            )
+          );
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (
+      selectedGenres.length !== 0 ||
+      selectedLanguages.length !== 0 ||
+      selectedReadingExperiences !== null
+    ) {
+      axiosClient
+        .get(`api/filter_booksBygenre?genres=${selectedGenres}`)
+        .then((response) => {
+          var initialStateWithOpacityHovered = response.data.map((book) => ({
+            ...book,
+            opacity: 1,
+            hovered: false,
+          }));
+          if (selectedReadingExperiences === "Free") {
+            initialStateWithOpacityHovered =
+              initialStateWithOpacityHovered.filter(
+                (book) => book.isFree === 1
+              );
+          } else if (selectedReadingExperiences === "Premium") {
+            initialStateWithOpacityHovered =
+              initialStateWithOpacityHovered.filter(
+                (book) => book.isFree === 0
+              );
+          }
+          if (selectedLanguages.length !== 0) {
+            initialStateWithOpacityHovered =
+              initialStateWithOpacityHovered.filter((book) =>
+                selectedLanguages.includes(book.lang)
+              );
+          }
+          if (selectedOption === "Name A-Z") {
+            initialStateWithOpacityHovered.sort((a, b) => {
+              if (selectedOrder === "asc") {
+                return a.title.localeCompare(b.title);
+              } else {
+                return b.title.localeCompare(a.title);
+              }
+            });
+          } else if (selectedOption === "Recently Added") {
+            initialStateWithOpacityHovered.sort((a, b) => {
+              if (selectedOrder === "asc") {
+                return a.created_at - b.created_at;
+              } else {
+                return b.created_at - a.created_at;
+              }
+            });
+          } else if (selectedOption === "Most Viewed") {
+            initialStateWithOpacityHovered.sort((a, b) => {
+              if (selectedOrder === "asc") {
+                return a.views - b.views;
+              } else {
+                return b.views - a.views;
+              }
+            });
+          } else if (selectedOption === "Rating") {
+            initialStateWithOpacityHovered.sort((a, b) => {
+              if (selectedOrder === "asc") {
+                return a.sum_rating - b.sum_rating;
+              } else {
+                return b.sum_rating - a.sum_rating;
+              }
+            });
+          } else if (selectedOption === "Released Date") {
+            initialStateWithOpacityHovered.sort((a, b) => {
+              if (selectedOrder === "asc") {
+                return a.date_publication - b.date_publication;
+              } else {
+                return b.date_publication - a.date_publication;
+              }
+            });
+          }
+
+          console.log(initialStateWithOpacityHovered);
+          setLivres(initialStateWithOpacityHovered);
+          setBooksSelected(initialStateWithOpacityHovered);
+          setCurrentBooks(
+            initialStateWithOpacityHovered.slice(
+              indexOfFirstBook,
+              indexOfLastBook
+            )
+          );
+        });
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -427,6 +283,15 @@ function SearchPage() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    setCurrentBooks(
+      booksSelected.slice(
+        (currentPage - 1) * booksPerPage,
+        currentPage * booksPerPage
+      )
+    );
+  }, [currentPage]);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -521,48 +386,20 @@ function SearchPage() {
 
   const searchByAlphabets = (alphabet) => {
     setSelectedAlphabet(alphabet);
+    console.log(alphabet);
     setCurrentPage(1);
     const lowerCaseAlphabet = alphabet.toLowerCase();
 
-    switch (selectedSearchMethod) {
-      case "Title":
-        const filtredByTitle = livres.filter((book) =>
-          book.title.toLowerCase().startsWith(lowerCaseAlphabet)
-        );
-        setBooksSelected(filtredByTitle);
-        break;
-      case "Author":
-        const filtredByAuthor = livres.filter((book) =>
-          book.authorName.toLowerCase().startsWith(lowerCaseAlphabet)
-        );
-        setBooksSelected(filtredByAuthor);
-        break;
-      case "Origin":
-        const filtredByOrigin = livres.filter((book) =>
-          book.origin.toLowerCase().startsWith(lowerCaseAlphabet)
-        );
-        setBooksSelected(filtredByOrigin);
-        break;
-      case "Subject":
-        const filtredBySubject = livres.filter((book) =>
-          book.subject.toLowerCase().startsWith(lowerCaseAlphabet)
-        );
-        setBooksSelected(filtredBySubject);
-        break;
-      case "All":
-        const filtredByAll = livres.filter((book) => {
-          return (
-            book.authorName.toLowerCase().startsWith(lowerCaseAlphabet) ||
-            book.origin.toLowerCase().startsWith(lowerCaseAlphabet) ||
-            book.subject.toLowerCase().startsWith(lowerCaseAlphabet)
-          );
-        });
-        setBooksSelected(filtredByAll);
-        break;
-    }
+    const filtredByTitle = livres.filter((book) =>
+      book.title.toLowerCase().startsWith(lowerCaseAlphabet)
+    );
+    console.log("aaa" + filtredByTitle);
+    setBooksSelected(filtredByTitle);
+    setCurrentBooks(filtredByTitle.slice(indexOfFirstBook, indexOfLastBook));
   };
 
   const searchBook = (e) => {
+    setTextSearch(e.target.value);
     setSelectedAlphabet(null);
     setCurrentPage(1);
     const value = e.target.value;
@@ -572,42 +409,57 @@ function SearchPage() {
           book.title.toLowerCase().includes(value.toLowerCase())
         );
         setBooksSelected(filtredByTitle);
+        setCurrentBooks(
+          filtredByTitle.slice(indexOfFirstBook, indexOfLastBook)
+        );
         break;
       case "Author":
         const filteredByAuthor = livres.filter((book) =>
-          book.authorName.toLowerCase().includes(value.toLowerCase())
+          book.author.toLowerCase().includes(value.toLowerCase())
         );
         setBooksSelected(filteredByAuthor);
+        setCurrentBooks(
+          filtredByTitle.slice(indexOfFirstBook, indexOfLastBook)
+        );
         break;
       case "Origin":
         const filteredByOrigin = livres.filter((book) =>
           book.origin.toLowerCase().startsWith(value.toLowerCase())
         );
         setBooksSelected(filteredByOrigin);
+        setCurrentBooks(
+          filtredByTitle.slice(indexOfFirstBook, indexOfLastBook)
+        );
         break;
       case "Subject":
         const filteredBySubject = livres.filter((book) =>
           book.subject.toLowerCase().includes(value.toLowerCase())
         );
         setBooksSelected(filteredBySubject);
+        setCurrentBooks(
+          filtredByTitle.slice(indexOfFirstBook, indexOfLastBook)
+        );
         break;
       case "All":
         const filtredByAll = livres.filter((book) => {
           return (
-            book.authorName.toLowerCase().includes(value.toLowerCase()) ||
+            book.author.toLowerCase().includes(value.toLowerCase()) ||
             book.origin.toLowerCase().startsWith(value.toLowerCase()) ||
             book.subject.toLowerCase().includes(value.toLowerCase()) ||
             book.title.toLowerCase().includes(value.toLowerCase())
           );
         });
         setBooksSelected(filtredByAll);
+        setCurrentBooks(
+          filtredByTitle.slice(indexOfFirstBook, indexOfLastBook)
+        );
         break;
     }
   };
   return (
     <div className="mt-5 px-0">
       <div className="flex flex-row">
-      <div className="w-1/5  min-[100px]:hidden sm:hidden md:block">
+        <div className="w-1/5  min-[100px]:hidden sm:hidden md:block">
           <div className="catalogue-conatiner">
             <div>
               <div>
@@ -616,11 +468,16 @@ function SearchPage() {
               </div>
               <div className="flex flex-wrap items-center   g-0 lg:mx-2 mx-xxl-3">
                 <div
-                  className="w-1/12 2xl:me-2 2xl:ms-2 "
+                  onClick={handleOrder}
+                  className="w-1/12 2xl:me-2 2xl:ms-2 cursor-pointer"
                   style={{ marginTop: "12px" }}
                 >
                   <img
-                    src="./public/Frame (3).png"
+                    src={`${
+                      selectedOrder === "asc"
+                        ? "./public/Frame (3).png"
+                        : "./public/FrameUpsideDown.png"
+                    }`}
                     alt=""
                     className={`${
                       windowWidth >= 992 && windowWidth <= 1194 ? "ms-3" : ""
@@ -629,7 +486,9 @@ function SearchPage() {
                     }`}
                   />
                 </div>
-                <div className="" style={{ marginTop: "12px" }}> {/* // .... */}
+                <div className="" style={{ marginTop: "12px" }}>
+                  {" "}
+                  {/* // .... */}
                   <select
                     name="Sorted-By"
                     onChange={HandleSelectOption}
@@ -661,7 +520,8 @@ function SearchPage() {
                 </div>
                 <div className="relative flex-grow max-w-full flex-1 px-4 ms-3 lg:mt-2">
                   <button
-                    className={` flex text-md  justify-center font-medium rounded-md text-gray-300 filter-button ${
+                    onClick={filterHandler}
+                    className={` flex text-md   justify-center font-medium rounded-md text-white filter-button ${
                       windowWidth >= 1400 && windowWidth <= 1424
                         ? "additional-class"
                         : ""
@@ -690,7 +550,7 @@ function SearchPage() {
                       }`}
                     />
                     <span
-                      className={`ps-1 ${
+                      className={`ps-1 text-lg  ${
                         windowWidth >= 1195 && windowWidth <= 1221
                           ? "filter-additional-class"
                           : ""
@@ -725,6 +585,10 @@ function SearchPage() {
                         type="radio"
                         name="Reading Experience"
                         className=" ms-1"
+                        value={element}
+                        onChange={(e) =>
+                          setSelectedReadingExperiences(e.target.value)
+                        }
                       />{" "}
                       <label
                         className={`font-semibold ps-1 ${
@@ -754,12 +618,24 @@ function SearchPage() {
                     Languages
                   </label>
                   {Languages.map((language) => (
-                    <div>
+                    <div key={language}>
+                      {" "}
+                      {/* Add a unique key for better performance */}
                       <input
                         type="checkbox"
                         name="Languages"
                         className="ms-1"
-                      />{" "}
+                        value={language}
+                        checked={selectedLanguages.includes(language)}
+                        onChange={(e) => {
+                          const updatedLanguages = e.target.checked
+                            ? [...selectedLanguages, e.target.value] // Add language if checked
+                            : selectedLanguages.filter(
+                                (lang) => lang !== e.target.value
+                              ); // Remove language if unchecked
+                          setSelectedLanguage(updatedLanguages);
+                        }}
+                      />
                       <label
                         className={`font-semibold ps-1 ${
                           windowWidth >= 1700 && windowWidth <= 1920
@@ -788,16 +664,32 @@ function SearchPage() {
                 Non Fiction
               </label>
               {NonFinction.map((element) => (
-                <div>
-                  <input type="checkbox" name="Non Ficiton" className="ms-1" />{" "}
+                <div key={element}>
+                  {" "}
+                  {/* Add a unique key for better performance */}
+                  <input
+                    type="checkbox"
+                    name="Fiction"
+                    className="ms-1"
+                    value={element}
+                    // Add a state variable to track selected non-fiction elements (replace 'selectedNonFiction' with your actual state name)
+                    checked={selectedGenres.includes(element)}
+                    onChange={(e) => {
+                      const updatedFiction = e.target.checked
+                        ? [...selectedGenres, e.target.value] // Add element if checked
+                        : selectedGenres.filter(
+                            (item) => item !== e.target.value
+                          ); // Remove element if unchecked
+                      setSelectedGenres(updatedFiction); // Update state with the modified array
+                    }}
+                  />
                   <label
-                    className={` font-semibold ps-1 ${
+                    className={`font-semibold ps-1 ${
                       windowWidth >= 1700 && windowWidth <= 1920
                         ? "small-label-additional-class"
                         : ""
                     }`}
                   >
-                    {" "}
                     {element}
                   </label>
                 </div>
@@ -817,10 +709,27 @@ function SearchPage() {
                 Fiction
               </label>
               {Fiction.map((element) => (
-                <div>
-                  <input type="checkbox" name="Ficiton" className="ms-1" />{" "}
+                <div key={element}>
+                  {" "}
+                  {/* Add a unique key for better performance */}
+                  <input
+                    type="checkbox"
+                    name="NonFiction"
+                    className="ms-1"
+                    value={element}
+                    // Add a state variable to track selected non-fiction elements (replace 'selectedNonFiction' with your actual state name)
+                    checked={selectedGenres.includes(element)}
+                    onChange={(e) => {
+                      const updatedNonFiction = e.target.checked
+                        ? [...selectedGenres, e.target.value] // Add element if checked
+                        : selectedGenres.filter(
+                            (item) => item !== e.target.value
+                          ); // Remove element if unchecked
+                      setSelectedGenres(updatedNonFiction); // Update state with the modified array
+                    }}
+                  />
                   <label
-                    className={` font-semibold ps-1 ${
+                    className={`font-semibold ps-1 ${
                       windowWidth >= 1700 && windowWidth <= 1920
                         ? "small-label-additional-class"
                         : ""
@@ -855,6 +764,7 @@ function SearchPage() {
               className="ml-2 px-2 py-2 rounded-md border border-gray-300"
               style={{ width: "300px", fontSize: "14px" }}
               onChange={(e) => searchBook(e)}
+              value={textSearch}
             />
           </div>
           <div className="text-center mt-4 mb-4 mx-4 ">
@@ -872,7 +782,7 @@ function SearchPage() {
                 {alphabet}
               </span>
             ))}
-          </div>
+          </div>
           <div className="container mt-5">
             {booksSelected.length === 0 ? (
               <div className="text-center">No books found!</div>
@@ -881,21 +791,20 @@ function SearchPage() {
                 {currentBooks.map((book, index) => (
                   <div key={index} className="relative">
                     <img
-                      src={book.image}
+                      src={book.ImageURL}
                       alt={book.title}
-                      className="border w-full"
+                      className="border w-full h-full"
                       style={{ opacity: book.opacity }}
                       onMouseEnter={() => handleImageMouseEnter(index)}
                       onMouseLeave={() => handleImageMouseLeave(index)}
                     />
-                    {!book.hovered &&
-                      book.etat.toLocaleLowerCase() === "free" && (
-                        <div className="absolute top-0 start-0 w-full">
-                          <div className="mt-1 ml-1 w-1/4 text-center font-bold rounded etat-label">
-                            {book.etat}
-                          </div>
+                    {!book.hovered && book.isFree === 1 && (
+                      <div className="absolute top-0 start-0 w-full">
+                        <div className="mt-1 ml-1 w-1/4 text-center font-bold rounded etat-label">
+                          {"Free"}
                         </div>
-                      )}
+                      </div>
+                    )}
                     <div
                       className="absolute top-0 start-0 w-full"
                       style={{
@@ -914,11 +823,16 @@ function SearchPage() {
                         >
                           {book.title}
                         </span>
-                        <button
-                          className={`text-start font-medium text-sm block mt-2 bg-gray-200 px-2 py-1 rounded-md`}
-                        >
-                          Genre
-                        </button>
+                        <div className="flex  h-10 gap-2 flex-shrink-3">
+                          {book.genres.map((genre) => (
+                            <button
+                              className={`text-start  font-medium text-sm block mt-2 bg-gray-200 px-2 py-1 rounded-md`}
+                            >
+                              {genre.genreName}
+                            </button>
+                          ))}
+                        </div>
+
                         <div
                           className={`mt-2 ${
                             window.innerWidth >= 992 &&
@@ -933,7 +847,7 @@ function SearchPage() {
                               alt=""
                               className="inline-block w-4 h-4 mr-2"
                             />
-                            <span className="font-bold">{book.rating}</span>
+                            <span className="font-bold">{book.sum_rating}</span>
                           </span>
                           <span className="block">
                             <img
@@ -959,18 +873,22 @@ function SearchPage() {
                               alt=""
                               className="inline-block w-4 h-4 mr-2"
                             />
-                            <span className="font-bold">1.5K views</span>
+                            <span className="font-bold">
+                              {book.views} views
+                            </span>
                           </span>
                         </div>
                         <div className="text-center">
-                          <button className="font-medium py-[2px] px-[20px] bg-orange-600 rounded-sm">
-                            <img
-                              src="./public/book.svg"
-                              alt=""
-                              className="inline-block w-4 h-4 mr-2"
-                            />
-                            Read
-                          </button>
+                          <Link to={`/reading`}>
+                            <button className="font-medium py-[2px] px-[20px] bg-orange-600 rounded-sm">
+                              <img
+                                src="./public/book.svg"
+                                alt=""
+                                className="inline-block w-4 h-4 mr-2"
+                              />
+                              Read
+                            </button>
+                          </Link>
                         </div>
                         <div
                           className={`text-center ${
@@ -980,14 +898,16 @@ function SearchPage() {
                               : "mt-2"
                           }`}
                         >
-                          <button className="font-medium py-[2px] px-[25px] bg-white rounded-sm">
-                            <img
-                              src="./public/info.svg"
-                              alt=""
-                              className="inline-block w-4 h-4 mr-2"
-                            />
-                            Info
-                          </button>
+                          <Link to={`/book/${book.id}`}>
+                            <button className="font-medium py-[2px] px-[25px] bg-white rounded-sm">
+                              <img
+                                src="./public/info.svg"
+                                alt=""
+                                className="inline-block w-4 h-4 mr-2"
+                              />
+                              Info
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -1003,7 +923,7 @@ function SearchPage() {
                       onClick={() => paginate(pageNumber)}
                       className={`px-4 py-2 rounded-md ${
                         pageNumber === currentPage
-                          ? "bg-blue-500 text-white"
+                          ? "bg-orange-500 text-white"
                           : "bg-gray-200"
                       }`}
                     >

@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BiblioHasBook extends Model
+class Rating extends Model
 {
     use HasFactory;
-    protected $table = 'biblio_has_book';
-    protected $fillable = [
-        'biblio_id',
-        'book_id'
-    ];
+    protected $table ='ratings';
+    protected $fillable = ['rating','book_id','utilisateur_id'];
     public $timestamps = false;
 }

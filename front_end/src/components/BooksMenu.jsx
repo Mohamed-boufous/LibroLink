@@ -4,7 +4,7 @@ export default function BooksMenu() {
     const booklist = [
         "New",
         "Popular",
-        "Top Rated",
+        "Rating",
         "Book List",
     ]
   return (

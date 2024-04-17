@@ -139,6 +139,7 @@ class UserController extends Controller
         $user->rating_book()->detach();
         $user->subscriptions()->delete();
         $user->credit_card()->delete();
+        $user->comment()->delete();
         $user->penalty()->delete();
         $user->subscriptions()->delete();
         $user->delete();
@@ -247,6 +248,7 @@ class UserController extends Controller
                         $penalty->delete();
                     } else {
                         $user->state = $penalty;
+                        $user->image = $user->image ? asset($user->image) : null;
                         return $user;
                     }
                 }

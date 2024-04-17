@@ -13,7 +13,7 @@ use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfReader\PdfReader;
 use App\Models\Biblio;
 use App\Models\BiblioHasBook;
-
+use App\Models\Rating;
 
 class BookController extends Controller
 {
@@ -24,13 +24,13 @@ class BookController extends Controller
         $limit = $request->query('limit');
         $books = Book::with('genres');
         switch ($option) {
-            case 'recent':
+            case 'Recently Added':
                 $books = $books->orderBy('created_at', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
                 break;
             case 'popular':
                 $books = $books->orderBy('views', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
                 break;
-            case 'rating':
+            case 'Rating':
                 $books = $books->orderBy('sum_rating', $order ? $order : "desc")->limit($limit ? $limit : 10)->get();
                 break;
             default:
@@ -45,7 +45,32 @@ class BookController extends Controller
         }
         return response()->json($books);
     }
+    public function getBooksByTitle(Request $request)
+    {
+        // Get the search term from the request (assuming it's in a 'title' query parameter)
+        $searchTerm = $request->query('title');
 
+        // Perform the query using Eloquent
+        $books = Book::where('title', 'like', "%{$searchTerm}%")
+            ->with('genres')->get();
+
+        // Alternative for case-insensitive search (optional)
+        // $books = Book::where('title', 'ilike', "%{$searchTerm}%")
+        //           ->get();
+
+        // Check if any books were found
+        if ($books->isEmpty()) {
+            return response()->json([
+                'message' => 'No books found for the search term.',
+            ]);
+        }
+        foreach ($books as $book) {
+            /** @var Book $book */
+            $book->ImageURL = asset($book->bookCover);
+        }
+        // Return the found books as JSON
+        return response()->json($books);
+    }
     public function get_book($id)
     {
         $book = Book::with('genres')->find($id);
@@ -93,32 +118,33 @@ class BookController extends Controller
 
     public function filterByGenre(Request $request)
     {
-        $genreIds = json_decode($request->query('genre_id'), true); 
-        $langString = $request->query('lang');
+        $genreString = $request->query('genres');
+        $genreArray = explode(',', $genreString);
+        $genreIds = Genre::whereIn('genreName', $genreArray)->pluck('id')->toArray();
         $order = $request->query('order');
         $ordermode = $request->query('ordermode');
-        if ($order === "alpha"){
+        if ($order === "Name A-Z") {
             $tablecol = "title";
-        }else if($order === "date"){
+        } else if ($order === "Released Date") {
             $tablecol = "date_publication";
-        }else if($order === "views"){
+        } else if ($order === "Most Viewed") {
             $tablecol = "views";
-        }else if($order === "rating"){
+        } else if ($order === "Rating") {
             $tablecol = "sum_rating";
-        }else if($order === "recent"){
+        } else if ($order === "Recently Added") {
             $tablecol = "created_at";
-        }else {
+        } else {
             $tablecol = "created_at";
             $ordermode = "desc";
         }
-    
+
         if (!is_array($genreIds)) {
-            
+
             return response()->json(['error' => "Genre IDs must be an array"], 400);
         }
-         if (!empty($genreIds)) {
+        if (!empty($genreIds)) {
             $genreIdsCount = count($genreIds);
-           
+
             $bookIds = Book::select('book_id')
                 ->join('book_has_genres', 'book_has_genres.book_id', '=', 'book.id')
                 ->whereIn('book_has_genres.genres_id', $genreIds)
@@ -129,64 +155,69 @@ class BookController extends Controller
 
             $books = Book::with('genres')->whereIn('id', $bookIds)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
         }
-    
 
+        foreach ($books as $book) {
+            $book->ImageURL = asset($book->bookCover);
+        }
         return response()->json($books);
     }
 
-    public function filterByfree(Request $request){
+    public function filterByfree(Request $request)
+    {
         $isFree = $request->query('isFree');
-        $langString = $request->query('lang');
         $order = $request->query('order');
         $ordermode = $request->query('ordermode');
-        if ($order === "alpha"){
+        if ($order === "Name A-Z") {
             $tablecol = "title";
-        }else if($order === "date"){
+        } else if ($order === "Released Date") {
             $tablecol = "date_publication";
-        }else if($order === "views"){
+        } else if ($order === "Most Viewed") {
             $tablecol = "views";
-        }else if($order === "rating"){
+        } else if ($order === "Rating") {
             $tablecol = "sum_rating";
-        }else if($order === "recent"){
+        } else if ($order === "Recently Added") {
             $tablecol = "created_at";
-        }else {
+        } else {
             $tablecol = "created_at";
             $ordermode = "desc";
         }
 
-        if(!isset($isFree))
-        {
+        if (!isset($isFree)) {
             return response()->json(['error' => "isFree must be set to 0 or 1"], 400);
         }
 
         $books = Book::where('isFree', $isFree)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
+        foreach ($books as $book) {
+            $book->ImageURL = asset($book->bookCover);
+        }
 
         return response()->json($books);
     }
 
-    public function filterBylang(Request $request){
-        try{
-        $langString = $request->query('lang');
-        $order = $request->query('order');
-        $ordermode = $request->query('ordermode');
-        $langs = explode(',', $langString);
-        if ($order === "alpha"){
-            $tablecol = "title";
-        }else if($order === "date"){
-            $tablecol = "date_publication";
-        }else if($order === "views"){
-            $tablecol = "views";
-        }else if($order === "rating"){
-            $tablecol = "sum_rating";
-        }else if($order === "recent"){
-            $tablecol = "created_at";
-        }else {
-            $tablecol = "created_at";
-            $ordermode = "desc";
-        }
-        $books = Book::whereIn('lang', $langs)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
-        return response()->json($books);
-        }catch(\Throwable  $e){
+    public function filterBylang(Request $request)
+    {
+        try {
+            $langString = $request->query('lang');
+            $order = $request->query('order');
+            $ordermode = $request->query('ordermode');
+            $langs = explode(',', $langString);
+            if ($order === "Name A-Z") {
+                $tablecol = "title";
+            } else if ($order === "Released Date") {
+                $tablecol = "date_publication";
+            } else if ($order === "Most Viewed") {
+                $tablecol = "views";
+            } else if ($order === "Rating") {
+                $tablecol = "sum_rating";
+            } else if ($order === "Recently Added") {
+                $tablecol = "created_at";
+            } else {
+                $tablecol = "created_at";
+                $ordermode = "desc";
+            }
+            $books = Book::whereIn('lang', $langs)->orderBy($tablecol, $ordermode ? $ordermode : "asc")->get();
+            return response()->json($books);
+        } catch (\Throwable  $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -200,13 +231,13 @@ class BookController extends Controller
             'author' => 'required|string',
             'description' => 'required|string',
             'subject' => 'required|string',
-            'date_publication' => 'required|date',
+            'date_publication' => 'required',
             'origin' => 'string',
             'isFree' => 'required|numeric|between:0,1',
             'serie' => 'string|nullable',
             'lang' => 'required|string',
             'genre' => 'required|string',
-            'bookFile' => 'required|file|mimes:pdf',
+            'bookFile' => 'file|mimes:pdf',
         ]);
 
         if ($validator->fails()) {
@@ -270,7 +301,7 @@ class BookController extends Controller
             'author' => 'required|string',
             'description' => 'required|string',
             'subject' => 'required|string',
-            'date_publication' => 'required|date',
+            'date_publication' => 'required',
             'origin' => 'string',
             'isFree' => 'required|numeric|between:0,1',
             'serie' => 'string',
@@ -381,5 +412,34 @@ class BookController extends Controller
             'books' => $pagedBooks->values(), // Extract just the values without keys
             'nbrPage' => $nbrPage,
         ]);
+    }
+
+    function addRating(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'book_id' => 'required|integer',
+            'rating' => 'required|integer|between:0,5',
+            'utilisateur_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 422);
+        }
+        /* return response()->json(['message' => $request->utilisateur_id]); */
+        try {
+            Rating::create([
+                'book_id' => $request->book_id,
+                'rating' => $request->rating,
+                'utilisateur_id' => $request->utilisateur_id
+            ]);
+
+            $book = Book::find($request->book_id);
+            $book->sum_rating = Rating::where('book_id', $request->book_id)->average('rating');
+            $book->save();
+            return response()->json(['message' => 'Rating added successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

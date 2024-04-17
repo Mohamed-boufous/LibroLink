@@ -35,6 +35,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { currentUser, currentToken, setCurrentUser, setLang, Lang } =
     useStateContext();
+    const [searchText, setSearchText] = useState("");
   console.log(currentToken);
   const [menuClicked, setMenuClicked] = useState(false);
   const logoutHandler = () => {
@@ -59,6 +60,10 @@ export default function Header() {
         console.log(error);
       });
   }, []);
+  const handleSearch = (event) => { 
+    setSearchText("");
+    navigate(`/book_filter?search=${searchText}`);
+  }
   return (
     <>
       <div className="border-b  shadow-sm bg-white ">
@@ -96,8 +101,10 @@ export default function Header() {
                 className="w-full focus:outline-none  "
                 type="text"
                 placeholder="Search Book ..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               />
-              <div className="size-8">
+              <div className="size-8" onClick={(e)=>handleSearch(e)}>
                 <img src={searchBarIcon} alt="Search Logo" />
               </div>
             </div>

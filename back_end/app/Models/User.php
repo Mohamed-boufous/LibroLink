@@ -68,4 +68,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function penalty() {
         return $this->hasMany(PenaltyUsers::class, 'userId');
     }
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/button";
 import MyPieChart from "@/components/charts/MyPieChart";
 const columns = [
   { field: "id", headerName: "Id", width: 60 },
+  { field: "image", headerName: "Image", width: 160, hideable: true },
   {
     field: "avatar",
     headerName: "Avatar",
     width: 60,
-    renderCell: () => (
+    renderCell: (params) => (
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarImage src={params.row.image} />
         <AvatarFallback>AV</AvatarFallback>
       </Avatar>
     ),
@@ -93,6 +94,9 @@ export default function AdminUsers() {
     },
   });
   const [selectedRows, setSelectedRows] = useState([]);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+   image: false,
+  });
   useEffect(() => {
     axiosClient
       .get("/api/list_users")
@@ -144,6 +148,7 @@ export default function AdminUsers() {
 
   const rows = userArray.map((user) => ({
     id: user.id,
+    image: user.image,
     username: user.userName,
     displayname: user.displayName,
     subscribed: user.is_subscribed,
@@ -221,6 +226,10 @@ export default function AdminUsers() {
               loading={userArray.length === 0}
               checkboxSelection
               disableRowSelectionOnClick
+              columnVisibilityModel={columnVisibilityModel}
+              onColumnVisibilityModelChange={(newModel) =>
+                setColumnVisibilityModel(newModel)
+              }
               onRowSelectionModelChange={(rowSelectionModel) => {
                 setSelectedRows(rowSelectionModel);
               }}
